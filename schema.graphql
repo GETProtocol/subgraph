@@ -1,6 +1,92 @@
-type ExampleEntity @entity {
+# COMBAK inherit all from a DataFactory Schema
+type ProtocolData @entity {
   id: ID!
-  count: BigInt!
-  addressBouncer: Bytes! # address
-  addressMetadata: Bytes! # address
+
+  fuel_used: BigInt!
+
+  ticket_value: BigInt!
+
+  mints: BigInt!
+
+  scans: BigInt!
+
+  illegal_scans: Int!
+
+  claims: BigInt!
+
+  changes: BigInt!
 }
+
+# NOTE could be called TicketEngineDayData??? Bc "protocol" likely suggests more than
+# just the ticketing portion
+type ProtocolDayData @entity {
+   # timestampAsDate
+  id: ID! 
+
+  # timestamp as a Day
+  timestamp: Int!
+  
+  # amount of GET used
+  fuel_used: BigInt!
+
+  # total value of tickets (only updated on mint)
+  ticket_value: BigInt!
+
+  # total number of mints
+  mints: BigInt!
+
+  # total successful scans 
+  scans: BigInt!
+
+  # total illegal scans -> begs the question  of COMBAK should we differentiate where GET
+  # fuel comes from? I.e. GET from scans amd URI changes, as opposed to GET from illegal scans??
+  illegal_scans: Int!
+
+  # total claims
+  claims: BigInt!
+
+  # total state changes of any kind
+  changes: BigInt!
+}
+
+# NOTE NOTE Additional primary keys for querying by timestamp instead of relayer. This would remove the need
+# to have a separate ProtocolDayData Entity if you could just query by timestamp, then
+# aggregate on the client
+type RelayerDayData @entity @key(fields: "id") @key(fields: "timestamp") {
+  # relayerAddress:timestampAsDay
+  id: ID! 
+
+  relayer_address: String! 
+
+  # timestamp as a Day
+  timestamp: Int!
+  
+  # amount of GET used
+  fuel_used: BigInt!
+
+  # total value of tickets (only updated on mint)
+  ticket_value: BigInt!
+
+  # total number of mints
+  mints: BigInt!
+
+  # total successful scans 
+  scans: BigInt!
+
+  # total illegal scans -> begs the question of COMBAK should we differentiate where GET 
+  # fuel comes from? I.e. GET from scans amd URI changes, as opposed to GET from illegal scans??
+  illegal_scans: Int!
+
+  # total claims
+  claims: BigInt!
+
+  # total state changes of any kind
+  changes: BigInt!
+}
+
+# ------------------------------------------------------------------------------------------------------------
+# V2 Contract Entities 
+# ------------------------------------------------------------------------------------------------------------
+# type RelayerDayDynamicRates @entity  {
+
+# }

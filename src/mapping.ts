@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, ByteArray } from "@graphprotocol/graph-ts"
 import {
   Contract,
   ConfigurationChanged,
@@ -14,82 +14,121 @@ import {
   ticketInvalidated,
   ticketScanned
 } from "../generated/Contract/Contract"
-import { ExampleEntity } from "../generated/schema"
+import { getProtocolDayData, getRelayerDayData } from './entities';
 
-export function handleConfigurationChanged(event: ConfigurationChanged): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
+/**
+ * NFT CONTRACT V1 --------------------------------------------------------------------
+ */
 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (entity == null) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
+// export function handleConfigurationChangedEcon(event: ConfigurationChangedEcon): void {}
+// export function handleNFTCheckedIn(event: NFTCheckedIn): void { }
+export function handleillegalScan(event: illegalScan): void {
+  let protocol = getProtocolDayData(event)
+  let relayer = getRelayerDayData(event)
 
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
-  }
+  //@ts-ignore
+  protocol.fuel_used += event.params.getUsed;
+  protocol.illegal_scans += 1;
 
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
+  //@ts-ignore
+  relayer.fuel_used += event.params.getUsed;
+  relayer.illegal_scans += 1;
+  
 
-  // Entity fields can be set based on event parameters
-  entity.addressBouncer = event.params.addressBouncer
-  entity.addressMetadata = event.params.addressMetadata
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract._mintGETNFT(...)
-  // - contract.addressToIndex(...)
-  // - contract.contractName(...)
-  // - contract.contractVersion(...)
-  // - contract.isNFTClaimable(...)
-  // - contract.isNFTSellable(...)
-  // - contract.primarySale(...)
-  // - contract.returnStructTicket(...)
-  // - contract.secondaryTransfer(...)
-  // - contract.ticketMetadataAddress(...)
-  // - contract.ticketMetadataIndex(...)
+  protocol.save()
+  relayer.save()
 }
 
-export function handleConfigurationChangedEcon(
-  event: ConfigurationChangedEcon
-): void {}
+export function handlenftClaimed(event: nftClaimed): void {
+  let protocol = getProtocolDayData(event)
+  let relayer = getRelayerDayData(event)
 
-export function handleNFTCheckedIn(event: NFTCheckedIn): void {}
+  //@ts-ignore
+  protocol.fuel_used += event.params.getUsed;
+  //@ts-ignore
+  protocol.claims += BigInt.fromI32(1);
+  //@ts-ignore
+  protocol.changes += BigInt.fromI32(1);
+  
+  //@ts-ignore
+  relayer.fuel_used += event.params.getUsed;
+  //@ts-ignore
+  relayer.claims += BigInt.fromI32(1);
+  //@ts-ignore
+  relayer.changes += BigInt.fromI32(1);
 
-export function handleillegalScan(event: illegalScan): void {}
+  protocol.save()
+  relayer.save()
+}
 
-export function handlenftClaimed(event: nftClaimed): void {}
+// export function handlenftTokenURIEdited(event: nftTokenURIEdited): void { }
 
-export function handlenftMinted(event: nftMinted): void {}
+// NOTE this takes the place of "handleNftMinted", since it doesnt exist on V2 contracts
+export function handleprimarySaleMint(event: primarySaleMint): void {
+  let protocol = getProtocolDayData(event)
+  let relayer = getRelayerDayData(event)
 
-export function handlenftTokenURIEdited(event: nftTokenURIEdited): void {}
-
-export function handleprimarySaleMint(event: primarySaleMint): void {}
+  //@ts-ignore
+  protocol.ticket_value += event.params.primaryPrice;
+  //@ts-ignore
+  protocol.mints += BigInt.fromI32(1);
+  
+  //@ts-ignore
+  relayer.ticket_value += event.params.primaryPrice;
+  //@ts-ignore
+  relayer.mints += BigInt.fromI32(1);
+  
+  protocol.save()
+  relayer.save()
+}
 
 export function handlesaleCollaterizedIntentory(
   event: saleCollaterizedIntentory
-): void {}
+): void { }
 
-export function handlesecondarySale(event: secondarySale): void {}
+// export function handlesecondarySale(event: secondarySale): void { }
 
-export function handleticketInvalidated(event: ticketInvalidated): void {}
+export function handleticketInvalidated(event: ticketInvalidated): void {
+  let protocol = getProtocolDayData(event)
+  let relayer = getRelayerDayData(event)
 
-export function handleticketScanned(event: ticketScanned): void {}
+  //@ts-ignore
+  protocol.fuel_used += event.params.getUsed;
+  //@ts-ignore
+  protocol.changes += BigInt.fromI32(1);
+  
+  //@ts-ignore
+  relayer.fuel_used += event.params.getUsed;
+  //@ts-ignore
+  relayer.changes += BigInt.fromI32(1);
+
+  protocol.save()
+  relayer.save()
+}
+
+export function handleticketScanned(event: ticketScanned): void {
+  let protocol = getRelayerDayData(event)
+  let relayer = getRelayerDayData(event)
+
+  //@ts-ignore
+  protocol.fuel_used += event.params.getUsed;
+  //@ts-ignore
+  protocol.scans += BigInt.fromI32(1);
+  //@ts-ignore
+  protocol.changes += BigInt.fromI32(1);
+  
+  //@ts-ignore
+  relayer.fuel_used += event.params.getUsed;
+  //@ts-ignore
+  relayer.scans += BigInt.fromI32(1);
+  //@ts-ignore
+  relayer.changes += BigInt.fromI32(1);
+
+  protocol.save()
+  relayer.save()
+}
+
+/**
+ * END NFT CONTRACT V1 --------------------------------------------------------------------
+ */
+
