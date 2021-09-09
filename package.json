@@ -1,6 +1,6 @@
 {
-  "name": "basegetnft",
-  "license": "UNLICENSED",
+  "name": "get-protocol-subgraph",
+  "license": "MIT",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
@@ -11,6 +11,7 @@
     "prepare": "husky install",
     "lint": "eslint .",
     "format": "prettier --write --ignore-path .gitignore ."
+
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.21.1",
