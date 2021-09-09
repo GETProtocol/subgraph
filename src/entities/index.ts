@@ -1,4 +1,7 @@
+export * from './event';
 
-export * from './protocol-day-data';
+export * from './protocol';
 
-export * from './relayer-day-data';
+export * from './protocol-day';
+
+export * from './relayer-day';

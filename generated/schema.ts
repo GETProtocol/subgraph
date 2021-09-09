@@ -12,7 +12,7 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class ProtocolData extends Entity {
+export class Protocol extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -20,17 +20,17 @@ export class ProtocolData extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ProtocolData entity without an ID");
+    assert(id !== null, "Cannot save Protocol entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save ProtocolData entity with non-string ID. " +
+      "Cannot save Protocol entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("ProtocolData", id.toString(), this);
+    store.set("Protocol", id.toString(), this);
   }
 
-  static load(id: string): ProtocolData | null {
-    return store.get("ProtocolData", id) as ProtocolData | null;
+  static load(id: string): Protocol | null {
+    return store.get("Protocol", id) as Protocol | null;
   }
 
   get id(): string {
@@ -106,7 +106,7 @@ export class ProtocolData extends Entity {
   }
 }
 
-export class ProtocolDayData extends Entity {
+export class Event extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -114,17 +114,84 @@ export class ProtocolDayData extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save ProtocolDayData entity without an ID");
+    assert(id !== null, "Cannot save Event entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save ProtocolDayData entity with non-string ID. " +
+      "Cannot save Event entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("ProtocolDayData", id.toString(), this);
+    store.set("Event", id.toString(), this);
   }
 
-  static load(id: string): ProtocolDayData | null {
-    return store.get("ProtocolDayData", id) as ProtocolDayData | null;
+  static load(id: string): Event | null {
+    return store.get("Event", id) as Event | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get integrator_address(): string {
+    let value = this.get("integrator_address");
+    return value.toString();
+  }
+
+  set integrator_address(value: string) {
+    this.set("integrator_address", Value.fromString(value));
+  }
+
+  get fuel_used(): BigInt {
+    let value = this.get("fuel_used");
+    return value.toBigInt();
+  }
+
+  set fuel_used(value: BigInt) {
+    this.set("fuel_used", Value.fromBigInt(value));
+  }
+
+  get ticket_value(): BigInt {
+    let value = this.get("ticket_value");
+    return value.toBigInt();
+  }
+
+  set ticket_value(value: BigInt) {
+    this.set("ticket_value", Value.fromBigInt(value));
+  }
+
+  get mints(): BigInt {
+    let value = this.get("mints");
+    return value.toBigInt();
+  }
+
+  set mints(value: BigInt) {
+    this.set("mints", Value.fromBigInt(value));
+  }
+}
+
+export class ProtocolDay extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save ProtocolDay entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save ProtocolDay entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("ProtocolDay", id.toString(), this);
+  }
+
+  static load(id: string): ProtocolDay | null {
+    return store.get("ProtocolDay", id) as ProtocolDay | null;
   }
 
   get id(): string {
@@ -209,7 +276,7 @@ export class ProtocolDayData extends Entity {
   }
 }
 
-export class RelayerDayData extends Entity {
+export class RelayerDay extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -217,17 +284,17 @@ export class RelayerDayData extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id !== null, "Cannot save RelayerDayData entity without an ID");
+    assert(id !== null, "Cannot save RelayerDay entity without an ID");
     assert(
       id.kind == ValueKind.STRING,
-      "Cannot save RelayerDayData entity with non-string ID. " +
+      "Cannot save RelayerDay entity with non-string ID. " +
         'Considering using .toHex() to convert the "id" to a string.'
     );
-    store.set("RelayerDayData", id.toString(), this);
+    store.set("RelayerDay", id.toString(), this);
   }
 
-  static load(id: string): RelayerDayData | null {
-    return store.get("RelayerDayData", id) as RelayerDayData | null;
+  static load(id: string): RelayerDay | null {
+    return store.get("RelayerDay", id) as RelayerDay | null;
   }
 
   get id(): string {
@@ -318,5 +385,108 @@ export class RelayerDayData extends Entity {
 
   set changes(value: BigInt) {
     this.set("changes", Value.fromBigInt(value));
+  }
+}
+
+export class Relayer extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Relayer entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Relayer entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Relayer", id.toString(), this);
+  }
+
+  static load(id: string): Relayer | null {
+    return store.get("Relayer", id) as Relayer | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get fuel_used(): BigInt {
+    let value = this.get("fuel_used");
+    return value.toBigInt();
+  }
+
+  set fuel_used(value: BigInt) {
+    this.set("fuel_used", Value.fromBigInt(value));
+  }
+
+  get ticket_value(): BigInt {
+    let value = this.get("ticket_value");
+    return value.toBigInt();
+  }
+
+  set ticket_value(value: BigInt) {
+    this.set("ticket_value", Value.fromBigInt(value));
+  }
+
+  get mints(): BigInt {
+    let value = this.get("mints");
+    return value.toBigInt();
+  }
+
+  set mints(value: BigInt) {
+    this.set("mints", Value.fromBigInt(value));
+  }
+
+  get scans(): BigInt {
+    let value = this.get("scans");
+    return value.toBigInt();
+  }
+
+  set scans(value: BigInt) {
+    this.set("scans", Value.fromBigInt(value));
+  }
+
+  get illegal_scans(): i32 {
+    let value = this.get("illegal_scans");
+    return value.toI32();
+  }
+
+  set illegal_scans(value: i32) {
+    this.set("illegal_scans", Value.fromI32(value));
+  }
+
+  get claims(): BigInt {
+    let value = this.get("claims");
+    return value.toBigInt();
+  }
+
+  set claims(value: BigInt) {
+    this.set("claims", Value.fromBigInt(value));
+  }
+
+  get changes(): BigInt {
+    let value = this.get("changes");
+    return value.toBigInt();
+  }
+
+  set changes(value: BigInt) {
+    this.set("changes", Value.fromBigInt(value));
+  }
+
+  get events(): Array<string | null> {
+    let value = this.get("events");
+    return value.toStringArray();
+  }
+
+  set events(value: Array<string | null>) {
+    this.set("events", Value.fromStringArray(value));
   }
 }

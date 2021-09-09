@@ -1,5 +1,5 @@
 # COMBAK inherit all from a DataFactory Schema
-type ProtocolData @entity {
+type Protocol @entity {
   id: ID!
 
   fuel_used: BigInt!
@@ -17,9 +17,23 @@ type ProtocolData @entity {
   changes: BigInt!
 }
 
+type Event @entity @key(fields: "id") @key(fields: "integrator_address") {
+  # event address
+  id: ID!
+
+  integrator_address: String!
+
+  fuel_used: BigInt!
+
+  ticket_value: BigInt!
+  
+  mints: BigInt!
+
+}
+
 # NOTE could be called TicketEngineDayData??? Bc "protocol" likely suggests more than
 # just the ticketing portion
-type ProtocolDayData @entity {
+type ProtocolDay @entity {
    # timestampAsDate
   id: ID! 
 
@@ -52,7 +66,7 @@ type ProtocolDayData @entity {
 # NOTE NOTE Additional primary keys for querying by timestamp instead of relayer. This would remove the need
 # to have a separate ProtocolDayData Entity if you could just query by timestamp, then
 # aggregate on the client
-type RelayerDayData @entity @key(fields: "id") @key(fields: "timestamp") {
+type RelayerDay @entity @key(fields: "id") @key(fields: "timestamp") {
   # relayerAddress:timestampAsDay
   id: ID! 
 
@@ -84,6 +98,27 @@ type RelayerDayData @entity @key(fields: "id") @key(fields: "timestamp") {
   changes: BigInt!
 }
 
+type Relayer @entity {
+  # relayerAddress
+  id: ID!
+
+   # amount of GET used
+  fuel_used: BigInt!
+
+  ticket_value: BigInt!
+
+  mints: BigInt!
+
+  scans: BigInt!
+
+  illegal_scans: Int!
+
+  claims: BigInt!
+
+  changes: BigInt!
+
+  events: [Event]!
+}
 # ------------------------------------------------------------------------------------------------------------
 # V2 Contract Entities 
 # ------------------------------------------------------------------------------------------------------------
