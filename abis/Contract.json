@@ -403,16 +403,12 @@
       { "internalType": "bool", "name": "setAsideNFT", "type": "bool" }
     ],
     "name": "_mintGETNFT",
-    "outputs": [
-      { "internalType": "uint256", "name": "nftIndexM", "type": "uint256" }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "nftIndexM", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "ownerAddress", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "ownerAddress", "type": "address" }],
     "name": "addressToIndex",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
@@ -572,16 +568,12 @@
       }
     ],
     "name": "primarySale",
-    "outputs": [
-      { "internalType": "uint256", "name": "nftIndexP", "type": "uint256" }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "nftIndexP", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "nftIndex", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "nftIndex", "type": "uint256" }],
     "name": "returnStructTicket",
     "outputs": [
       {
@@ -640,18 +632,14 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "uint64", "name": "newBaseGETFee", "type": "uint64" }
-    ],
+    "inputs": [{ "internalType": "uint64", "name": "newBaseGETFee", "type": "uint64" }],
     "name": "setBaseGETFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "ownerAddress", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "ownerAddress", "type": "address" }],
     "name": "ticketMetadataAddress",
     "outputs": [
       { "internalType": "address", "name": "_eventAddress", "type": "address" },
@@ -673,9 +661,7 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "nftIndex", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "nftIndex", "type": "uint256" }],
     "name": "ticketMetadataIndex",
     "outputs": [
       { "internalType": "address", "name": "_eventAddress", "type": "address" },

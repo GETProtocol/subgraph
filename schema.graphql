@@ -26,20 +26,19 @@ type Event @entity @key(fields: "id") @key(fields: "integrator_address") {
   fuel_used: BigInt!
 
   ticket_value: BigInt!
-  
-  mints: BigInt!
 
+  mints: BigInt!
 }
 
 # NOTE could be called TicketEngineDayData??? Bc "protocol" likely suggests more than
 # just the ticketing portion
 type ProtocolDay @entity {
-   # timestampAsDate
-  id: ID! 
+  # timestampAsDate
+  id: ID!
 
   # timestamp as a Day
   timestamp: Int!
-  
+
   # amount of GET used
   fuel_used: BigInt!
 
@@ -49,7 +48,7 @@ type ProtocolDay @entity {
   # total number of mints
   mints: BigInt!
 
-  # total successful scans 
+  # total successful scans
   scans: BigInt!
 
   # total illegal scans -> begs the question  of COMBAK should we differentiate where GET
@@ -68,13 +67,13 @@ type ProtocolDay @entity {
 # aggregate on the client
 type RelayerDay @entity @key(fields: "id") @key(fields: "timestamp") {
   # relayerAddress:timestampAsDay
-  id: ID! 
+  id: ID!
 
-  relayer_address: String! 
+  relayer_address: String!
 
   # timestamp as a Day
   timestamp: Int!
-  
+
   # amount of GET used
   fuel_used: BigInt!
 
@@ -84,10 +83,10 @@ type RelayerDay @entity @key(fields: "id") @key(fields: "timestamp") {
   # total number of mints
   mints: BigInt!
 
-  # total successful scans 
+  # total successful scans
   scans: BigInt!
 
-  # total illegal scans -> begs the question of COMBAK should we differentiate where GET 
+  # total illegal scans -> begs the question of COMBAK should we differentiate where GET
   # fuel comes from? I.e. GET from scans amd URI changes, as opposed to GET from illegal scans??
   illegal_scans: Int!
 
@@ -102,7 +101,7 @@ type Relayer @entity {
   # relayerAddress
   id: ID!
 
-   # amount of GET used
+  # amount of GET used
   fuel_used: BigInt!
 
   ticket_value: BigInt!
@@ -120,7 +119,7 @@ type Relayer @entity {
   events: [Event]!
 }
 # ------------------------------------------------------------------------------------------------------------
-# V2 Contract Entities 
+# V2 Contract Entities
 # ------------------------------------------------------------------------------------------------------------
 # type RelayerDayDynamicRates @entity  {
 
