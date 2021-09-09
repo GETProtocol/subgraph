@@ -3,12 +3,14 @@ import { Protocol } from '../../generated/schema';
 import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from '../constants'
 
 export function getProtocol(event: ethereum.Event): Protocol {
-    const day = event.block.timestamp.toI32() / 86400
-    const date = day * 86400
+    // const day = event.block.timestamp.toI32() / 86400
+    // const date = day * 86400
     
-    const id = date;
+    // const id = date;
 
-    let protocol = Protocol.load(id.toString())
+    const id = '0001';
+
+    let protocol = Protocol.load(id)
 
     if(protocol == null) {
         protocol = new Protocol(id.toString())
