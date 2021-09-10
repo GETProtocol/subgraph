@@ -18,6 +18,8 @@ export let BIG_INT_ONE = BigInt.fromI32(1);
 
 export let BIG_INT_TWO = BigInt.fromI32(2);
 
+export let BIG_INT_TEN = BigInt.fromI32(10);
+
 export let BIG_INT_ONE_HUNDRED = BigInt.fromI32(100);
 
 export let BIG_INT_ONE_DAY_SECONDS = BigInt.fromI32(86400);

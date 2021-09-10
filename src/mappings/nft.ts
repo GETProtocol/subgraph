@@ -1,6 +1,6 @@
 import { log } from "@graphprotocol/graph-ts";
 import { NFT_ADDRESS } from "../constants/addresses";
-import { BIG_INT_ONE } from "../constants/index";
+import { BIG_INT_ONE, BIG_INT_TEN } from "../constants/index";
 import {
   NFT as NFTContract,
   // illegalScan,
@@ -77,14 +77,15 @@ export function handlePrimarySaleMint(event: primarySaleMint): void {
 
   log.warning("BasePrice: {}", [basePrice.toString()]);
 
-  protocol.ticketValue.plus(basePrice);
-  protocol.mintCount.plus(BIG_INT_ONE);
+  // basePrice is denominated to the tenth of a cent, divide by 10 to get to the cent.
+  protocol.ticketValue = protocol.ticketValue.plus(basePrice.div(BIG_INT_TEN));
+  protocol.mintCount = protocol.mintCount.plus(BIG_INT_ONE);
 
-  protocolDay.ticketValue.plus(basePrice);
-  protocolDay.mintCount.plus(BIG_INT_ONE);
+  protocolDay.ticketValue = protocolDay.ticketValue.plus(basePrice.div(BIG_INT_TEN));
+  protocolDay.mintCount = protocolDay.mintCount.plus(BIG_INT_ONE);
 
-  relayerDay.ticketValue.plus(basePrice);
-  relayerDay.mintCount.plus(BIG_INT_ONE);
+  relayerDay.ticketValue = relayerDay.ticketValue.plus(basePrice.div(BIG_INT_TEN));
+  relayerDay.mintCount = relayerDay.mintCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
