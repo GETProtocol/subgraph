@@ -4,13 +4,13 @@ import { BIG_INT_ONE, BIG_INT_TEN } from "../constants/index";
 import {
   NFT as NFTContract,
   // illegalScan,
-  // nftClaimed,
+  nftClaimed,
   primarySaleMint,
   // saleCollaterizedIntentory,
-  // ticketInvalidated,
-  // ticketScanned,
+  ticketInvalidated,
+  ticketScanned,
 } from "../../generated/NFT/NFT";
-import { getProtocol, getProtocolDayByEvent, getRelayerDayByEvent } from "../entities";
+import { getProtocol, getProtocolDayByEvent, getRelayerDayByEvent, getEvent } from "../entities";
 
 /**
  * NFT CONTRACT V1 --------------------------------------------------------------------
@@ -18,78 +18,64 @@ import { getProtocol, getProtocolDayByEvent, getRelayerDayByEvent } from "../ent
 
 // export function handleConfigurationChangedEcon(event: ConfigurationChangedEcon): void {}
 // export function handleNFTCheckedIn(event: NFTCheckedIn): void { }
-/*
-export function handleillegalScan(event: illegalScan): void {
-  const protocol = getProtocol();
-  const protocolDay = getProtocolDay(event);
-  const relayerDay = getRelayerDay(event);
-
-  protocol.fuel_used.plus(event.params.getUsed);
-  protocol.illegal_scans.plus(BIG_INT_ONE);
-
-  protocolDay.fuel_used.plus(event.params.getUsed);
-  protocolDay.illegal_scans.plus(BIG_INT_ONE);
-
-  relayerDay.fuel_used.plus(event.params.getUsed);
-  relayerDay.illegal_scans.plus(BIG_INT_ONE);
-
-  protocol.save();
-  protocolDay.save();
-  relayerDay.save();
-}
 
 export function handlenftClaimed(event: nftClaimed): void {
-  const protocol = getProtocol();
-  const protocolDay = getProtocolDay(event);
-  const relayerDay = getRelayerDay(event);
-
-  protocol.fuel_used.plus(event.params.getUsed);
-  protocol.claims.plus(BIG_INT_ONE);
-  protocol.changes.plus(BIG_INT_ONE);
-
-  protocolDay.fuel_used.plus(event.params.getUsed);
-  protocolDay.claims.plus(BIG_INT_ONE);
-  protocolDay.changes.plus(BIG_INT_ONE);
-
-  relayerDay.fuel_used.plus(event.params.getUsed);
-  relayerDay.claims.plus(BIG_INT_ONE);
-  relayerDay.changes.plus(BIG_INT_ONE);
-
-  protocol.save();
-  protocolDay.save();
-  relayerDay.save();
-}
-*/
-// export function handlenftTokenURIEdited(event: nftTokenURIEdited): void { }
-
-// NOTE this takes the place of "handleNftMinted", since it doesnt exist on V2 contracts
-export function handlePrimarySaleMint(event: primarySaleMint): void {
   let protocol = getProtocol();
   let protocolDay = getProtocolDayByEvent(event);
   let relayerDay = getRelayerDayByEvent(event);
-  let nftIndex = event.params.nftIndex;
+
+  protocol.getUsed = protocol.getUsed.plus(event.params.getUsed);
+  protocol.claimCount = protocol.claimCount.plus(BIG_INT_ONE);
+  protocol.changeCount = protocol.changeCount.plus(BIG_INT_ONE);
+
+  protocolDay.getUsed = protocolDay.getUsed.plus(event.params.getUsed);
+  protocolDay.claimCount = protocolDay.claimCount.plus(BIG_INT_ONE);
+  protocolDay.changeCount = protocolDay.changeCount.plus(BIG_INT_ONE);
+
+  relayerDay.getUsed = relayerDay.getUsed.plus(event.params.getUsed);
+  relayerDay.claimCount = relayerDay.claimCount.plus(BIG_INT_ONE);
+  relayerDay.changeCount = relayerDay.changeCount.plus(BIG_INT_ONE);
+
+  protocol.save();
+  protocolDay.save();
+  relayerDay.save();
+}
+// export function handlenftTokenURIEdited(event: nftTokenURIEdited): void { }
+
+// NOTE this takes the place of "handleNftMinted", since it doesnt exist on V2 contracts
+export function handlePrimarySaleMint(e: primarySaleMint): void {
+  let protocol = getProtocol();
+  let protocolDay = getProtocolDayByEvent(e);
+  let relayerDay = getRelayerDayByEvent(e);
+  let event = getEvent(e.params.eventAddress.toHex())
+  let nftIndex = e.params.nftIndex;
 
   let nftContract = NFTContract.bind(NFT_ADDRESS);
   let nftData = nftContract.returnStructTicket(nftIndex);
 
   // prices_sold[0] is apparently not a supported operation, instead .shift() to get the first item
   let basePrice = nftData.prices_sold.shift();
+  basePrice = basePrice.div(BIG_INT_TEN)
 
-  log.warning("BasePrice: {}", [basePrice.toString()]);
+  log.info("BasePrice: {}", [basePrice.toString()]);
 
   // basePrice is denominated to the tenth of a cent, divide by 10 to get to the cent.
-  protocol.ticketValue = protocol.ticketValue.plus(basePrice.div(BIG_INT_TEN));
+  protocol.ticketValue = protocol.ticketValue.plus(basePrice);
   protocol.mintCount = protocol.mintCount.plus(BIG_INT_ONE);
 
-  protocolDay.ticketValue = protocolDay.ticketValue.plus(basePrice.div(BIG_INT_TEN));
+  protocolDay.ticketValue = protocolDay.ticketValue.plus(basePrice);
   protocolDay.mintCount = protocolDay.mintCount.plus(BIG_INT_ONE);
 
-  relayerDay.ticketValue = relayerDay.ticketValue.plus(basePrice.div(BIG_INT_TEN));
+  relayerDay.ticketValue = relayerDay.ticketValue.plus(basePrice);
   relayerDay.mintCount = relayerDay.mintCount.plus(BIG_INT_ONE);
+
+  event.ticketValue = event.ticketValue.plus(basePrice);
+  event.mintCount = event.mintCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
   relayerDay.save();
+  event.save();
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
@@ -97,19 +83,20 @@ export function handlePrimarySaleMint(event: primarySaleMint): void {
 
 // export function handlesecondarySale(event: secondarySale): void { }
 /*
+*/
 export function handleticketInvalidated(event: ticketInvalidated): void {
-  const protocol = getProtocol();
-  const protocolDay = getProtocolDay(event);
-  const relayerDay = getRelayerDay(event);
+  let protocol = getProtocol();
+  let protocolDay = getProtocolDayByEvent(event);
+  let relayerDay = getRelayerDayByEvent(event);
 
-  protocol.fuel_used.plus(event.params.getUsed);
-  protocol.changes.plus(BIG_INT_ONE);
+  protocol.getUsed = protocol.getUsed.plus(event.params.getUsed);
+  protocol.changeCount = protocol.changeCount.plus(BIG_INT_ONE);
 
-  protocolDay.fuel_used.plus(event.params.getUsed);
-  protocolDay.changes.plus(BIG_INT_ONE);
+  protocolDay.getUsed = protocolDay.getUsed.plus(event.params.getUsed);
+  protocolDay.changeCount = protocolDay.changeCount.plus(BIG_INT_ONE);
 
-  relayerDay.fuel_used.plus(event.params.getUsed);
-  relayerDay.changes.plus(BIG_INT_ONE);
+  relayerDay.getUsed = relayerDay.getUsed.plus(event.params.getUsed);
+  relayerDay.changeCount = relayerDay.changeCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
@@ -117,27 +104,23 @@ export function handleticketInvalidated(event: ticketInvalidated): void {
 }
 
 export function handleticketScanned(event: ticketScanned): void {
-  const protocol = getProtocol();
-  const protocolDay = getProtocolDay(event);
-  const relayerDay = getRelayerDay(event);
+  let protocol = getProtocol();
+  let protocolDay = getProtocolDayByEvent(event);
+  let relayerDay = getRelayerDayByEvent(event);
 
-  protocol.fuel_used.plus(event.params.getUsed);
-  protocol.scans.plus(BIG_INT_ONE);
-  protocol.changes.plus(BIG_INT_ONE);
+  protocol.getUsed = protocol.getUsed.plus(event.params.getUsed);
+  protocol.scanCount = protocol.scanCount.plus(BIG_INT_ONE);
+  protocol.changeCount = protocol.changeCount.plus(BIG_INT_ONE);
 
-  protocolDay.fuel_used.plus(event.params.getUsed);
-  protocolDay.scans.plus(BIG_INT_ONE);
-  protocolDay.changes.plus(BIG_INT_ONE);
+  protocolDay.getUsed = protocolDay.getUsed.plus(event.params.getUsed);
+  protocolDay.scanCount = protocolDay.scanCount.plus(BIG_INT_ONE);
+  protocolDay.changeCount = protocolDay.changeCount.plus(BIG_INT_ONE);
 
-  relayerDay.fuel_used.plus(event.params.getUsed);
-  relayerDay.scans.plus(BIG_INT_ONE);
-  relayerDay.changes.plus(BIG_INT_ONE);
+  relayerDay.getUsed = relayerDay.getUsed.plus(event.params.getUsed);
+  relayerDay.scanCount = relayerDay.scanCount.plus(BIG_INT_ONE);
+  relayerDay.changeCount = relayerDay.changeCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
   relayerDay.save();
 }
-*/
-/**
- * END NFT CONTRACT V1 --------------------------------------------------------------------
- */

@@ -18,14 +18,14 @@ dataSources:
         # - ConfigurationChangedEcon
         # - NFTCheckedIn
         # - illegalScan
-        # - nftClaimed
+        - nftClaimed
         # - nftMinted
         # - nftTokenURIEdited
         - primarySaleMint
         # - saleCollaterizedIntentory
         # - secondarySale
-        # - ticketInvalidated
-        # - ticketScanned
+        - ticketInvalidated
+        - ticketScanned
       abis:
         - name: NFT
           file: ./abis/NFT.json
@@ -38,8 +38,8 @@ dataSources:
         #   handler: handleNFTCheckedIn
         # - event: illegalScan(indexed uint256,indexed uint64,indexed uint64)
         #   handler: handleillegalScan
-        # - event: nftClaimed(indexed uint256,indexed uint64,address,indexed uint64)
-        #   handler: handlenftClaimed
+        - event: nftClaimed(indexed uint256,indexed uint64,address,indexed uint64)
+          handler: handlenftClaimed
         # - event: nftMinted(indexed uint256,indexed address)
         #   handler: handlenftMinted
         # - event: nftTokenURIEdited(indexed uint256,indexed uint64,string)
@@ -52,8 +52,8 @@ dataSources:
         #   handler: handlesecondarySale
         # - event: ticketInvalidated(indexed uint256,indexed uint64,address,indexed uint64)
         #   handler: handleticketInvalidated
-        # - event: ticketScanned(indexed uint256,indexed uint64,indexed uint64)
-        #   handler: handleticketScanned
+        - event: ticketScanned(indexed uint256,indexed uint64,indexed uint64)
+          handler: handleticketScanned
       file: ./src/mappings/nft.ts
   - kind: ethereum/contract
     name: EventMetadata

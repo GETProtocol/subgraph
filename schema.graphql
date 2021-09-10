@@ -20,7 +20,7 @@ type ProtocolDay @entity {
   changeCount: BigInt!
 }
 
-type Event @entity @key(fields: "id") @key(fields: "integratorAddress") {
+type Event @entity @key(fields: "id") @key(fields: "relayer") {
   id: ID!
   relayer: Relayer!
   getUsed: BigInt!
