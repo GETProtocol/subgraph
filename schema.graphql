@@ -1,122 +1,59 @@
 # COMBAK inherit all from a DataFactory Schema
 type Protocol @entity {
   id: ID!
-
-  fuel_used: BigInt!
-
-  ticket_value: BigInt!
-
-  mints: BigInt!
-
-  scans: BigInt!
-
-  illegal_scans: BigInt!
-
-  claims: BigInt!
-
-  changes: BigInt!
+  getUsed: BigInt!
+  ticketValue: BigInt!
+  mintCount: BigInt!
+  scanCount: BigInt!
+  claimCount: BigInt!
+  changeCount: BigInt!
 }
 
-type Event @entity @key(fields: "id") @key(fields: "integrator_address") {
-  # event address
-  id: ID!
-
-  integrator_address: String!
-
-  fuel_used: BigInt!
-
-  ticket_value: BigInt!
-
-  mints: BigInt!
-}
-
-# NOTE could be called TicketEngineDayData??? Bc "protocol" likely suggests more than
-# just the ticketing portion
 type ProtocolDay @entity {
-  # timestampAsDate
   id: ID!
-
-  # timestamp as a Day
   timestamp: Int!
+  getUsed: BigInt!
+  ticketValue: BigInt!
+  mintCount: BigInt!
+  scanCount: BigInt!
+  claimCount: BigInt!
+  changeCount: BigInt!
+}
 
-  # amount of GET used
-  fuel_used: BigInt!
+type Event @entity @key(fields: "id") @key(fields: "integratorAddress") {
+  id: ID!
+  relayer: Relayer!
+  getUsed: BigInt!
+  eventName: String!
+  shopUrl: String!
+  imageUrl: String!
+  ticketValue: BigInt!
+  mintCount: BigInt!
+}
 
-  # total value of tickets (only updated on mint)
-  ticket_value: BigInt!
-
-  # total number of mints
-  mints: BigInt!
-
-  # total successful scans
-  scans: BigInt!
-
-  # total illegal scans -> begs the question  of COMBAK should we differentiate where GET
-  # fuel comes from? I.e. GET from scans amd URI changes, as opposed to GET from illegal scans??
-  illegal_scans: BigInt!
-
-  # total claims
-  claims: BigInt!
-
-  # total state changes of any kind
-  changes: BigInt!
+type Relayer @entity {
+  id: ID!
+  getUsed: BigInt!
+  ticketValue: BigInt!
+  mintCount: BigInt!
+  scanCount: BigInt!
+  claimCount: BigInt!
+  events: [Event]!
 }
 
 # NOTE NOTE Additional primary keys for querying by timestamp instead of relayer. This would remove the need
 # to have a separate ProtocolDayData Entity if you could just query by timestamp, then
 # aggregate on the client
 type RelayerDay @entity @key(fields: "id") @key(fields: "timestamp") {
-  # relayerAddress:timestampAsDay
-  id: ID!
-
-  relayer_address: String!
-
-  # timestamp as a Day
+  id: ID! # Composite Key: relayerAddress:timestampAsDay
+  relayer: Relayer!
   timestamp: Int!
-
-  # amount of GET used
-  fuel_used: BigInt!
-
-  # total value of tickets (only updated on mint)
-  ticket_value: BigInt!
-
-  # total number of mints
-  mints: BigInt!
-
-  # total successful scans
-  scans: BigInt!
-
-  # total illegal scans -> begs the question of COMBAK should we differentiate where GET
-  # fuel comes from? I.e. GET from scans amd URI changes, as opposed to GET from illegal scans??
-  illegal_scans: BigInt!
-
-  # total claims
-  claims: BigInt!
-
-  # total state changes of any kind
-  changes: BigInt!
-}
-
-type Relayer @entity {
-  # relayerAddress
-  id: ID!
-
-  # amount of GET used
-  fuel_used: BigInt!
-
-  ticket_value: BigInt!
-
-  mints: BigInt!
-
-  scans: BigInt!
-
-  illegal_scans: BigInt!
-
-  claims: BigInt!
-
-  changes: BigInt!
-
-  events: [Event]!
+  getUsed: BigInt!
+  ticketValue: BigInt!
+  mintCount: BigInt!
+  scanCount: BigInt!
+  claimCount: BigInt!
+  changeCount: BigInt!
 }
 # ------------------------------------------------------------------------------------------------------------
 # V2 Contract Entities
