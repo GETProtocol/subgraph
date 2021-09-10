@@ -17,7 +17,7 @@ The GET Protocol subgraph acts as the complete data interface to all on-chain da
 Start by setting up a [graphprotocol/graph-node](https://github.com/graphprotocol/graph-node). For this you will also need a [Polygon RPC endpoint](https://docs.matic.network/docs/develop/network-details/network/) for the graph-node to index from. [Infura](https://infura.io/) or [Moralis (Speedy Nodes)](https://moralis.io/) provide enough capacity on their free-tiers.
 
 1. Clone graphprotocol/graph-node to a local directory.
-2. Edit the `services.graph-node.environment.ethereum` key within docker/docker-compose.yml to read `matix:<RPC_ENDPOINT>`.
+2. Edit the `services.graph-node.environment.ethereum` key within docker/docker-compose.yml to read `matic:<RPC_ENDPOINT>`.
 3. Run `docker compose up` to launch the graph-node instance.
 
 At this point you should now have a local graph-node available for local development and you can continue to deploy the get-protcol-subgraph to your local cluster.

@@ -12,5 +12,5 @@ export function getEvent(eventAddress: string): Event {
     event.ticket_value = BIG_INT_ZERO;
   }
 
-  return event;
+  return event as Event;
 }

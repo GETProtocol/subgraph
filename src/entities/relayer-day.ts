@@ -21,7 +21,9 @@ export function getRelayerDay(event: ethereum.Event): RelayerDay {
     relayerDay.ticket_value = BIG_INT_ZERO;
     relayerDay.scans = BIG_INT_ZERO;
     relayerDay.claims = BIG_INT_ZERO;
+    relayerDay.changes = BIG_INT_ZERO;
+    relayerDay.illegal_scans = BIG_INT_ZERO;
   }
 
-  return relayerDay;
+  return relayerDay as RelayerDay;
 }

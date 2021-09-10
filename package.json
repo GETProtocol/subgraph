@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ basegetnft",
-    "create-local": "graph create --node http://localhost:8020/ basegetnft",
-    "remove-local": "graph remove --node http://localhost:8020/ basegetnft",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 basegetnft",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ get-protocol-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ get-protocol-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ get-protocol-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 get-protocol-subgraph",
     "prepare": "husky install",
     "lint": "eslint .",
     "format": "prettier --write --ignore-path .gitignore ."

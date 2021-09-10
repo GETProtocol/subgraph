@@ -13,7 +13,9 @@ export function getProtocol(): Protocol {
     protocol.ticket_value = BIG_INT_ZERO;
     protocol.scans = BIG_INT_ZERO;
     protocol.claims = BIG_INT_ZERO;
+    protocol.changes = BIG_INT_ZERO;
+    protocol.illegal_scans = BIG_INT_ZERO;
   }
 
-  return protocol;
+  return protocol as Protocol;
 }

@@ -21,13 +21,13 @@ export function handleillegalScan(event: illegalScan): void {
   const relayerDay = getRelayerDay(event);
 
   protocol.fuel_used.plus(event.params.getUsed);
-  protocol.illegal_scans += 1;
+  protocol.illegal_scans.plus(BIG_INT_ONE);
 
   protocolDay.fuel_used.plus(event.params.getUsed);
-  protocolDay.illegal_scans += 1;
+  protocolDay.illegal_scans.plus(BIG_INT_ONE);
 
   relayerDay.fuel_used.plus(event.params.getUsed);
-  relayerDay.illegal_scans += 1;
+  relayerDay.illegal_scans.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();

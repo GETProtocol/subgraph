@@ -55,26 +55,26 @@ dataSources:
         - event: ticketScanned(indexed uint256,indexed uint64,indexed uint64)
           handler: handleticketScanned
       file: ./src/mappings/nft.ts
-  - kind: ethereum/contract
-    name: EventMetaData
-    network: matic
-    source:
-      address: "0xcDA348fF8C175f305Ed8682003ec6F8743067f79"
-      abi: EventMetaData
-      startBlock: 15980516
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - newEventRegistered
-      abis:
-        - name: EventMetaData
-          file: ./abis/EventMetaData.json
-      eventHandlers:
-        - event: newEventRegistered(indexed address,indexed uint256,string,indexed uint256)
-          handler: handleNewEventRegistered
-      callHandlers:
-        - function: registerEvent(address,address,string,string,string,bytes32[4],uint256[2],bool,bytes32[],bool)
-          handler: onRegisterEvent
-      file: ./src/mappings/event.ts
+  # - kind: ethereum/contract
+  #   name: EventMetaData
+  #   network: matic
+  #   source:
+  #     address: "0xcDA348fF8C175f305Ed8682003ec6F8743067f79"
+  #     abi: EventMetaData
+  #     startBlock: 15980516
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.4
+  #     language: wasm/assemblyscript
+  #     entities:
+  #       - newEventRegistered
+  #     abis:
+  #       - name: EventMetaData
+  #         file: ./abis/EventMetaData.json
+  #     eventHandlers:
+  #       - event: newEventRegistered(indexed address,indexed uint256,string,indexed uint256)
+  #         handler: handleNewEventRegistered
+      # callHandlers:
+      #   - function: registerEvent(address,address,string,string,string,bytes32[4],uint256[2],bool,bytes32[],bool)
+      #     handler: onRegisterEvent
+      # file: ./src/mappings/event.ts

@@ -10,7 +10,7 @@ type Protocol @entity {
 
   scans: BigInt!
 
-  illegal_scans: Int!
+  illegal_scans: BigInt!
 
   claims: BigInt!
 
@@ -53,7 +53,7 @@ type ProtocolDay @entity {
 
   # total illegal scans -> begs the question  of COMBAK should we differentiate where GET
   # fuel comes from? I.e. GET from scans amd URI changes, as opposed to GET from illegal scans??
-  illegal_scans: Int!
+  illegal_scans: BigInt!
 
   # total claims
   claims: BigInt!
@@ -88,7 +88,7 @@ type RelayerDay @entity @key(fields: "id") @key(fields: "timestamp") {
 
   # total illegal scans -> begs the question of COMBAK should we differentiate where GET
   # fuel comes from? I.e. GET from scans amd URI changes, as opposed to GET from illegal scans??
-  illegal_scans: Int!
+  illegal_scans: BigInt!
 
   # total claims
   claims: BigInt!
@@ -110,7 +110,7 @@ type Relayer @entity {
 
   scans: BigInt!
 
-  illegal_scans: Int!
+  illegal_scans: BigInt!
 
   claims: BigInt!
 

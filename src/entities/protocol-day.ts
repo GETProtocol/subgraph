@@ -18,7 +18,9 @@ export function getProtocolDay(event: ethereum.Event): ProtocolDay {
     protocolDay.ticket_value = BIG_INT_ZERO;
     protocolDay.scans = BIG_INT_ZERO;
     protocolDay.claims = BIG_INT_ZERO;
+    protocolDay.changes = BIG_INT_ZERO;
+    protocolDay.illegal_scans = BIG_INT_ZERO;
   }
 
-  return protocolDay;
+  return protocolDay as ProtocolDay;
 }
