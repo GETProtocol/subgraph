@@ -2,19 +2,18 @@ import { Protocol } from "../../generated/schema";
 import { BIG_INT_ZERO } from "../constants";
 
 export function getProtocol(): Protocol {
-  const id = "0001";
+  let id = "1";
 
   let protocol = Protocol.load(id);
 
   if (protocol == null) {
     protocol = new Protocol(id.toString());
-    protocol.fuel_used = BIG_INT_ZERO;
-    protocol.mints = BIG_INT_ZERO;
-    protocol.ticket_value = BIG_INT_ZERO;
-    protocol.scans = BIG_INT_ZERO;
-    protocol.claims = BIG_INT_ZERO;
-    protocol.changes = BIG_INT_ZERO;
-    protocol.illegal_scans = BIG_INT_ZERO;
+    protocol.getUsed = BIG_INT_ZERO;
+    protocol.ticketValue = BIG_INT_ZERO;
+    protocol.mintCount = BIG_INT_ZERO;
+    protocol.scanCount = BIG_INT_ZERO;
+    protocol.claimCount = BIG_INT_ZERO;
+    protocol.changeCount = BIG_INT_ZERO;
   }
 
   return protocol as Protocol;

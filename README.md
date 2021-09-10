@@ -6,11 +6,25 @@
 
 The GET Protocol subgraph acts as the complete data interface to all on-chain data. Its purpose is to properly aggregate and index all static and time-series data passing through the protocol. There are a number of key entities to be aware of:
 
-- **Events** [static]: indexes all metadata for an _Event_ by its `address`. Each Event has it's own independent address on-chain. Updates to an _Event_ will overwrite the data within this entity, so this will always represent the latest state. Contains a reference to _Tickets_ for fetching all of the tickets for an _Event_ using its one-to-many relationship.
-- **Tickets** [static]: indexes all _Ticket_ metadata through to the latest update. Contains a reference to _Event_ using the `eventAddress` as a belongs-to relationship. The current state/status of the _Ticket_ will be given in the state field (e.g. UNSCANNED, SCANNED, CLAIMABLE, INVALIDATED).
-- **Protocol** [static]: all-time data for protocol-wide metrics, aggregated. This is used to capture the all-time usage on the protocol across all integrators. Singleton with ID '0001'.
-- **ProtocolDay** [time-series]: similar content to _Protocol_ but aggregrated to each UTC-day. Used to track protocol usage over time. ID is a `dayInteger` from the unix epoch (unix / 86400).
-- **RelayerDay** [time-series]: usage statistics per-relayer-day. Used to track and compare protocol usage by relayer. ID is a composite key of `relayerAddress-dayInteger`.
+### Events [static]
+
+Indexes all metadata for an _Event_ by its `address`. Each Event has it's own independent address on-chain. Updates to an _Event_ will overwrite the data within this entity, so this will always represent the latest state. Contains a reference to _Tickets_ for fetching all of the tickets for an _Event_ using its one-to-many relationship.
+
+### Tickets [static]
+
+Indexes all _Ticket_ metadata through to the latest update. Contains a reference to _Event_ using the `eventAddress` as a belongs-to relationship. The current state/status of the _Ticket_ will be given in the state field (e.g. UNSCANNED, SCANNED, CLAIMABLE, INVALIDATED).
+
+### Protocol [static]
+
+All-time data for protocol-wide metrics, aggregated. This is used to capture the all-time usage on the protocol across all integrators. Singleton with ID '0001'.
+
+### ProtocolDay [time-series]
+
+Similar content to _Protocol_ but aggregrated to each UTC-day. Used to track protocol usage over time. ID is a `dayInteger` from the unix epoch (unix / 86400).
+
+### RelayerDay [time-series]
+
+Usage statistics per-relayer-day. Used to track and compare protocol usage by relayer. ID is a composite key of `relayerAddress-dayInteger`.
 
 ## Setup
 
@@ -25,7 +39,7 @@ At this point you should now have a local graph-node available for local develop
 1. `yarn create-local` to create the local graph namespace.
 2. `yarn deploy-local` to deploy the graph to the local instance.
 
-The local GraphiQL explorer can be found at http://localhost:8000/subgraphs/name/get-protocol-subgraph/graphql, follow the terminal logs from the `docker compose up` command to follow progress on the indexing.
+The local GraphiQL explorer can be found at http://localhost:8000/subgraphs/name/get-protocol-subgraph/graphql. Follow the terminal logs from the `docker compose up` command to follow progress on the indexing.
 
 ## Contributing
 

@@ -13,5 +13,8 @@ module.exports = {
   rules: {
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error",
+    // The following are incompatible with AssemblyScript
+    "prefer-const": "off",
+    "@typescript-eslint/no-unnecessary-type-assertion": "off",
   },
 };

@@ -6,10 +6,13 @@ export function getEvent(eventAddress: string): Event {
 
   if (event == null) {
     event = new Event(eventAddress);
-    event.integrator_address = "";
-    event.fuel_used = BIG_INT_ZERO;
-    event.mints = BIG_INT_ZERO;
-    event.ticket_value = BIG_INT_ZERO;
+    event.relayer = "";
+    event.getUsed = BIG_INT_ZERO;
+    event.eventName = "";
+    event.shopUrl = "";
+    event.imageUrl = "";
+    event.ticketValue = BIG_INT_ZERO;
+    event.mintCount = BIG_INT_ZERO;
   }
 
   return event as Event;
