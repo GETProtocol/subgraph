@@ -20,7 +20,7 @@ type ProtocolDay @entity {
   changeCount: BigInt!
 }
 
-type Event @entity @key(fields: "id") @key(fields: "relayer") {
+type Event @entity {
   id: ID!
   relayer: Relayer!
   getUsed: BigInt!
@@ -29,6 +29,7 @@ type Event @entity @key(fields: "id") @key(fields: "relayer") {
   imageUrl: String!
   ticketValue: BigInt!
   mintCount: BigInt!
+  timestamp: BigInt!
 }
 
 type Relayer @entity {
@@ -44,7 +45,7 @@ type Relayer @entity {
 # NOTE NOTE Additional primary keys for querying by timestamp instead of relayer. This would remove the need
 # to have a separate ProtocolDayData Entity if you could just query by timestamp, then
 # aggregate on the client
-type RelayerDay @entity @key(fields: "id") @key(fields: "timestamp") {
+type RelayerDay @entity {
   id: ID! # Composite Key: relayerAddress:timestampAsDay
   relayer: Relayer!
   timestamp: Int!

@@ -11,6 +11,7 @@ export function getRelayer(id: string): Relayer {
     relayer.mintCount = BIG_INT_ZERO;
     relayer.scanCount = BIG_INT_ZERO;
     relayer.claimCount = BIG_INT_ZERO;
+    relayer.events = [];
   }
 
   return relayer as Relayer;

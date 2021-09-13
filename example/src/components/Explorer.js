@@ -1,21 +1,33 @@
 import React, { useState } from "react";
 import Chart from "./Chart";
+import { GET_PROTOCOL_BY_DAY, GET_EVENTS } from "../api";
 import { Box, Button } from "@chakra-ui/react";
 
-const Explorer = props => {
+import ProtocolStats from "./ProtocolStats";
+import Table from './Table';
 
+const Explorer = props => {
   return (
     <Box h="100vh" w="100vw" d="flex" p="100" flexDir="column">
-      <Box d="flex" h="64" bgColor="green" justifyContent="center" alignItems="center" experimental_spaceX="4">
-        <Button>Events by Day</Button>
-        <Button>Protocol by Day</Button>
-      </Box>
-
-
+        <ProtocolStats />
 
       <Box flex="1">
-        <Chart />
+        <Chart
+          entity="protocolDays"
+          query={GET_PROTOCOL_BY_DAY()}
+          fields={["ticketValue", "changeCount", "claimCount", "getUsed", "mintCount", "scanCount"]}
+        />
       </Box>
+
+      <Box flex="1">
+        <Chart
+          entity="events"
+          query={GET_EVENTS()}
+          fields={["ticketValue", "changeCount", "getUsed", "mintCount", "scanCount"]}
+        />
+      </Box>
+
+      <Table />
     </Box>
   );
 };

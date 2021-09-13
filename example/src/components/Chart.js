@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { GET_PROTOCOL, GET_PROTOCOL_BY_DAY } from "../api";
 import { useQuery } from "@apollo/client";
 import { Box, Button } from "@chakra-ui/react";
 
@@ -27,16 +26,14 @@ function formatDataForBar(data, fieldToPlot) {
   return _data;
 }
 
-const fields = ["ticketValue", "changeCount", "claimCount", "getUsed", "mintCount", "scanCount"];
-
-const Chart = props => {
-  const [fieldToPlot, setFieldToPlot] = useState(fields[0]);
-  const { loading, error, data } = useQuery(GET_PROTOCOL_BY_DAY());
+const Chart = ({ query, fields=[], entity }) => {
+  const [fieldToPlot, setFieldToPlot] = useState(fields[0] || '');
+  const { loading, error, data } = useQuery(query);
   
   if (loading) return "Loading...";
   if (error) return "Error..." + error.message;
   
-  const { protocolDays } = data;
+  const dataByDay = data[entity]
   
   return (
     <>
@@ -46,7 +43,7 @@ const Chart = props => {
         ))}
       </Box>
 
-      <Bar data={formatDataForBar(protocolDays, fieldToPlot)} options={options} />
+      <Bar data={formatDataForBar(dataByDay, fieldToPlot)} options={options} />
     </>
   );
 };

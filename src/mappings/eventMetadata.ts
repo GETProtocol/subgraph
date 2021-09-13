@@ -12,13 +12,14 @@ export function handleNewEventRegistered(e: newEventRegistered): void {
   let eventData = eventMetadataContract.getEventData(address);
 
   log.info('NEW EVENT REGISTERED', [eventData.value2.toString()])
-
+  
   let event = getEvent(address.toHex());
   event.getUsed = e.params.getUsed;
   event.relayer = eventData.value0.toHex();
   event.eventName = eventData.value2;
   event.shopUrl = eventData.value3;
   event.imageUrl = eventData.value4;
+  event.timestamp = e.params.orderTime;
 
   event.save();
 }

@@ -1,5 +1,5 @@
 import { ethereum } from "@graphprotocol/graph-ts";
-import { RelayerDay } from "../../generated/schema";
+import { RelayerDay, Relayer } from "../../generated/schema";
 import { BIG_INT_ZERO } from "../constants";
 
 export function getRelayerDayByEvent(event: ethereum.Event): RelayerDay {
@@ -11,6 +11,7 @@ export function getRelayerDayByEvent(event: ethereum.Event): RelayerDay {
   let id = relayerAddress.concat("-").concat(date.toString());
 
   let relayerDay = RelayerDay.load(id);
+  let relayerParent = Relayer.load(relayerAddress)
 
   if (relayerDay == null) {
     relayerDay = new RelayerDay(id);
