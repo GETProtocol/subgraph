@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Text } from "@chakra-ui/react";
-import { GET_PROTOCOL } from "../api";
+import { findProtocol } from "../queries";
 import { useQuery } from "@apollo/client";
 
-const ProtocolStats = props => {
-  const { loading, error, data } = useQuery(GET_PROTOCOL);
+const ProtocolStats = () => {
+  const { loading, error, data } = useQuery(findProtocol);
 
   if (loading) return "Loading...";
   if (error) return "Erorr" + error;
@@ -36,7 +36,7 @@ const ProtocolStats = props => {
       </Text>
       <Box flex="1" d="flex" flexDir="row" experimental_spaceX="4" mb="4">
         {keys.map((k, i) => {
-          if (k.includes("__")) return;
+          if (k.includes("__")) return null;
           return cardFactory(k, protocol[k], i);
         })}
       </Box>

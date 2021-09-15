@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { GET_EVENTS } from "../api";
+import { allEvents } from "../queries";
 import { Table as UITable, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, Box } from "@chakra-ui/react";
 
-const Table = props => {
-  const { loading, error, data } = useQuery(GET_EVENTS());
-  const [totals, setTotals] = useState({ getUsed: 0, ticketValue: 0, mintCount: 0 });
+const Table = () => {
+  const { loading, error, data } = useQuery(allEvents);
+  const [totals] = useState({ getUsed: 0, ticketValue: 0, mintCount: 0 });
 
   if (loading) return "Loading...";
   if (error) return "Error " + error;
 
   const events = data.events;
 
-
   return (
     <Box d="flex" flex="1">
-      <UITable variant="simple" >
+      <UITable variant="simple">
         <TableCaption>List of Events</TableCaption>
         <Thead>
           <Tr>

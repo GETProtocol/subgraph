@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-const GET_PROTOCOL = gql`
-  query GetProtocol {
+const findProtocol = gql`
+  query Protocol {
     protocols(id: "0001") {
       id
       getUsed
@@ -14,9 +14,8 @@ const GET_PROTOCOL = gql`
   }
 `;
 
-// TODO make dynamic based on timestamp
-const GET_PROTOCOL_BY_DAY = () => gql`
-  query GetProtocolDays {
+const allProtocolDays = gql`
+  query ProtocolDays {
     protocolDays {
       id
       timestamp
@@ -30,8 +29,8 @@ const GET_PROTOCOL_BY_DAY = () => gql`
   }
 `;
 
-const GET_EVENTS = () => gql`
-  query GetEvents {
+const allEvents = gql`
+  query Events {
     events(where: { getUsed_gt: 1 }) {
       id
       getUsed
@@ -44,4 +43,4 @@ const GET_EVENTS = () => gql`
   }
 `;
 
-export { GET_PROTOCOL, GET_PROTOCOL_BY_DAY, GET_EVENTS };
+export { findProtocol, allProtocolDays, allEvents };

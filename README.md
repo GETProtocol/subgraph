@@ -2,27 +2,30 @@
 
 > Aggregating and indexing all on-chain event, ticket, and protocol data.
 
-## Intro
+The GET Protocol subgraph acts as the complete data interface to all on-chain data. Its purpose is to properly aggregate and index all static and time-series data passing through the protocol.
 
-The GET Protocol subgraph acts as the complete data interface to all on-chain data. Its purpose is to properly aggregate and index all static and time-series data passing through the protocol. There are a number of key entities to be aware of:
+- _Cross-sectional_ data is compiled to its latest update and will always return the latest state.
+- _Time-series_ data is indexed by its time bucket and is used for metrics and time-sensitive usage stats.
 
-### Events [static]
+There are a number of key entities to be aware of:
+
+#### Events [cross-sectional]
 
 Indexes all metadata for an _Event_ by its `address`. Each Event has it's own independent address on-chain. Updates to an _Event_ will overwrite the data within this entity, so this will always represent the latest state. Contains a reference to _Tickets_ for fetching all of the tickets for an _Event_ using its one-to-many relationship.
 
-### Tickets [static]
+#### Tickets [cross-sectional]
 
 Indexes all _Ticket_ metadata through to the latest update. Contains a reference to _Event_ using the `eventAddress` as a belongs-to relationship. The current state/status of the _Ticket_ will be given in the state field (e.g. UNSCANNED, SCANNED, CLAIMABLE, INVALIDATED).
 
-### Protocol [static]
+#### Protocol [cross-sectional]
 
 All-time data for protocol-wide metrics, aggregated. This is used to capture the all-time usage on the protocol across all integrators. Singleton with ID '0001'.
 
-### ProtocolDay [time-series]
+#### ProtocolDay [time-series]
 
 Similar content to _Protocol_ but aggregrated to each UTC-day. Used to track protocol usage over time. ID is a `dayInteger` from the unix epoch (unix / 86400).
 
-### RelayerDay [time-series]
+#### RelayerDay [time-series]
 
 Usage statistics per-relayer-day. Used to track and compare protocol usage by relayer. ID is a composite key of `relayerAddress-dayInteger`.
 
@@ -47,4 +50,4 @@ Contributions are welcome, please feel free to let us know about any issues or c
 
 ### Conventions
 
-Where possible we stick to some sensible defaults in particular [@typescript-eslint](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin) (recommended and recommended-requiring-type-checking), and [Prettier](https://prettier.io/docs/en/index.html). [Husky](https://github.com/typicode/husky) has been configured to automatically lint and format upon commit.
+Where possible we stick to some sensible defaults in particular [@typescript-eslint](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin), and [Prettier](https://prettier.io/docs/en/index.html). [Husky](https://github.com/typicode/husky) has been configured to automatically lint and format upon commit.
