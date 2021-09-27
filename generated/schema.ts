@@ -528,6 +528,15 @@ export class UsageEvent extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get timestamp(): i32 {
+    let value = this.get("timestamp");
+    return value.toI32();
+  }
+
+  set timestamp(value: i32) {
+    this.set("timestamp", Value.fromI32(value));
+  }
+
   get relayer(): string {
     let value = this.get("relayer");
     return value.toString();

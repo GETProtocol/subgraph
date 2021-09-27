@@ -26,8 +26,8 @@ const Table = () => {
         </Thead>
         <Tbody>
           {events.map((e, i) => {
-            if(!e.eventName || e.eventName === '') return null;
-            
+            if (!e.eventName || e.eventName === "") return null;
+
             const getUsed = Number(e.getUsed) / 1000;
 
             return (

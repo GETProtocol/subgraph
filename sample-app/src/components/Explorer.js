@@ -20,11 +20,7 @@ const Explorer = () => {
       </Box>
 
       <Box flex="1">
-        <Chart
-          entity="events"
-          query={allEvents}
-          fields={["changeCount", "getUsed", "mintCount", "scanCount"]}
-        />
+        <Chart entity="events" query={allEvents} fields={["changeCount", "getUsed", "mintCount", "scanCount"]} />
       </Box>
 
       <Table />
