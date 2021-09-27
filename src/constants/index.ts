@@ -25,3 +25,5 @@ export let BIG_INT_ONE_HUNDRED = BigInt.fromI32(100);
 export let BIG_INT_ONE_DAY_SECONDS = BigInt.fromI32(86400);
 
 export let BIG_INT_ZERO = BigInt.fromI32(0);
+
+export let BIG_INT_MINUS_ONE = BigInt.fromI32(-1);

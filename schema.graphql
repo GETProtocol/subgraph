@@ -1,23 +1,34 @@
+enum Interaction {
+  NEW_EVENT
+  MINT
+  SCAN
+  CLAIM
+  INVALIDATE
+}
+
+enum TicketState {
+  UNSCANNED
+  SCANNED
+  CLAIMABLE
+  INVALIDATED
+}
+
 # COMBAK inherit all from a DataFactory Schema
 type Protocol @entity {
   id: ID!
   getUsed: BigInt!
-  ticketValue: BigInt!
   mintCount: BigInt!
   scanCount: BigInt!
   claimCount: BigInt!
-  changeCount: BigInt!
 }
 
 type ProtocolDay @entity {
   id: ID!
   timestamp: Int!
   getUsed: BigInt!
-  ticketValue: BigInt!
   mintCount: BigInt!
   scanCount: BigInt!
   claimCount: BigInt!
-  changeCount: BigInt!
 }
 
 type Event @entity {
@@ -27,7 +38,6 @@ type Event @entity {
   eventName: String!
   shopUrl: String!
   imageUrl: String!
-  ticketValue: BigInt!
   mintCount: BigInt!
   timestamp: BigInt!
 }
@@ -35,30 +45,37 @@ type Event @entity {
 type Relayer @entity {
   id: ID!
   getUsed: BigInt!
-  ticketValue: BigInt!
   mintCount: BigInt!
   scanCount: BigInt!
   claimCount: BigInt!
   events: [Event]!
+  relayerDays: [RelayerDay]!
+  usageEvents: [UsageEvent]!
 }
 
-# NOTE NOTE Additional primary keys for querying by timestamp instead of relayer. This would remove the need
-# to have a separate ProtocolDayData Entity if you could just query by timestamp, then
-# aggregate on the client
 type RelayerDay @entity {
   id: ID! # Composite Key: relayerAddress:timestampAsDay
   relayer: Relayer!
   timestamp: Int!
   getUsed: BigInt!
-  ticketValue: BigInt!
   mintCount: BigInt!
   scanCount: BigInt!
   claimCount: BigInt!
-  changeCount: BigInt!
 }
-# ------------------------------------------------------------------------------------------------------------
-# V2 Contract Entities
-# ------------------------------------------------------------------------------------------------------------
-# type RelayerDayDynamicRates @entity  {
 
-# }
+type Ticket @entity {
+  id: ID!
+  relayer: Relayer!
+  event: Event!
+  state: TicketState!
+  url: String
+  fuelTankBalance: BigInt!
+}
+
+type UsageEvent @entity {
+  id: ID!
+  relayer: Relayer!
+  nftIndex: BigInt!
+  getUsed: BigInt!
+  interaction: Interaction!
+}

@@ -2,14 +2,12 @@ import { gql } from "@apollo/client";
 
 const findProtocol = gql`
   query Protocol {
-    protocols(id: "0001") {
+    protocols(id: "1") {
       id
       getUsed
-      ticketValue
       mintCount
       scanCount
       claimCount
-      changeCount
     }
   }
 `;
@@ -20,11 +18,9 @@ const allProtocolDays = gql`
       id
       timestamp
       getUsed
-      ticketValue
       mintCount
       scanCount
       claimCount
-      changeCount
     }
   }
 `;
@@ -36,7 +32,6 @@ const allEvents = gql`
       getUsed
       eventName
       shopUrl
-      ticketValue
       mintCount
       timestamp
     }

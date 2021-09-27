@@ -9,11 +9,9 @@ export function getProtocol(): Protocol {
   if (protocol == null) {
     protocol = new Protocol(id.toString());
     protocol.getUsed = BIG_INT_ZERO;
-    protocol.ticketValue = BIG_INT_ZERO;
     protocol.mintCount = BIG_INT_ZERO;
     protocol.scanCount = BIG_INT_ZERO;
     protocol.claimCount = BIG_INT_ZERO;
-    protocol.changeCount = BIG_INT_ZERO;
   }
 
   return protocol as Protocol;

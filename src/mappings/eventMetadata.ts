@@ -10,9 +10,10 @@ export function handleNewEventRegistered(e: newEventRegistered): void {
   let address = e.params.eventAddress;
   let eventMetadataContract = EventMetadataContract.bind(EVENT_METADATA_ADDRESS);
   let eventData = eventMetadataContract.getEventData(address);
+  // let usageEvent = getUsageEvent(e, e.transaction.hash.toI32())
 
-  log.info('NEW EVENT REGISTERED', [eventData.value2.toString()])
-  
+  log.info("NEW EVENT REGISTERED", [eventData.value2.toString()]);
+
   let event = getEvent(address.toHex());
   event.getUsed = e.params.getUsed;
   event.relayer = eventData.value0.toHex();
@@ -21,5 +22,9 @@ export function handleNewEventRegistered(e: newEventRegistered): void {
   event.imageUrl = eventData.value4;
   event.timestamp = e.params.orderTime;
 
+  // usageEvent.getUsed = usageEvent.getUsed.plus(e.params.getUsed);
+  // usageEvent.interaction = "NEW_EVENT"
+
   event.save();
+  // usageEvent.save()
 }

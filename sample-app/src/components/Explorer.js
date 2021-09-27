@@ -15,7 +15,7 @@ const Explorer = () => {
         <Chart
           entity="protocolDays"
           query={allProtocolDays}
-          fields={["ticketValue", "changeCount", "claimCount", "getUsed", "mintCount", "scanCount"]}
+          fields={["changeCount", "claimCount", "getUsed", "mintCount", "scanCount"]}
         />
       </Box>
 
@@ -23,7 +23,7 @@ const Explorer = () => {
         <Chart
           entity="events"
           query={allEvents}
-          fields={["ticketValue", "changeCount", "getUsed", "mintCount", "scanCount"]}
+          fields={["changeCount", "getUsed", "mintCount", "scanCount"]}
         />
       </Box>
 

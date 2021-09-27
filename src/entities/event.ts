@@ -11,7 +11,6 @@ export function getEvent(eventAddress: string): Event {
     event.eventName = "";
     event.shopUrl = "";
     event.imageUrl = "";
-    event.ticketValue = BIG_INT_ZERO;
     event.mintCount = BIG_INT_ZERO;
     event.timestamp = BIG_INT_ZERO;
   }
