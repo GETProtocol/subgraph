@@ -3,66 +3,41 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum/contract
-    name: NFT
+    name: NFTV1
     network: matic
     source:
       address: "0x308e44cA2153C61103b0DC67Fd038De650912b73"
-      abi: NFT
-      startBlock: 18074178
+      abi: NFTV1
+      startBlock: 15980516
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
       entities:
-        # - ConfigurationChanged
-        # - ConfigurationChangedEcon
-        # - NFTCheckedIn
-        # - illegalScan
         - nftClaimed
-        # - nftMinted
-        # - nftTokenURIEdited
         - primarySaleMint
-        # - saleCollaterizedIntentory
-        # - secondarySale
         - ticketInvalidated
         - ticketScanned
       abis:
-        - name: NFT
-          file: ./abis/NFT.json
+        - name: NFTV1
+          file: ./abis/v1/NFT.json
       eventHandlers:
-        # - event: ConfigurationChanged(address,address,address,address)
-        #   handler: handleConfigurationChanged
-        # - event: ConfigurationChangedEcon(address,address)
-        #   handler: handleConfigurationChangedEcon
-        # - event: NFTCheckedIn(indexed uint256,indexed uint64,indexed uint64)
-        #   handler: handleNFTCheckedIn
-        # - event: illegalScan(indexed uint256,indexed uint64,indexed uint64)
-        #   handler: handleillegalScan
         - event: nftClaimed(indexed uint256,indexed uint64,address,indexed uint64)
-          handler: handlenftClaimed
-        # - event: nftMinted(indexed uint256,indexed address)
-        #   handler: handlenftMinted
-        # - event: nftTokenURIEdited(indexed uint256,indexed uint64,string)
-        #   handler: handlenftTokenURIEdited
+          handler: handleNftClaimed
         - event: primarySaleMint(indexed uint256,indexed uint64,address,address,uint256,indexed uint64)
           handler: handlePrimarySaleMint
-        # - event: saleCollaterizedIntentory(indexed uint256,indexed uint64,address,indexed uint64)
-        #   handler: handlesaleCollaterizedIntentory
-        # - event: secondarySale(indexed uint256,indexed uint64,address,address,uint256,indexed uint64)
-        #   handler: handlesecondarySale
-        # - event: ticketInvalidated(indexed uint256,indexed uint64,address,indexed uint64)
-        #   handler: handleticketInvalidated
+        - event: ticketInvalidated(indexed uint256,indexed uint64,address,indexed uint64)
+          handler: handleTicketInvalidated
         - event: ticketScanned(indexed uint256,indexed uint64,indexed uint64)
-          handler: handleticketScanned
-      file: ./src/mappings/nft.ts
+          handler: handleTicketScanned
+      file: ./src/mappings/v1/nft.ts
   - kind: ethereum/contract
-    name: EventMetadata
+    name: EventMetadataV1
     network: matic
     source:
       address: "0xcDA348fF8C175f305Ed8682003ec6F8743067f79"
-      abi: EventMetadata
-      # startBlock: 15980516
-      startBlock: 18074178
+      abi: EventMetadataV1
+      startBlock: 15980516
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -70,9 +45,9 @@ dataSources:
       entities:
         - newEventRegistered
       abis:
-        - name: EventMetadata
-          file: ./abis/EventMetadata.json
+        - name: EventMetadataV1
+          file: ./abis/v1/EventMetadata.json
       eventHandlers:
         - event: newEventRegistered(indexed address,indexed uint256,string,indexed uint256)
           handler: handleNewEventRegistered
-      file: ./src/mappings/eventMetadata.ts
+      file: ./src/mappings/v1/eventMetadata.ts

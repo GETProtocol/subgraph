@@ -1,5 +1,7 @@
+import { BigInt } from "@graphprotocol/graph-ts";
 import { Event } from "../../generated/schema";
-import { BIG_INT_ZERO } from "../constants";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, NFT_ADDRESS } from "../constants";
+import { NFTV1 as NFTContract } from "../../generated/NFTV1/NFTV1";
 
 export function getEvent(eventAddress: string): Event {
   let event = Event.load(eventAddress);
@@ -11,9 +13,16 @@ export function getEvent(eventAddress: string): Event {
     event.eventName = "";
     event.shopUrl = "";
     event.imageUrl = "";
-    event.mintCount = BIG_INT_ZERO;
-    event.timestamp = BIG_INT_ZERO;
+    event.orderTime = BIG_INT_ZERO;
+    event.latitude = BIG_DECIMAL_ZERO;
+    event.longitude = BIG_DECIMAL_ZERO;
   }
 
   return event as Event;
+}
+
+export function getEventByNftIndexV1(nftIndex: BigInt): Event {
+  let nftContract = NFTContract.bind(NFT_ADDRESS);
+  let nftData = nftContract.returnStructTicket(nftIndex);
+  return getEvent(nftData.event_address.toHexString());
 }

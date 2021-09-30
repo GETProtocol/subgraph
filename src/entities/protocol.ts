@@ -11,6 +11,7 @@ export function getProtocol(): Protocol {
     protocol.getUsed = BIG_INT_ZERO;
     protocol.mintCount = BIG_INT_ZERO;
     protocol.scanCount = BIG_INT_ZERO;
+    protocol.invalidateCount = BIG_INT_ZERO;
     protocol.claimCount = BIG_INT_ZERO;
   }
 

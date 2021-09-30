@@ -1,17 +1,46 @@
-import { ethereum, BigInt } from "@graphprotocol/graph-ts";
-import { UsageEvent } from "../../generated/schema";
-import { BIG_INT_ZERO } from "../constants";
+import { BigInt, ethereum } from "@graphprotocol/graph-ts";
+import { Event, UsageEvent } from "../../generated/schema";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../constants";
 
-export function getUsageEvent(event: ethereum.Event, nftIndex: BigInt = BIG_INT_ZERO): UsageEvent {
-  let day = event.block.timestamp.toI32() / 86400;
-  let date = day * 86400;
+export function getUsageEvent(e: ethereum.Event): UsageEvent {
+  let timestamp = e.block.timestamp;
+  let day = timestamp.toI32() / 86400;
 
-  let usageEvent = new UsageEvent(event.transaction.hash.toHex());
+  let usageEvent = new UsageEvent(e.transaction.hash.toHexString());
+  usageEvent.relayer = e.transaction.from.toHexString();
+
+  usageEvent.blockNumber = e.block.number;
+  usageEvent.blockTimestamp = timestamp;
+  usageEvent.orderTime = BIG_INT_ZERO;
+  usageEvent.day = day;
   usageEvent.getUsed = BIG_INT_ZERO;
-  usageEvent.relayer = event.transaction.from.toHex();
-  usageEvent.nftIndex = nftIndex;
+  usageEvent.event = "";
+  usageEvent.nftIndex = BIG_INT_ZERO;
   usageEvent.interaction = "";
-  usageEvent.timestamp = date;
+  usageEvent.latitude = BIG_DECIMAL_ZERO;
+  usageEvent.longitude = BIG_DECIMAL_ZERO;
 
+  return usageEvent as UsageEvent;
+}
+
+export function createUsageEvent(
+  e: ethereum.Event,
+  event: Event,
+  nftIndex: BigInt,
+  interaction: string,
+  orderTime: BigInt,
+  getUsed: BigInt
+): UsageEvent {
+  let usageEvent = getUsageEvent(e);
+
+  usageEvent.orderTime = orderTime;
+  usageEvent.getUsed = getUsed;
+  usageEvent.event = event.id;
+  usageEvent.nftIndex = nftIndex;
+  usageEvent.interaction = interaction;
+  usageEvent.latitude = event.latitude;
+  usageEvent.longitude = event.longitude;
+
+  usageEvent.save();
   return usageEvent as UsageEvent;
 }

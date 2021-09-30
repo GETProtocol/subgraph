@@ -5,29 +5,38 @@
 The GET Protocol subgraph acts as the complete data interface to all on-chain data. Its purpose is to properly aggregate and index all static and time-series data passing through the protocol.
 
 - _Cross-sectional_ data is compiled to its latest update and will always return the latest state.
-- _Time-series_ data is indexed by its time bucket and is used for metrics and time-sensitive usage stats.
+- _Aggregate_ data aggregated across all time, similar to cross-sectional in that there should be one record per-entity.
+- _Time-series_ individual granular events of raw data, either as individual records or within a time-bucket.
 
 There are a number of key entities to be aware of:
 
-#### Events [cross-sectional]
+#### Events [Cross-sectional]
 
-Indexes all metadata for an _Event_ by its `address`. Each Event has it's own independent address on-chain. Updates to an _Event_ will overwrite the data within this entity, so this will always represent the latest state. Contains a reference to _Tickets_ for fetching all of the tickets for an _Event_ using its one-to-many relationship.
+Indexes all metadata for an _Event_ by its `address` as each Event has it's own independent address on-chain. Updates to an _Event_ will overwrite the data within this entity, so this will always represent the latest state. All actions visible through the associated `usageEvents` field.
 
-#### Tickets [cross-sectional]
+#### Protocol [Aggregate]
 
-Indexes all _Ticket_ metadata through to the latest update. Contains a reference to _Event_ using the `eventAddress` as a belongs-to relationship. The current state/status of the _Ticket_ will be given in the state field (e.g. UNSCANNED, SCANNED, CLAIMABLE, INVALIDATED).
+All-time data for protocol-wide metrics, aggregated. This is used to capture the all-time usage on the protocol across all integrators. Singleton with ID '1'.
 
-#### Protocol [cross-sectional]
+#### Relayer [Aggregate]
 
-All-time data for protocol-wide metrics, aggregated. This is used to capture the all-time usage on the protocol across all integrators. Singleton with ID '0001'.
+All-time data for individual relayer, with total usage and counts. ID'd by the `relayerAddress`.
 
-#### ProtocolDay [time-series]
+#### ProtocolDay [Time-series]
 
 Similar content to _Protocol_ but aggregrated to each UTC-day. Used to track protocol usage over time. ID is a `dayInteger` from the unix epoch (unix / 86400).
 
-#### RelayerDay [time-series]
+#### RelayerDay [Time-series]
 
 Usage statistics per-relayer-day. Used to track and compare protocol usage by relayer. ID is a composite key of `relayerAddress-dayInteger`.
+
+#### UsageEvent [Time-series]
+
+Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `CREATE_EVENT`, `MINT`, `SCAN`. Comes with lat/long, the relayer, the GET used as fuel, the exact timestamp of the block, and the day as an integer.
+
+## Entity Relationship Diagram
+
+![GET Protocol Subgraph Entity Relationship Diagram](/docs/erd.png)
 
 ## Setup
 
