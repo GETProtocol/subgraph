@@ -17,11 +17,9 @@ export function getRelayerDayByEvent(event: ethereum.Event): RelayerDay {
     relayerDay.relayer = relayerAddress;
     relayerDay.timestamp = date;
     relayerDay.getUsed = BIG_INT_ZERO;
-    relayerDay.ticketValue = BIG_INT_ZERO;
     relayerDay.mintCount = BIG_INT_ZERO;
     relayerDay.scanCount = BIG_INT_ZERO;
     relayerDay.claimCount = BIG_INT_ZERO;
-    relayerDay.changeCount = BIG_INT_ZERO;
   }
 
   return relayerDay as RelayerDay;

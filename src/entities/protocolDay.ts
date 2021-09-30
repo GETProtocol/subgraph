@@ -14,11 +14,9 @@ export function getProtocolDayByEvent(event: ethereum.Event): ProtocolDay {
     protocolDay = new ProtocolDay(id.toString());
     protocolDay.timestamp = date;
     protocolDay.getUsed = BIG_INT_ZERO;
-    protocolDay.ticketValue = BIG_INT_ZERO;
     protocolDay.mintCount = BIG_INT_ZERO;
     protocolDay.scanCount = BIG_INT_ZERO;
     protocolDay.claimCount = BIG_INT_ZERO;
-    protocolDay.changeCount = BIG_INT_ZERO;
   }
 
   return protocolDay as ProtocolDay;
