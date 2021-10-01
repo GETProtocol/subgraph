@@ -16,7 +16,7 @@ const allProtocolDays = gql`
   query ProtocolDays {
     protocolDays {
       id
-      timestamp
+      day
       getUsed
       mintCount
       scanCount
@@ -32,8 +32,7 @@ const allEvents = gql`
       getUsed
       eventName
       shopUrl
-      mintCount
-      timestamp
+      orderTime
     }
   }
 `;

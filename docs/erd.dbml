@@ -1,0 +1,84 @@
+// Enums
+
+Enum Interaction {
+  MINT
+  SCAN
+  CLAIM
+}
+
+// Entities
+
+Table Protocol {
+  id id
+  getUsed bigint
+  averageGetUsedPerMint bigint
+  mintCount bigint
+  invalidateCount bigint
+  scanCount bigint
+  claimCount bigint
+}
+
+Table ProtocolDay {
+  id id
+  day int
+  getUsed bigint
+  averageGetUsedPerMint bigint
+  mintCount bigint
+  invalidateCount bigint
+  scanCount bigint
+  claimCount bigint
+}
+
+
+Table Relayer {
+  id id
+  getUsed bigint
+  averageGetUsedPerMint bigint
+  mintCount bigint
+  invalidateCount bigint
+  scanCount bigint
+  claimCount bigint
+  events Event[] [ref: > Event.relayer]
+  relayerDays RelayerDay[] [ref: > RelayerDay.relayer]
+  usageEvents UsageEvent[] [ref: > UsageEvent.relayer]
+}
+
+Table RelayerDay {
+  id id
+  relayer Relayer
+  day int
+  getUsed bigint
+  averageGetUsedPerMint bigint
+  mintCount bigint
+  invalidateCount bigint
+  scanCount bigint
+  claimCount bigint
+}
+
+Table Event {
+  id id
+  relayer Relayer
+  usageEvents UsageEvent[] [ref: > UsageEvent.event]
+  getUsed bigint
+  eventName string
+  shopUrl string
+  imageUrl string
+  orderTime bigint
+  latitude bigdecimal
+  longitude bigdecimal
+}
+
+Table UsageEvent {
+  id id
+  relayer Relayer
+  blockNumber bigint
+  blockTimestamp bigint
+  orderTime bigint
+  day int
+  getUsed bigint
+  interaction Interaction
+  event event
+  nftIndex bigint
+  latitude bigdecimal
+  longitude bigdecimal
+}

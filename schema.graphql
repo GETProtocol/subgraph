@@ -13,20 +13,23 @@ enum TicketState {
   INVALIDATED
 }
 
-# COMBAK inherit all from a DataFactory Schema
 type Protocol @entity {
   id: ID!
   getUsed: BigInt!
+  averageGetUsedPerMint: BigDecimal!
   mintCount: BigInt!
+  invalidateCount: BigInt!
   scanCount: BigInt!
   claimCount: BigInt!
 }
 
 type ProtocolDay @entity {
   id: ID!
-  timestamp: Int!
+  day: Int!
   getUsed: BigInt!
+  averageGetUsedPerMint: BigDecimal!
   mintCount: BigInt!
+  invalidateCount: BigInt!
   scanCount: BigInt!
   claimCount: BigInt!
 }
@@ -34,31 +37,37 @@ type ProtocolDay @entity {
 type Event @entity {
   id: ID!
   relayer: Relayer!
+  usageEvents: [UsageEvent!]! @derivedFrom(field: "event")
   getUsed: BigInt!
   eventName: String!
   shopUrl: String!
   imageUrl: String!
-  mintCount: BigInt!
-  timestamp: BigInt!
+  orderTime: BigInt!
+  latitude: BigDecimal!
+  longitude: BigDecimal!
 }
 
 type Relayer @entity {
   id: ID!
   getUsed: BigInt!
+  averageGetUsedPerMint: BigDecimal!
   mintCount: BigInt!
+  invalidateCount: BigInt!
   scanCount: BigInt!
   claimCount: BigInt!
-  events: [Event]!
-  relayerDays: [RelayerDay]!
-  usageEvents: [UsageEvent]!
+  events: [Event!]! @derivedFrom(field: "relayer")
+  relayerDays: [RelayerDay!]! @derivedFrom(field: "relayer")
+  usageEvents: [UsageEvent!]! @derivedFrom(field: "relayer")
 }
 
 type RelayerDay @entity {
-  id: ID! # Composite Key: relayerAddress:timestampAsDay
+  id: ID! # Composite PK: relayerAddress-timestampAsDay
   relayer: Relayer!
-  timestamp: Int!
+  day: Int!
   getUsed: BigInt!
+  averageGetUsedPerMint: BigDecimal!
   mintCount: BigInt!
+  invalidateCount: BigInt!
   scanCount: BigInt!
   claimCount: BigInt!
 }
@@ -74,9 +83,15 @@ type Ticket @entity {
 
 type UsageEvent @entity {
   id: ID!
-  timestamp: Int!
   relayer: Relayer!
-  nftIndex: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  orderTime: BigInt!
+  day: Int!
   getUsed: BigInt!
   interaction: Interaction!
+  event: Event!
+  nftIndex: BigInt!
+  latitude: BigDecimal!
+  longitude: BigDecimal!
 }

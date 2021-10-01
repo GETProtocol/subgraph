@@ -21,12 +21,12 @@ const options = {
   },
 };
 
-function formatDataForBar(data, fieldToPlot) {
+function formatDataForBar(data, xAxis, fieldToPlot) {
   const labels = [];
   const values = [];
 
   data.forEach((item) => {
-    labels.push(item.timestamp);
+    labels.push(item[xAxis]);
     values.push(Number(item[fieldToPlot]));
   });
 
@@ -42,7 +42,7 @@ function formatDataForBar(data, fieldToPlot) {
   };
 }
 
-const Chart = ({ query, fields = [], entity }) => {
+const Chart = ({ query, xAxis, fields = [], entity }) => {
   const [fieldToPlot, setFieldToPlot] = useState(fields[0] || "");
   const { loading, error, data } = useQuery(query);
 
@@ -61,7 +61,7 @@ const Chart = ({ query, fields = [], entity }) => {
         ))}
       </Box>
 
-      <Bar data={formatDataForBar(dataByDay, fieldToPlot)} options={options} />
+      <Bar data={formatDataForBar(dataByDay, xAxis, fieldToPlot)} options={options} />
     </>
   );
 };

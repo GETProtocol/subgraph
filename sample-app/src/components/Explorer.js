@@ -15,12 +15,13 @@ const Explorer = () => {
         <Chart
           entity="protocolDays"
           query={allProtocolDays}
-          fields={["changeCount", "claimCount", "getUsed", "mintCount", "scanCount"]}
+          xAxis="day"
+          fields={["getUsed", "mintCount", "scanCount", "claimCount"]}
         />
       </Box>
 
       <Box flex="1">
-        <Chart entity="events" query={allEvents} fields={["changeCount", "getUsed", "mintCount", "scanCount"]} />
+        <Chart entity="events" query={allEvents} xAxis="orderTime" fields={["getUsed"]} />
       </Box>
 
       <Table />

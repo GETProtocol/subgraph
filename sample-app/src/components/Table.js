@@ -20,7 +20,6 @@ const Table = () => {
           <Tr>
             <Th>Event Name</Th>
             <Th isNumeric>getUsed</Th>
-            <Th isNumeric>mintCount</Th>
             <Th isNumeric>timestamp</Th>
           </Tr>
         </Thead>
@@ -34,8 +33,7 @@ const Table = () => {
               <Tr>
                 <Td>{e.eventName}</Td>
                 <Td isNumeric>{getUsed}</Td>
-                <Td isNumeric>{e.mintCount}</Td>
-                <Td isNumeric>{e.timestamp}</Td>
+                <Td isNumeric>{e.orderTime}</Td>
               </Tr>
             );
           })}
@@ -44,7 +42,6 @@ const Table = () => {
           <Tr>
             <Th></Th>
             <Th>{totals.getUsed}</Th>
-            <Th>{totals.mintCount}</Th>
             <Th></Th>
           </Tr>
         </Tfoot>
