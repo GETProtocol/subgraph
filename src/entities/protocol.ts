@@ -1,5 +1,5 @@
 import { Protocol } from "../../generated/schema";
-import { BIG_INT_ZERO } from "../constants";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../constants";
 
 export function getProtocol(): Protocol {
   let id = "1";
@@ -9,6 +9,7 @@ export function getProtocol(): Protocol {
   if (protocol == null) {
     protocol = new Protocol(id.toString());
     protocol.getUsed = BIG_INT_ZERO;
+    protocol.averageGetUsedPerMint = BIG_DECIMAL_ZERO;
     protocol.mintCount = BIG_INT_ZERO;
     protocol.scanCount = BIG_INT_ZERO;
     protocol.invalidateCount = BIG_INT_ZERO;

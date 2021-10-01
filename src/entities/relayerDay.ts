@@ -1,6 +1,6 @@
 import { ethereum } from "@graphprotocol/graph-ts";
 import { RelayerDay } from "../../generated/schema";
-import { BIG_INT_ZERO } from "../constants";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../constants";
 
 export function getRelayerDay(e: ethereum.Event): RelayerDay {
   let relayerAddress = e.transaction.from.toHexString();
@@ -13,6 +13,7 @@ export function getRelayerDay(e: ethereum.Event): RelayerDay {
     relayerDay.relayer = relayerAddress;
     relayerDay.day = day;
     relayerDay.getUsed = BIG_INT_ZERO;
+    relayerDay.averageGetUsedPerMint = BIG_DECIMAL_ZERO;
     relayerDay.mintCount = BIG_INT_ZERO;
     relayerDay.scanCount = BIG_INT_ZERO;
     relayerDay.invalidateCount = BIG_INT_ZERO;

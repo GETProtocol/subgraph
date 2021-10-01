@@ -35,18 +35,22 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
 
   protocol.getUsed = protocol.getUsed.plus(e.params.getUsed);
   protocol.mintCount = protocol.mintCount.plus(BIG_INT_ONE);
+  protocol.averageGetUsedPerMint = protocol.getUsed.toBigDecimal().div(protocol.mintCount.toBigDecimal());
   protocol.save();
 
   protocolDay.getUsed = protocolDay.getUsed.plus(e.params.getUsed);
   protocolDay.mintCount = protocolDay.mintCount.plus(BIG_INT_ONE);
+  protocolDay.averageGetUsedPerMint = protocolDay.getUsed.toBigDecimal().div(protocolDay.mintCount.toBigDecimal());
   protocolDay.save();
 
   relayer.getUsed = relayer.getUsed.plus(e.params.getUsed);
   relayer.mintCount = relayer.mintCount.plus(BIG_INT_ONE);
+  relayer.averageGetUsedPerMint = relayer.getUsed.toBigDecimal().div(relayer.mintCount.toBigDecimal());
   relayer.save();
 
   relayerDay.getUsed = relayerDay.getUsed.plus(e.params.getUsed);
   relayerDay.mintCount = relayerDay.mintCount.plus(BIG_INT_ONE);
+  relayerDay.averageGetUsedPerMint = relayerDay.getUsed.toBigDecimal().div(relayerDay.mintCount.toBigDecimal());
   relayerDay.save();
 
   event.getUsed = event.getUsed.plus(e.params.getUsed);

@@ -16,6 +16,7 @@ enum TicketState {
 type Protocol @entity {
   id: ID!
   getUsed: BigInt!
+  averageGetUsedPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
   scanCount: BigInt!
@@ -26,6 +27,7 @@ type ProtocolDay @entity {
   id: ID!
   day: Int!
   getUsed: BigInt!
+  averageGetUsedPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
   scanCount: BigInt!
@@ -48,6 +50,7 @@ type Event @entity {
 type Relayer @entity {
   id: ID!
   getUsed: BigInt!
+  averageGetUsedPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
   scanCount: BigInt!
@@ -62,6 +65,7 @@ type RelayerDay @entity {
   relayer: Relayer!
   day: Int!
   getUsed: BigInt!
+  averageGetUsedPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
   scanCount: BigInt!

@@ -1,5 +1,4 @@
-// For use on dbdiagram.io
-// See: https://www.dbml.org/home/#intro
+// Enums
 
 Enum Interaction {
   MINT
@@ -7,22 +6,12 @@ Enum Interaction {
   CLAIM
 }
 
-Table Event {
-  id id
-  relayer Relayer
-  usageEvents UsageEvent[] [ref: > UsageEvent.event]
-  getUsed bigint
-  eventName string
-  shopUrl string
-  imageUrl string
-  orderTime bigint
-  latitude bigdecimal
-  longitude bigdecimal
-}
+// Entities
 
 Table Protocol {
   id id
   getUsed bigint
+  averageGetUsedPerMint bigint
   mintCount bigint
   invalidateCount bigint
   scanCount bigint
@@ -33,6 +22,7 @@ Table ProtocolDay {
   id id
   day int
   getUsed bigint
+  averageGetUsedPerMint bigint
   mintCount bigint
   invalidateCount bigint
   scanCount bigint
@@ -43,6 +33,7 @@ Table ProtocolDay {
 Table Relayer {
   id id
   getUsed bigint
+  averageGetUsedPerMint bigint
   mintCount bigint
   invalidateCount bigint
   scanCount bigint
@@ -57,10 +48,24 @@ Table RelayerDay {
   relayer Relayer
   day int
   getUsed bigint
+  averageGetUsedPerMint bigint
   mintCount bigint
   invalidateCount bigint
   scanCount bigint
   claimCount bigint
+}
+
+Table Event {
+  id id
+  relayer Relayer
+  usageEvents UsageEvent[] [ref: > UsageEvent.event]
+  getUsed bigint
+  eventName string
+  shopUrl string
+  imageUrl string
+  orderTime bigint
+  latitude bigdecimal
+  longitude bigdecimal
 }
 
 Table UsageEvent {
