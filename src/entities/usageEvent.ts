@@ -35,11 +35,17 @@ export function createUsageEvent(
 
   usageEvent.orderTime = orderTime;
   usageEvent.getUsed = getUsed;
-  usageEvent.event = event.id;
   usageEvent.nftIndex = nftIndex;
   usageEvent.interaction = interaction;
-  usageEvent.latitude = event.latitude;
-  usageEvent.longitude = event.longitude;
+  if (event) {
+    usageEvent.event = event.id;
+    usageEvent.latitude = event.latitude;
+    usageEvent.longitude = event.longitude;
+  } else {
+    usageEvent.event = "";
+    usageEvent.latitude = BIG_DECIMAL_ZERO;
+    usageEvent.longitude = BIG_DECIMAL_ZERO;
+  }
 
   usageEvent.save();
   return usageEvent as UsageEvent;

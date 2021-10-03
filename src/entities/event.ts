@@ -23,6 +23,11 @@ export function getEvent(eventAddress: string): Event {
 
 export function getEventByNftIndexV1(nftIndex: BigInt): Event {
   let nftContract = NFTContract.bind(NFT_ADDRESS);
-  let nftData = nftContract.returnStructTicket(nftIndex);
-  return getEvent(nftData.event_address.toHexString());
+  let nftData = nftContract.try_returnStructTicket(nftIndex);
+
+  if (!nftData.reverted) {
+    return getEvent(nftData.value.event_address.toHexString());
+  }
+
+  return null;
 }
