@@ -25,13 +25,18 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   let event = getEventByNftIndexV1(nftIndex);
 
   let nftContract = NFTContract.bind(NFT_ADDRESS);
-  let nftData = nftContract.returnStructTicket(nftIndex);
+  let nftData = nftContract.try_returnStructTicket(nftIndex);
 
-  // prices_sold[0] is apparently not a supported operation, instead .shift() to get the first item
-  // basePrice is denominated to the tenth of a cent, divide by 10 to get to the cent.
-  let basePrice = nftData.prices_sold.shift();
-  basePrice = basePrice.div(BIG_INT_TEN);
-  log.info("BasePrice: {}", [basePrice.toString()]);
+  // Here, `.reverted` is not a reference to a blockchain transaction revert, rather this represents
+  // the `_try` function above failing. When this errors a reverted key is added to the return object.
+  // See: https://thegraph.com/docs/developer/assemblyscript-api#handling-reverted-calls
+  if (!nftData.reverted) {
+    // prices_sold[0] is apparently not a supported operation, instead .shift() to get the first item
+    // basePrice is denominated to the tenth of a cent, divide by 10 to get to the cent.
+    let basePrice = nftData.value.prices_sold.shift();
+    basePrice = basePrice.div(BIG_INT_TEN);
+    log.info("BasePrice: {}", [basePrice.toString()]);
+  }
 
   protocol.getUsed = protocol.getUsed.plus(e.params.getUsed);
   protocol.mintCount = protocol.mintCount.plus(BIG_INT_ONE);
@@ -53,8 +58,10 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   relayerDay.averageGetUsedPerMint = relayerDay.getUsed.toBigDecimal().div(relayerDay.mintCount.toBigDecimal());
   relayerDay.save();
 
-  event.getUsed = event.getUsed.plus(e.params.getUsed);
-  event.save();
+  if (event) {
+    event.getUsed = event.getUsed.plus(e.params.getUsed);
+    event.save();
+  }
 
   createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, e.params.getUsed);
 }
@@ -83,8 +90,10 @@ export function handleTicketInvalidated(e: ticketInvalidated): void {
   relayerDay.invalidateCount = relayerDay.invalidateCount.plus(BIG_INT_ONE);
   relayerDay.save();
 
-  event.getUsed = event.getUsed.plus(e.params.getUsed);
-  event.save();
+  if (event) {
+    event.getUsed = event.getUsed.plus(e.params.getUsed);
+    event.save();
+  }
 
   createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, e.params.getUsed);
 }
@@ -113,8 +122,10 @@ export function handleTicketScanned(e: ticketScanned): void {
   relayerDay.scanCount = relayerDay.scanCount.plus(BIG_INT_ONE);
   relayerDay.save();
 
-  event.getUsed = event.getUsed.plus(e.params.getUsed);
-  event.save();
+  if (event) {
+    event.getUsed = event.getUsed.plus(e.params.getUsed);
+    event.save();
+  }
 
   createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, e.params.getUsed);
 }
@@ -143,8 +154,10 @@ export function handleNftClaimed(e: nftClaimed): void {
   relayerDay.claimCount = relayerDay.claimCount.plus(BIG_INT_ONE);
   relayerDay.save();
 
-  event.getUsed = event.getUsed.plus(e.params.getUsed);
-  event.save();
+  if (event) {
+    event.getUsed = event.getUsed.plus(e.params.getUsed);
+    event.save();
+  }
 
   createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, e.params.getUsed);
 }
