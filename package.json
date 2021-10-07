@@ -9,7 +9,7 @@
     "remove-local": "graph remove --node http://localhost:8020/ get-protocol-subgraph",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 get-protocol-subgraph",
     "prepare": "husky install",
-    "check": "yarn run lint && yarn run format --check",
+    "check": "eslint . && prettier --check --ignore-path .gitignore .",
     "lint": "eslint .",
     "format": "prettier --write --ignore-path .gitignore ."
   },

@@ -1,7 +1,9 @@
 // Enums
 
-Enum Interaction {
+Enum UsageEventType {
+  NEW_EVENT
   MINT
+  INVALIDATE
   SCAN
   CLAIM
 }
@@ -70,13 +72,14 @@ Table Event {
 
 Table UsageEvent {
   id id
+  txHash string
   relayer Relayer
   blockNumber bigint
   blockTimestamp bigint
   orderTime bigint
   day int
   getUsed bigint
-  interaction Interaction
+  type UsageEventType
   event event
   nftIndex bigint
   latitude bigdecimal

@@ -1,4 +1,4 @@
-enum Interaction {
+enum UsageEventType {
   NEW_EVENT
   MINT
   SCAN
@@ -82,14 +82,15 @@ type Ticket @entity {
 }
 
 type UsageEvent @entity {
-  id: ID!
+  id: ID! # Composite PK: txHash-logIndex
+  txHash: Bytes!
   relayer: Relayer!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   orderTime: BigInt!
   day: Int!
   getUsed: BigInt!
-  interaction: Interaction!
+  type: UsageEventType!
   event: Event!
   nftIndex: BigInt!
   latitude: BigDecimal!
