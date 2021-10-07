@@ -32,7 +32,7 @@ Usage statistics per-relayer-day. Used to track and compare protocol usage by re
 
 #### UsageEvent [Time-series]
 
-Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `CREATE_EVENT`, `MINT`, `SCAN`. Comes with lat/long, the relayer, the GET used as fuel, the exact timestamp of the block, and the day as an integer.
+Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `CREATE_EVENT`, `MINT`, `SCAN`. Comes with lat/long, the relayer, the GET used as fuel, the exact timestamp of the block, and the day as an integer. ID is a composite key of `txHash-logIndex`.
 
 ## Entity Relationship Diagram
 

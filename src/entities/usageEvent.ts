@@ -5,10 +5,11 @@ import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../constants";
 export function getUsageEvent(e: ethereum.Event): UsageEvent {
   let timestamp = e.block.timestamp;
   let day = timestamp.toI32() / 86400;
+  let id = e.transaction.hash.toHex() + "-" + e.logIndex.toString();
 
-  let usageEvent = new UsageEvent(e.transaction.hash.toHexString());
+  let usageEvent = new UsageEvent(id);
+  usageEvent.txHash = e.transaction.hash;
   usageEvent.relayer = e.transaction.from.toHexString();
-
   usageEvent.blockNumber = e.block.number;
   usageEvent.blockTimestamp = timestamp;
   usageEvent.orderTime = BIG_INT_ZERO;
@@ -16,7 +17,7 @@ export function getUsageEvent(e: ethereum.Event): UsageEvent {
   usageEvent.getUsed = BIG_INT_ZERO;
   usageEvent.event = "";
   usageEvent.nftIndex = BIG_INT_ZERO;
-  usageEvent.interaction = "";
+  usageEvent.type = "";
   usageEvent.latitude = BIG_DECIMAL_ZERO;
   usageEvent.longitude = BIG_DECIMAL_ZERO;
 
@@ -27,7 +28,7 @@ export function createUsageEvent(
   e: ethereum.Event,
   event: Event,
   nftIndex: BigInt,
-  interaction: string,
+  type: string,
   orderTime: BigInt,
   getUsed: BigInt
 ): UsageEvent {
@@ -36,7 +37,7 @@ export function createUsageEvent(
   usageEvent.orderTime = orderTime;
   usageEvent.getUsed = getUsed;
   usageEvent.nftIndex = nftIndex;
-  usageEvent.interaction = interaction;
+  usageEvent.type = type;
   if (event) {
     usageEvent.event = event.id;
     usageEvent.latitude = event.latitude;
