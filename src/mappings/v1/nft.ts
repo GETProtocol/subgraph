@@ -27,10 +27,12 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   let nftContract = NFTContract.bind(NFT_ADDRESS);
   let nftData = nftContract.try_returnStructTicket(nftIndex);
 
-  // prices_sold[0] is apparently not a supported operation, instead .shift() to get the first item
-  // basePrice is denominated to the tenth of a cent, divide by 10 to get to the cent.
-
+  // Here, `.reverted` is not a reference to a blockchain transaction revert, rather this represents
+  // the `_try` function above failing. When this errors a reverted key is added to the return object.
+  // See: https://thegraph.com/docs/developer/assemblyscript-api#handling-reverted-calls
   if (!nftData.reverted) {
+    // prices_sold[0] is apparently not a supported operation, instead .shift() to get the first item
+    // basePrice is denominated to the tenth of a cent, divide by 10 to get to the cent.
     let basePrice = nftData.value.prices_sold.shift();
     basePrice = basePrice.div(BIG_INT_TEN);
     log.info("BasePrice: {}", [basePrice.toString()]);
