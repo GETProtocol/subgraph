@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { useQuery } from "@apollo/client";
 import { Box, Button } from "@chakra-ui/react";

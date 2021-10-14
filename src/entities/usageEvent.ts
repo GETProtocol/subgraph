@@ -14,7 +14,8 @@ export function getUsageEvent(e: ethereum.Event): UsageEvent {
   usageEvent.blockTimestamp = timestamp;
   usageEvent.orderTime = BIG_INT_ZERO;
   usageEvent.day = day;
-  usageEvent.getUsed = BIG_INT_ZERO;
+  usageEvent.getDebitedFromSilo = BIG_INT_ZERO;
+  usageEvent.getCreditedToDepot = BIG_INT_ZERO;
   usageEvent.event = "";
   usageEvent.nftIndex = BIG_INT_ZERO;
   usageEvent.type = "";
@@ -35,17 +36,19 @@ export function createUsageEvent(
   let usageEvent = getUsageEvent(e);
 
   usageEvent.orderTime = orderTime;
-  usageEvent.getUsed = getUsed;
   usageEvent.nftIndex = nftIndex;
   usageEvent.type = type;
+
   if (event) {
     usageEvent.event = event.id;
     usageEvent.latitude = event.latitude;
     usageEvent.longitude = event.longitude;
-  } else {
-    usageEvent.event = "";
-    usageEvent.latitude = BIG_DECIMAL_ZERO;
-    usageEvent.longitude = BIG_DECIMAL_ZERO;
+  }
+
+  if (type === "MINT") {
+    usageEvent.getDebitedFromSilo = getUsed;
+  } else if (type === "INVALIDATE" || type === "SCAN" || type === "CHECK_IN") {
+    usageEvent.getCreditedToDepot = getUsed;
   }
 
   usageEvent.save();

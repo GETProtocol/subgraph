@@ -10,11 +10,14 @@ export function getProtocolDay(e: ethereum.Event): ProtocolDay {
   if (protocolDay == null) {
     protocolDay = new ProtocolDay(id.toString());
     protocolDay.day = day;
-    protocolDay.getUsed = BIG_INT_ZERO;
-    protocolDay.averageGetUsedPerMint = BIG_DECIMAL_ZERO;
+    protocolDay.getDebitedFromSilos = BIG_INT_ZERO;
+    protocolDay.getCreditedToDepot = BIG_INT_ZERO;
+    protocolDay.getMovedToFeeCollector = BIG_INT_ZERO;
+    protocolDay.averageGetPerMint = BIG_DECIMAL_ZERO;
     protocolDay.mintCount = BIG_INT_ZERO;
     protocolDay.scanCount = BIG_INT_ZERO;
     protocolDay.invalidateCount = BIG_INT_ZERO;
+    protocolDay.checkInCount = BIG_INT_ZERO;
     protocolDay.claimCount = BIG_INT_ZERO;
   }
 

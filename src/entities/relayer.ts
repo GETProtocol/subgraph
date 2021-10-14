@@ -8,11 +8,13 @@ export function getRelayer(e: ethereum.Event): Relayer {
 
   if (relayer == null) {
     relayer = new Relayer(id);
-    relayer.getUsed = BIG_INT_ZERO;
-    relayer.averageGetUsedPerMint = BIG_DECIMAL_ZERO;
+    relayer.getDebitedFromSilo = BIG_INT_ZERO;
+    relayer.getCreditedToDepot = BIG_INT_ZERO;
+    relayer.averageGetPerMint = BIG_DECIMAL_ZERO;
     relayer.mintCount = BIG_INT_ZERO;
     relayer.scanCount = BIG_INT_ZERO;
     relayer.invalidateCount = BIG_INT_ZERO;
+    relayer.checkInCount = BIG_INT_ZERO;
     relayer.claimCount = BIG_INT_ZERO;
   }
 
