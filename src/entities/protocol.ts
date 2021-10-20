@@ -8,11 +8,16 @@ export function getProtocol(): Protocol {
 
   if (protocol == null) {
     protocol = new Protocol(id.toString());
-    protocol.getUsed = BIG_INT_ZERO;
-    protocol.averageGetUsedPerMint = BIG_DECIMAL_ZERO;
+    protocol.getDebitedFromSilos = BIG_DECIMAL_ZERO;
+    protocol.getHeldInFuelTanks = BIG_DECIMAL_ZERO;
+    protocol.getCreditedToDepot = BIG_DECIMAL_ZERO;
+    protocol.getMovedToFeeCollector = BIG_DECIMAL_ZERO;
+    protocol.averageGetPerMint = BIG_DECIMAL_ZERO;
     protocol.mintCount = BIG_INT_ZERO;
-    protocol.scanCount = BIG_INT_ZERO;
     protocol.invalidateCount = BIG_INT_ZERO;
+    protocol.resaleCount = BIG_INT_ZERO;
+    protocol.scanCount = BIG_INT_ZERO;
+    protocol.checkInCount = BIG_INT_ZERO;
     protocol.claimCount = BIG_INT_ZERO;
   }
 

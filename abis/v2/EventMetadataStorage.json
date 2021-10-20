@@ -1,0 +1,371 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newAccesscontrol",
+        "type": "address"
+      }
+    ],
+    "name": "AccessControlSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "baseAddress",
+        "type": "address"
+      }
+    ],
+    "name": "BaseConfigured",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "ContractSyncCompleted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "getUsed",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "eventName",
+        "type": "string"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "orderTime",
+        "type": "uint256"
+      }
+    ],
+    "name": "NewEventRegistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "underWriterAddress",
+        "type": "address"
+      }
+    ],
+    "name": "UnderWriterSet",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "CONFIGURATION",
+    "outputs": [
+      {
+        "internalType": "contract IGETProtocolConfiguration",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_configurationAddress",
+        "type": "address"
+      }
+    ],
+    "name": "__FoundationContract_init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "configuration_address",
+        "type": "address"
+      }
+    ],
+    "name": "__initialize_metadata",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      }
+    ],
+    "name": "doesEventExist",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getEventCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      }
+    ],
+    "name": "getEventData",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "_relayerAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_underWriterAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_eventName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_shopUrl",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_imageUrl",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes32[4]",
+        "name": "_eventMeta",
+        "type": "bytes32[4]"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "_eventTimes",
+        "type": "uint256[2]"
+      },
+      {
+        "internalType": "bool",
+        "name": "_setAside",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "_extraData",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "_privateEvent",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_eventAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_integratorAccountPublicKeyHash",
+        "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_eventName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_shopUrl",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_imageUrl",
+        "type": "string"
+      },
+      {
+        "internalType": "bytes32[4]",
+        "name": "_eventMeta",
+        "type": "bytes32[4]"
+      },
+      {
+        "internalType": "uint256[2]",
+        "name": "_eventTimes",
+        "type": "uint256[2]"
+      },
+      {
+        "internalType": "bool",
+        "name": "_setAside",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes32[]",
+        "name": "_extraData",
+        "type": "bytes32[]"
+      },
+      {
+        "internalType": "bool",
+        "name": "_isPrivate",
+        "type": "bool"
+      }
+    ],
+    "name": "registerEvent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      }
+    ],
+    "name": "returnStructEvent",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "eventAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "relayerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "underWriterAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "eventName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "shopUrl",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "imageUrl",
+            "type": "string"
+          },
+          {
+            "internalType": "bytes32[4]",
+            "name": "eventMetadata",
+            "type": "bytes32[4]"
+          },
+          {
+            "internalType": "uint256[2]",
+            "name": "eventTimes",
+            "type": "uint256[2]"
+          },
+          {
+            "internalType": "bool",
+            "name": "setAside",
+            "type": "bool"
+          },
+          {
+            "internalType": "bytes32[]",
+            "name": "extraData",
+            "type": "bytes32[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "privateEvent",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "created",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct EventMetadataStorage.EventStruct",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "syncConfiguration",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

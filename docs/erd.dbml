@@ -1,10 +1,12 @@
 // Enums
 
-Enum UsageEventType {
+Enum Interaction {
   NEW_EVENT
   MINT
   INVALIDATE
+  RESALE
   SCAN
+  CHECK_IN
   CLAIM
 }
 
@@ -12,32 +14,45 @@ Enum UsageEventType {
 
 Table Protocol {
   id id
-  getUsed bigint
-  averageGetUsedPerMint bigint
+  getDebitedFromSilos bigdecimal
+  getHeldInFuelTanks bigdecimal
+  getCreditedToDepot bigdecimal
+  getMovedToFeeCollector bigdecimal
+  averageGetPerMint bigdecimal
   mintCount bigint
   invalidateCount bigint
+  resaleCount bigint
   scanCount bigint
+  checkInCount bigint
   claimCount bigint
 }
 
 Table ProtocolDay {
   id id
   day int
-  getUsed bigint
-  averageGetUsedPerMint bigint
+  getDebitedFromSilos bigdecimal
+  getCreditedToDepot bigdecimal
+  getMovedToFeeCollector bigdecimal
+  averageGetPerMint bigdecimal
   mintCount bigint
   invalidateCount bigint
+  resaleCount bigint
   scanCount bigint
+  checkInCount bigint
   claimCount bigint
 }
 
 
 Table Relayer {
   id id
-  getUsed bigint
-  averageGetUsedPerMint bigint
+  getDebitedFromSilo bigdecimal
+  getHeldInFuelTanks bigdecimal
+  getCreditedToDepot bigdecimal
+  averageGetPerMint bigdecimal
   mintCount bigint
   invalidateCount bigint
+  resaleCount bigint
+  checkInCount bigint
   scanCount bigint
   claimCount bigint
   events Event[] [ref: > Event.relayer]
@@ -49,10 +64,13 @@ Table RelayerDay {
   id id
   relayer Relayer
   day int
-  getUsed bigint
-  averageGetUsedPerMint bigint
+  getDebitedFromSilo bigdecimal
+  getCreditedToDepot bigdecimal
+  averageGetPerMint bigdecimal
   mintCount bigint
   invalidateCount bigint
+  resaleCount bigint
+  checkInCount bigint
   scanCount bigint
   claimCount bigint
 }
@@ -61,7 +79,16 @@ Table Event {
   id id
   relayer Relayer
   usageEvents UsageEvent[] [ref: > UsageEvent.event]
-  getUsed bigint
+  getDebitedFromSilo bigdecimal
+  getHeldInFuelTanks bigdecimal
+  getCreditedToDepot bigdecimal
+  averageGetPerMint bigdecimal
+  mintCount bigint
+  invalidateCount bigint
+  resaleCount bigint
+  checkInCount bigint
+  scanCount bigint
+  claimCount bigint
   eventName string
   shopUrl string
   imageUrl string
@@ -72,14 +99,14 @@ Table Event {
 
 Table UsageEvent {
   id id
-  txHash string
   relayer Relayer
   blockNumber bigint
   blockTimestamp bigint
   orderTime bigint
   day int
-  getUsed bigint
-  type UsageEventType
+  getDebitedFromSilo bigdecimal
+  getCreditedToDepot bigdecimal
+  interaction Interaction
   event event
   nftIndex bigint
   latitude bigdecimal

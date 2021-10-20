@@ -1,59 +1,54 @@
 enum UsageEventType {
   NEW_EVENT
   MINT
-  SCAN
-  CLAIM
   INVALIDATE
-}
-
-enum TicketState {
-  UNSCANNED
-  SCANNED
-  CLAIMABLE
-  INVALIDATED
+  RESALE
+  SCAN
+  CHECK_IN
+  CLAIM
 }
 
 type Protocol @entity {
   id: ID!
-  getUsed: BigInt!
-  averageGetUsedPerMint: BigDecimal!
+  getDebitedFromSilos: BigDecimal!
+  getHeldInFuelTanks: BigDecimal!
+  getCreditedToDepot: BigDecimal!
+  getMovedToFeeCollector: BigDecimal!
+  averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
+  resaleCount: BigInt!
   scanCount: BigInt!
+  checkInCount: BigInt!
   claimCount: BigInt!
 }
 
 type ProtocolDay @entity {
   id: ID!
   day: Int!
-  getUsed: BigInt!
-  averageGetUsedPerMint: BigDecimal!
+  getDebitedFromSilos: BigDecimal!
+  getCreditedToDepot: BigDecimal!
+  getMovedToFeeCollector: BigDecimal!
+  averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
+  resaleCount: BigInt!
   scanCount: BigInt!
+  checkInCount: BigInt!
   claimCount: BigInt!
-}
-
-type Event @entity {
-  id: ID!
-  relayer: Relayer!
-  usageEvents: [UsageEvent!]! @derivedFrom(field: "event")
-  getUsed: BigInt!
-  eventName: String!
-  shopUrl: String!
-  imageUrl: String!
-  orderTime: BigInt!
-  latitude: BigDecimal!
-  longitude: BigDecimal!
 }
 
 type Relayer @entity {
   id: ID!
-  getUsed: BigInt!
-  averageGetUsedPerMint: BigDecimal!
+  getDebitedFromSilo: BigDecimal!
+  getHeldInFuelTanks: BigDecimal!
+  getCreditedToDepot: BigDecimal!
+  averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
+  resaleCount: BigInt!
   scanCount: BigInt!
+  checkInCount: BigInt!
   claimCount: BigInt!
   events: [Event!]! @derivedFrom(field: "relayer")
   relayerDays: [RelayerDay!]! @derivedFrom(field: "relayer")
@@ -64,21 +59,37 @@ type RelayerDay @entity {
   id: ID! # Composite PK: relayerAddress-timestampAsDay
   relayer: Relayer!
   day: Int!
-  getUsed: BigInt!
-  averageGetUsedPerMint: BigDecimal!
+  getDebitedFromSilo: BigDecimal!
+  getCreditedToDepot: BigDecimal!
+  averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
+  resaleCount: BigInt!
   scanCount: BigInt!
+  checkInCount: BigInt!
   claimCount: BigInt!
 }
 
-type Ticket @entity {
+type Event @entity {
   id: ID!
   relayer: Relayer!
-  event: Event!
-  state: TicketState!
-  url: String
-  fuelTankBalance: BigInt!
+  usageEvents: [UsageEvent!]! @derivedFrom(field: "event")
+  getDebitedFromSilo: BigDecimal!
+  getHeldInFuelTanks: BigDecimal!
+  getCreditedToDepot: BigDecimal!
+  averageGetPerMint: BigDecimal!
+  mintCount: BigInt!
+  invalidateCount: BigInt!
+  resaleCount: BigInt!
+  scanCount: BigInt!
+  checkInCount: BigInt!
+  claimCount: BigInt!
+  eventName: String!
+  shopUrl: String!
+  imageUrl: String!
+  orderTime: BigInt!
+  latitude: BigDecimal!
+  longitude: BigDecimal!
 }
 
 type UsageEvent @entity {
@@ -89,7 +100,8 @@ type UsageEvent @entity {
   blockTimestamp: BigInt!
   orderTime: BigInt!
   day: Int!
-  getUsed: BigInt!
+  getDebitedFromSilo: BigDecimal!
+  getCreditedToDepot: BigDecimal!
   type: UsageEventType!
   event: Event!
   nftIndex: BigInt!

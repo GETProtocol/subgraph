@@ -34,13 +34,103 @@ Usage statistics per-relayer-day. Used to track and compare protocol usage by re
 
 Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `CREATE_EVENT`, `MINT`, `SCAN`. Comes with lat/long, the relayer, the GET used as fuel, the exact timestamp of the block, and the day as an integer. ID is a composite key of `txHash-logIndex`.
 
+## Tracking the flow of GET
+
+Please see the [DAO Token Economics Documentation](https://docs.get-protocol.io/docs/dao-token-economics-accounting) for full details on how GET balances move through the system.
+
+There are a number of steps that GET takes throughout its lifecycle and the subgraph aggregated this for easier charting and analysis. There are a number of key field that help with this:
+
+Available on Relayer and Protocol entities:
+
+- `getDebitedFromSilos` contains the amount of GET moved from the Silo to the NFT Fuel Tank when minting NFT tickets.
+- `getHeldInFuelTanks` contains the total amount of all GET held within the NFT Fuel Tanks, awaiting a move to the depot.
+- `getCreditedToDepot` records the GET balance credited to the Depot balance when a ticket is checked-in (finalized).
+
+Available only on the Protocol entities:
+
+- `getMovedToFeeCollector` the amount of GET moving from the depot to the DAO Fee Collector address. The depot is a global balance and not specifc to a single relayer.
+
+Additionally the `averageGetPerMint` provides the average amount of GET that has been required per-ticket (mint) for the selected entity. This means that `ProtocolDay.averageGetPerMint` will show the average GET/ticket across all relayers aggregated by day.
+
+## Examples
+
+### All-Time Interaction Counts
+
+```graphql
+{
+  protocol(id: "1") {
+    mintCount
+    invalidateCount
+    resaleCount
+    scanCount
+    checkInCount
+    claimCount
+  }
+}
+```
+
+### Last 7 days GET Usage
+
+```graphql
+{
+  protocolDays(orderBy: day, orderDirection: desc, first: 7) {
+    day
+    getDebitedFromSilos
+    getCreditedToDepot
+    averageGetPerMint
+  }
+}
+```
+
+### Last 30 days of GET Usage for a Single Relayer
+
+```graphql
+{
+  relayerDays(orderBy: day, orderDirection: desc, first: 30, where: { relayer: "0x4afdae9cca053e3d456a9cb697081bf083a3340b" }) {
+    relayer {
+      id
+    }
+    day
+    getDebitedFromSilo
+    getCreditedToDepot
+    averageGetPerMint
+  }
+}
+```
+
+### All Events
+
+```graphql
+{
+  events {
+    id
+    eventName
+  }
+}
+```
+
+### 100 Most Recent Protocol Usage Events
+
+```graphql
+{
+  usageEvents(orderBy: blockTimestamp, orderDirection: desc, first: 100) {
+    type
+    nftIndex
+    event {
+      id
+    }
+    getDebitedFromSilo
+  }
+}
+```
+
 ## Entity Relationship Diagram
 
 ![GET Protocol Subgraph Entity Relationship Diagram](/docs/erd.png)
 
 ## Setup
 
-Start by setting up a [graphprotocol/graph-node](https://github.com/graphprotocol/graph-node). For this you will also need a [Polygon RPC endpoint](https://docs.matic.network/docs/develop/network-details/network/) for the graph-node to index from. [Infura](https://infura.io/) or [Moralis (Speedy Nodes)](https://moralis.io/) provide enough capacity on their free-tiers.
+Start by setting up a [graphprotocol/graph-node](https://github.com/graphprotocol/graph-node). For this you will also need a [Polygon RPC endpoint](https://docs.matic.network/docs/develop/network-details/network/) for the graph-node to index from. [Infura](https://infura.io/) or [Moralis (Speedy Nodes)](https://moralis.io/) provide enough capacity on their free-tiers. An archive server is recommended.
 
 1. Clone graphprotocol/graph-node to a local directory.
 2. Edit the `services.graph-node.environment.ethereum` key within docker/docker-compose.yml to read `matic:<RPC_ENDPOINT>`.

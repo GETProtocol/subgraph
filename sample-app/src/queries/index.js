@@ -4,7 +4,7 @@ const findProtocol = gql`
   query Protocol {
     protocols(id: "1") {
       id
-      getUsed
+      averageGetPerMint
       mintCount
       scanCount
       claimCount
@@ -17,7 +17,7 @@ const allProtocolDays = gql`
     protocolDays {
       id
       day
-      getUsed
+      averageGetPerMint
       mintCount
       scanCount
       claimCount
@@ -27,9 +27,8 @@ const allProtocolDays = gql`
 
 const allEvents = gql`
   query Events {
-    events(where: { getUsed_gt: 1 }) {
+    events {
       id
-      getUsed
       eventName
       shopUrl
       orderTime

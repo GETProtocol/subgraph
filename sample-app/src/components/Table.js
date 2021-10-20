@@ -1,11 +1,9 @@
-import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { allEvents } from "../queries";
-import { Table as UITable, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, Box } from "@chakra-ui/react";
+import { Table as UITable, Thead, Tbody, Tr, Th, Td, TableCaption, Box } from "@chakra-ui/react";
 
 const Table = () => {
   const { loading, error, data } = useQuery(allEvents);
-  const [totals] = useState({ getUsed: 0, ticketValue: 0, mintCount: 0 });
 
   if (loading) return "Loading...";
   if (error) return "Error " + error;
@@ -19,32 +17,25 @@ const Table = () => {
         <Thead>
           <Tr>
             <Th>Event Name</Th>
-            <Th isNumeric>getUsed</Th>
-            <Th isNumeric>timestamp</Th>
+            <Th isNumeric>Latitude</Th>
+            <Th isNumeric>longitude</Th>
+            <Th isNumeric>Order Time</Th>
           </Tr>
         </Thead>
         <Tbody>
           {events.map((e, i) => {
             if (!e.eventName || e.eventName === "") return null;
 
-            const getUsed = Number(e.getUsed) / 1000;
-
             return (
               <Tr>
                 <Td>{e.eventName}</Td>
-                <Td isNumeric>{getUsed}</Td>
+                <Td isNumeric>{e.latitude}</Td>
+                <Td isNumeric>{e.longitude}</Td>
                 <Td isNumeric>{e.orderTime}</Td>
               </Tr>
             );
           })}
         </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th></Th>
-            <Th>{totals.getUsed}</Th>
-            <Th></Th>
-          </Tr>
-        </Tfoot>
       </UITable>
     </Box>
   );

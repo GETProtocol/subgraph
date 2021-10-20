@@ -1,6 +1,6 @@
 import React from "react";
 import Chart from "./Chart";
-import { allProtocolDays, allEvents } from "../queries";
+import { allProtocolDays } from "../queries";
 import { Box } from "@chakra-ui/react";
 
 import ProtocolStats from "./ProtocolStats";
@@ -16,12 +16,8 @@ const Explorer = () => {
           entity="protocolDays"
           query={allProtocolDays}
           xAxis="day"
-          fields={["getUsed", "mintCount", "scanCount", "claimCount"]}
+          fields={["averageGetPerMint", "mintCount", "scanCount", "claimCount"]}
         />
-      </Box>
-
-      <Box flex="1">
-        <Chart entity="events" query={allEvents} xAxis="orderTime" fields={["getUsed"]} />
       </Box>
 
       <Table />
