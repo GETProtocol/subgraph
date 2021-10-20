@@ -14,8 +14,9 @@ export function getProtocol(): Protocol {
     protocol.getMovedToFeeCollector = BIG_DECIMAL_ZERO;
     protocol.averageGetPerMint = BIG_DECIMAL_ZERO;
     protocol.mintCount = BIG_INT_ZERO;
-    protocol.scanCount = BIG_INT_ZERO;
     protocol.invalidateCount = BIG_INT_ZERO;
+    protocol.resaleCount = BIG_INT_ZERO;
+    protocol.scanCount = BIG_INT_ZERO;
     protocol.checkInCount = BIG_INT_ZERO;
     protocol.claimCount = BIG_INT_ZERO;
   }

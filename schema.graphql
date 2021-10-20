@@ -1,10 +1,11 @@
 enum UsageEventType {
   NEW_EVENT
   MINT
+  INVALIDATE
+  RESALE
   SCAN
   CHECK_IN
   CLAIM
-  INVALIDATE
 }
 
 type Protocol @entity {
@@ -16,6 +17,7 @@ type Protocol @entity {
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
+  resaleCount: BigInt!
   scanCount: BigInt!
   checkInCount: BigInt!
   claimCount: BigInt!
@@ -30,6 +32,7 @@ type ProtocolDay @entity {
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
+  resaleCount: BigInt!
   scanCount: BigInt!
   checkInCount: BigInt!
   claimCount: BigInt!
@@ -43,6 +46,7 @@ type Relayer @entity {
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
+  resaleCount: BigInt!
   scanCount: BigInt!
   checkInCount: BigInt!
   claimCount: BigInt!
@@ -60,6 +64,7 @@ type RelayerDay @entity {
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
+  resaleCount: BigInt!
   scanCount: BigInt!
   checkInCount: BigInt!
   claimCount: BigInt!
@@ -75,6 +80,7 @@ type Event @entity {
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
+  resaleCount: BigInt!
   scanCount: BigInt!
   checkInCount: BigInt!
   claimCount: BigInt!

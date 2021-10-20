@@ -6,6 +6,7 @@ import {
   ticketInvalidated,
   ticketScanned,
   nftClaimed,
+  secondarySale,
 } from "../../../generated/BaseGETV1/BaseGETV1";
 import { getProtocol, getRelayer, getProtocolDay, getRelayerDay, getEvent, getEventByNftIndexV1, createUsageEvent } from "../../entities";
 
@@ -69,6 +70,30 @@ export function handleTicketInvalidated(e: ticketInvalidated): void {
   event.save();
 
   createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, e.params.getUsed);
+}
+
+export function handleSecondarySale(e: secondarySale): void {
+  if (e.block.number.gt(V1_END_BLOCK)) return;
+  let nftIndex = e.params.nftIndex;
+  let protocol = getProtocol();
+  let protocolDay = getProtocolDay(e);
+  let relayerDay = getRelayerDay(e);
+  let relayer = getRelayer(e);
+  let event = getEventByNftIndexV1(nftIndex);
+
+  protocol.resaleCount = protocol.resaleCount.plus(BIG_INT_ONE);
+  protocolDay.resaleCount = protocolDay.resaleCount.plus(BIG_INT_ONE);
+  relayer.resaleCount = relayer.resaleCount.plus(BIG_INT_ONE);
+  relayerDay.resaleCount = relayerDay.resaleCount.plus(BIG_INT_ONE);
+  event.resaleCount = event.resaleCount.plus(BIG_INT_ONE);
+
+  protocol.save();
+  protocolDay.save();
+  relayer.save();
+  relayerDay.save();
+  event.save();
+
+  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, e.params.getUsed);
 }
 
 export function handleTicketScanned(e: ticketScanned): void {

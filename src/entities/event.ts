@@ -16,6 +16,7 @@ export function getEvent(eventAddress: string): Event {
     event.mintCount = BIG_INT_ZERO;
     event.scanCount = BIG_INT_ZERO;
     event.invalidateCount = BIG_INT_ZERO;
+    event.resaleCount = BIG_INT_ZERO;
     event.checkInCount = BIG_INT_ZERO;
     event.claimCount = BIG_INT_ZERO;
     event.relayer = "";

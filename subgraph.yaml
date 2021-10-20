@@ -26,6 +26,8 @@ dataSources:
           handler: handlePrimarySaleMint
         - event: ticketInvalidated(indexed uint256,indexed uint64,address,indexed uint64)
           handler: handleTicketInvalidated
+        - event: secondarySale(indexed uint256,indexed uint64,address,address,uint256,indexed uint64)
+          handler: handleSecondarySale
         - event: ticketScanned(indexed uint256,indexed uint64,indexed uint64)
           handler: handleTicketScanned
         - event: nftClaimed(indexed uint256,indexed uint64,address,indexed uint64)
@@ -56,6 +58,8 @@ dataSources:
           handler: handlePrimarySaleMint
         - event: TicketInvalidated(indexed uint256,indexed uint64,indexed uint64)
           handler: handleTicketInvalidated
+        - event: SecondarySale(indexed uint256,indexed uint64,indexed uint64,uint256)
+          handler: handleSecondarySale
         - event: TicketScanned(indexed uint256,indexed uint64,indexed uint64)
           handler: handleTicketScanned
         - event: CheckedIn(indexed uint256,indexed uint64,indexed uint64)

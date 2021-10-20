@@ -1,5 +1,12 @@
 import { BIG_DECIMAL_1E18, BIG_INT_ONE, FUEL_ACTIVATED_BLOCK } from "../../constants";
-import { PrimarySaleMint, TicketInvalidated, TicketScanned, NftClaimed, CheckedIn } from "../../../generated/BaseGETV2/BaseGETV2";
+import {
+  PrimarySaleMint,
+  TicketInvalidated,
+  TicketScanned,
+  NftClaimed,
+  CheckedIn,
+  SecondarySale,
+} from "../../../generated/BaseGETV2/BaseGETV2";
 import { getProtocol, getRelayer, getProtocolDay, getRelayerDay, getEventByNftIndexV2, createUsageEvent } from "../../entities";
 
 export function handlePrimarySaleMint(e: PrimarySaleMint): void {
@@ -76,6 +83,29 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
   event.save();
 
   createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, e.params.getUsed);
+}
+
+export function handleSecondarySale(e: SecondarySale): void {
+  let nftIndex = e.params.nftIndex;
+  let protocol = getProtocol();
+  let protocolDay = getProtocolDay(e);
+  let relayerDay = getRelayerDay(e);
+  let relayer = getRelayer(e);
+  let event = getEventByNftIndexV2(nftIndex);
+
+  protocol.resaleCount = protocol.resaleCount.plus(BIG_INT_ONE);
+  protocolDay.resaleCount = protocolDay.resaleCount.plus(BIG_INT_ONE);
+  relayer.resaleCount = relayer.resaleCount.plus(BIG_INT_ONE);
+  relayerDay.resaleCount = relayerDay.resaleCount.plus(BIG_INT_ONE);
+  event.resaleCount = event.resaleCount.plus(BIG_INT_ONE);
+
+  protocol.save();
+  protocolDay.save();
+  relayer.save();
+  relayerDay.save();
+  event.save();
+
+  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, e.params.getUsed);
 }
 
 export function handleTicketScanned(e: TicketScanned): void {

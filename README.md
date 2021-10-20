@@ -61,6 +61,7 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
   protocol(id: "1") {
     mintCount
     invalidateCount
+    resaleCount
     scanCount
     checkInCount
     claimCount

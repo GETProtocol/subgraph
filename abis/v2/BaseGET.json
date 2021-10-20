@@ -233,16 +233,16 @@
         "type": "uint64"
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "resalePrice",
-        "type": "uint256"
-      },
-      {
         "indexed": true,
         "internalType": "uint64",
         "name": "orderTime",
         "type": "uint64"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "resalePrice",
+        "type": "uint256"
       }
     ],
     "name": "SecondarySale",
