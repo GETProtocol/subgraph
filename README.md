@@ -52,6 +52,77 @@ Available only on the Protocol entities:
 
 Additionally the `averageGetPerMint` provides the average amount of GET that has been required per-ticket (mint) for the selected entity. This means that `ProtocolDay.averageGetPerMint` will show the average GET/ticket across all relayers aggregated by day.
 
+## Examples
+
+### All-Time Interaction Counts
+
+```graphql
+{
+  protocol(id: "1") {
+    mintCount
+    invalidateCount
+    scanCount
+    checkInCount
+    claimCount
+  }
+}
+```
+
+### Last 7 days GET Usage
+
+```graphql
+{
+  protocolDays(orderBy: day, orderDirection: desc, first: 7) {
+    day
+    getDebitedFromSilos
+    getCreditedToDepot
+    averageGetPerMint
+  }
+}
+```
+
+### Last 30 days of GET Usage for a Single Relayer
+
+```graphql
+{
+  relayerDays(orderBy: day, orderDirection: desc, first: 30, where: { relayer: "0x4afdae9cca053e3d456a9cb697081bf083a3340b" }) {
+    relayer {
+      id
+    }
+    day
+    getDebitedFromSilo
+    getCreditedToDepot
+    averageGetPerMint
+  }
+}
+```
+
+### All Events
+
+```graphql
+{
+  events {
+    id
+    eventName
+  }
+}
+```
+
+### 100 Most Recent Protocol Usage Events
+
+```graphql
+{
+  usageEvents(orderBy: blockTimestamp, orderDirection: desc, first: 100) {
+    type
+    nftIndex
+    event {
+      id
+    }
+    getDebitedFromSilo
+  }
+}
+```
+
 ## Entity Relationship Diagram
 
 ![GET Protocol Subgraph Entity Relationship Diagram](/docs/erd.png)
