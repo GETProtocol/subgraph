@@ -9,9 +9,10 @@ enum UsageEventType {
 
 type Protocol @entity {
   id: ID!
-  getDebitedFromSilos: BigInt!
-  getCreditedToDepot: BigInt!
-  getMovedToFeeCollector: BigInt!
+  getDebitedFromSilos: BigDecimal!
+  getHeldInFuelTanks: BigDecimal!
+  getCreditedToDepot: BigDecimal!
+  getMovedToFeeCollector: BigDecimal!
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
@@ -23,9 +24,9 @@ type Protocol @entity {
 type ProtocolDay @entity {
   id: ID!
   day: Int!
-  getDebitedFromSilos: BigInt!
-  getCreditedToDepot: BigInt!
-  getMovedToFeeCollector: BigInt!
+  getDebitedFromSilos: BigDecimal!
+  getCreditedToDepot: BigDecimal!
+  getMovedToFeeCollector: BigDecimal!
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
@@ -36,8 +37,9 @@ type ProtocolDay @entity {
 
 type Relayer @entity {
   id: ID!
-  getDebitedFromSilo: BigInt!
-  getCreditedToDepot: BigInt!
+  getDebitedFromSilo: BigDecimal!
+  getHeldInFuelTanks: BigDecimal!
+  getCreditedToDepot: BigDecimal!
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
@@ -53,8 +55,8 @@ type RelayerDay @entity {
   id: ID! # Composite PK: relayerAddress-timestampAsDay
   relayer: Relayer!
   day: Int!
-  getDebitedFromSilo: BigInt!
-  getCreditedToDepot: BigInt!
+  getDebitedFromSilo: BigDecimal!
+  getCreditedToDepot: BigDecimal!
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
@@ -67,8 +69,9 @@ type Event @entity {
   id: ID!
   relayer: Relayer!
   usageEvents: [UsageEvent!]! @derivedFrom(field: "event")
-  getDebitedFromSilo: BigInt!
-  getCreditedToDepot: BigInt!
+  getDebitedFromSilo: BigDecimal!
+  getHeldInFuelTanks: BigDecimal!
+  getCreditedToDepot: BigDecimal!
   averageGetPerMint: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
@@ -91,8 +94,8 @@ type UsageEvent @entity {
   blockTimestamp: BigInt!
   orderTime: BigInt!
   day: Int!
-  getDebitedFromSilo: BigInt!
-  getCreditedToDepot: BigInt!
+  getDebitedFromSilo: BigDecimal!
+  getCreditedToDepot: BigDecimal!
   type: UsageEventType!
   event: Event!
   nftIndex: BigInt!

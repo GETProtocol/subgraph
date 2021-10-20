@@ -1,8 +1,11 @@
 // Enums
 
 Enum Interaction {
+  NEW_EVENT
   MINT
+  INVALIDATE
   SCAN
+  CHECK_IN
   CLAIM
 }
 
@@ -10,9 +13,10 @@ Enum Interaction {
 
 Table Protocol {
   id id
-  getDebitedFromSilos bigint
-  getCreditedToDepot bigint
-  getMovedToFeeCollector bigint
+  getDebitedFromSilos bigdecimal
+  getHeldInFuelTanks bigdecimal
+  getCreditedToDepot bigdecimal
+  getMovedToFeeCollector bigdecimal
   averageGetPerMint bigdecimal
   mintCount bigint
   invalidateCount bigint
@@ -24,9 +28,9 @@ Table Protocol {
 Table ProtocolDay {
   id id
   day int
-  getDebitedFromSilos bigint
-  getCreditedToDepot bigint
-  getMovedToFeeCollector bigint
+  getDebitedFromSilos bigdecimal
+  getCreditedToDepot bigdecimal
+  getMovedToFeeCollector bigdecimal
   averageGetPerMint bigdecimal
   mintCount bigint
   invalidateCount bigint
@@ -38,8 +42,9 @@ Table ProtocolDay {
 
 Table Relayer {
   id id
-  getDebitedFromSilo bigint
-  getCreditedToDepot bigint
+  getDebitedFromSilo bigdecimal
+  getHeldInFuelTanks bigdecimal
+  getCreditedToDepot bigdecimal
   averageGetPerMint bigdecimal
   mintCount bigint
   invalidateCount bigint
@@ -55,8 +60,8 @@ Table RelayerDay {
   id id
   relayer Relayer
   day int
-  getDebitedFromSilo bigint
-  getCreditedToDepot bigint
+  getDebitedFromSilo bigdecimal
+  getCreditedToDepot bigdecimal
   averageGetPerMint bigdecimal
   mintCount bigint
   invalidateCount bigint
@@ -69,8 +74,9 @@ Table Event {
   id id
   relayer Relayer
   usageEvents UsageEvent[] [ref: > UsageEvent.event]
-  getDebitedFromSilo bigint
-  getCreditedToDepot bigint
+  getDebitedFromSilo bigdecimal
+  getHeldInFuelTanks bigdecimal
+  getCreditedToDepot bigdecimal
   averageGetPerMint bigdecimal
   mintCount bigint
   invalidateCount bigint
@@ -92,8 +98,8 @@ Table UsageEvent {
   blockTimestamp bigint
   orderTime bigint
   day int
-  getDebitedFromSilo bigint
-  getCreditedToDepot bigint
+  getDebitedFromSilo bigdecimal
+  getCreditedToDepot bigdecimal
   interaction Interaction
   event event
   nftIndex bigint

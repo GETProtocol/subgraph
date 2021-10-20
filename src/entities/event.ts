@@ -9,8 +9,9 @@ export function getEvent(eventAddress: string): Event {
 
   if (event == null) {
     event = new Event(eventAddress);
-    event.getDebitedFromSilo = BIG_INT_ZERO;
-    event.getCreditedToDepot = BIG_INT_ZERO;
+    event.getDebitedFromSilo = BIG_DECIMAL_ZERO;
+    event.getHeldInFuelTanks = BIG_DECIMAL_ZERO;
+    event.getCreditedToDepot = BIG_DECIMAL_ZERO;
     event.averageGetPerMint = BIG_DECIMAL_ZERO;
     event.mintCount = BIG_INT_ZERO;
     event.scanCount = BIG_INT_ZERO;

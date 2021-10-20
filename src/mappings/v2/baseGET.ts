@@ -1,4 +1,4 @@
-import { BIG_INT_ONE, FUEL_ACTIVATED_BLOCK } from "../../constants";
+import { BIG_DECIMAL_1E18, BIG_INT_ONE, FUEL_ACTIVATED_BLOCK } from "../../constants";
 import { PrimarySaleMint, TicketInvalidated, TicketScanned, NftClaimed, CheckedIn } from "../../../generated/BaseGETV2/BaseGETV2";
 import { getProtocol, getRelayer, getProtocolDay, getRelayerDay, getEventByNftIndexV2, createUsageEvent } from "../../entities";
 
@@ -17,17 +17,21 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
   event.mintCount = event.mintCount.plus(BIG_INT_ONE);
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    protocol.getDebitedFromSilos = protocol.getDebitedFromSilos.plus(e.params.getUsed);
-    protocolDay.getDebitedFromSilos = protocolDay.getDebitedFromSilos.plus(e.params.getUsed);
-    relayer.getDebitedFromSilo = relayer.getDebitedFromSilo.plus(e.params.getUsed);
-    relayerDay.getDebitedFromSilo = relayerDay.getDebitedFromSilo.plus(e.params.getUsed);
-    event.getDebitedFromSilo = event.getDebitedFromSilo.plus(e.params.getUsed);
+    protocol.getDebitedFromSilos = protocol.getDebitedFromSilos.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    protocolDay.getDebitedFromSilos = protocolDay.getDebitedFromSilos.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayer.getDebitedFromSilo = relayer.getDebitedFromSilo.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayerDay.getDebitedFromSilo = relayerDay.getDebitedFromSilo.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    event.getDebitedFromSilo = event.getDebitedFromSilo.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
 
-    protocol.averageGetPerMint = protocol.getDebitedFromSilos.toBigDecimal().div(protocol.mintCount.toBigDecimal());
-    protocolDay.averageGetPerMint = protocolDay.getDebitedFromSilos.toBigDecimal().div(protocolDay.mintCount.toBigDecimal());
-    relayer.averageGetPerMint = relayer.getDebitedFromSilo.toBigDecimal().div(relayer.mintCount.toBigDecimal());
-    relayerDay.averageGetPerMint = relayerDay.getDebitedFromSilo.toBigDecimal().div(relayerDay.mintCount.toBigDecimal());
-    event.averageGetPerMint = event.getDebitedFromSilo.toBigDecimal().div(event.mintCount.toBigDecimal());
+    protocol.getHeldInFuelTanks = protocol.getHeldInFuelTanks.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayer.getHeldInFuelTanks = relayer.getHeldInFuelTanks.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    event.getHeldInFuelTanks = event.getHeldInFuelTanks.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+
+    protocol.averageGetPerMint = protocol.getDebitedFromSilos.div(protocol.mintCount.toBigDecimal());
+    protocolDay.averageGetPerMint = protocolDay.getDebitedFromSilos.div(protocolDay.mintCount.toBigDecimal());
+    relayer.averageGetPerMint = relayer.getDebitedFromSilo.div(relayer.mintCount.toBigDecimal());
+    relayerDay.averageGetPerMint = relayerDay.getDebitedFromSilo.div(relayerDay.mintCount.toBigDecimal());
+    event.averageGetPerMint = event.getDebitedFromSilo.div(event.mintCount.toBigDecimal());
   }
 
   protocol.save();
@@ -54,11 +58,15 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
   event.invalidateCount = event.invalidateCount.plus(BIG_INT_ONE);
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    protocol.getCreditedToDepot = protocol.getCreditedToDepot.plus(e.params.getUsed);
-    protocolDay.getCreditedToDepot = protocolDay.getCreditedToDepot.plus(e.params.getUsed);
-    relayer.getCreditedToDepot = relayer.getCreditedToDepot.plus(e.params.getUsed);
-    relayerDay.getCreditedToDepot = relayerDay.getCreditedToDepot.plus(e.params.getUsed);
-    event.getCreditedToDepot = event.getCreditedToDepot.plus(e.params.getUsed);
+    protocol.getCreditedToDepot = protocol.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    protocolDay.getCreditedToDepot = protocolDay.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayer.getCreditedToDepot = relayer.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayerDay.getCreditedToDepot = relayerDay.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    event.getCreditedToDepot = event.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+
+    protocol.getHeldInFuelTanks = protocol.getHeldInFuelTanks.minus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayer.getHeldInFuelTanks = relayer.getHeldInFuelTanks.minus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    event.getHeldInFuelTanks = event.getHeldInFuelTanks.minus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
   }
 
   protocol.save();
@@ -85,11 +93,15 @@ export function handleTicketScanned(e: TicketScanned): void {
   event.scanCount = event.scanCount.plus(BIG_INT_ONE);
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    protocol.getCreditedToDepot = protocol.getCreditedToDepot.plus(e.params.getUsed);
-    protocolDay.getCreditedToDepot = protocolDay.getCreditedToDepot.plus(e.params.getUsed);
-    relayer.getCreditedToDepot = relayer.getCreditedToDepot.plus(e.params.getUsed);
-    relayerDay.getCreditedToDepot = relayerDay.getCreditedToDepot.plus(e.params.getUsed);
-    event.getCreditedToDepot = event.getCreditedToDepot.plus(e.params.getUsed);
+    protocol.getCreditedToDepot = protocol.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    protocolDay.getCreditedToDepot = protocolDay.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayer.getCreditedToDepot = relayer.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayerDay.getCreditedToDepot = relayerDay.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    event.getCreditedToDepot = event.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+
+    protocol.getHeldInFuelTanks = protocol.getHeldInFuelTanks.minus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayer.getHeldInFuelTanks = relayer.getHeldInFuelTanks.minus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    event.getHeldInFuelTanks = event.getHeldInFuelTanks.minus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
   }
 
   protocol.save();
@@ -116,11 +128,15 @@ export function handleCheckedIn(e: CheckedIn): void {
   event.claimCount = event.claimCount.plus(BIG_INT_ONE);
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    protocol.getCreditedToDepot = protocol.getCreditedToDepot.plus(e.params.getUsed);
-    protocolDay.getCreditedToDepot = protocolDay.getCreditedToDepot.plus(e.params.getUsed);
-    relayer.getCreditedToDepot = relayer.getCreditedToDepot.plus(e.params.getUsed);
-    relayerDay.getCreditedToDepot = relayerDay.getCreditedToDepot.plus(e.params.getUsed);
-    event.getCreditedToDepot = event.getCreditedToDepot.plus(e.params.getUsed);
+    protocol.getCreditedToDepot = protocol.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    protocolDay.getCreditedToDepot = protocolDay.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayer.getCreditedToDepot = relayer.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayerDay.getCreditedToDepot = relayerDay.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    event.getCreditedToDepot = event.getCreditedToDepot.plus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+
+    protocol.getHeldInFuelTanks = protocol.getHeldInFuelTanks.minus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    relayer.getHeldInFuelTanks = relayer.getHeldInFuelTanks.minus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
+    event.getHeldInFuelTanks = event.getHeldInFuelTanks.minus(e.params.getUsed.divDecimal(BIG_DECIMAL_1E18));
   }
 
   protocol.save();

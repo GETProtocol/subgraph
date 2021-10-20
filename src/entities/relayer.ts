@@ -8,8 +8,9 @@ export function getRelayer(e: ethereum.Event): Relayer {
 
   if (relayer == null) {
     relayer = new Relayer(id);
-    relayer.getDebitedFromSilo = BIG_INT_ZERO;
-    relayer.getCreditedToDepot = BIG_INT_ZERO;
+    relayer.getDebitedFromSilo = BIG_DECIMAL_ZERO;
+    relayer.getHeldInFuelTanks = BIG_DECIMAL_ZERO;
+    relayer.getCreditedToDepot = BIG_DECIMAL_ZERO;
     relayer.averageGetPerMint = BIG_DECIMAL_ZERO;
     relayer.mintCount = BIG_INT_ZERO;
     relayer.scanCount = BIG_INT_ZERO;

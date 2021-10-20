@@ -43,6 +43,7 @@ There are a number of steps that GET takes throughout its lifecycle and the subg
 Available on Relayer and Protocol entities:
 
 - `getDebitedFromSilos` contains the amount of GET moved from the Silo to the NFT Fuel Tank when minting NFT tickets.
+- `getHeldInFuelTanks` contains the total amount of all GET held within the NFT Fuel Tanks, awaiting a move to the depot.
 - `getCreditedToDepot` records the GET balance credited to the Depot balance when a ticket is checked-in (finalized).
 
 Available only on the Protocol entities:
@@ -57,7 +58,7 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
 
 ## Setup
 
-Start by setting up a [graphprotocol/graph-node](https://github.com/graphprotocol/graph-node). For this you will also need a [Polygon RPC endpoint](https://docs.matic.network/docs/develop/network-details/network/) for the graph-node to index from. [Infura](https://infura.io/) or [Moralis (Speedy Nodes)](https://moralis.io/) provide enough capacity on their free-tiers.
+Start by setting up a [graphprotocol/graph-node](https://github.com/graphprotocol/graph-node). For this you will also need a [Polygon RPC endpoint](https://docs.matic.network/docs/develop/network-details/network/) for the graph-node to index from. [Infura](https://infura.io/) or [Moralis (Speedy Nodes)](https://moralis.io/) provide enough capacity on their free-tiers. An archive server is recommended.
 
 1. Clone graphprotocol/graph-node to a local directory.
 2. Edit the `services.graph-node.environment.ethereum` key within docker/docker-compose.yml to read `matic:<RPC_ENDPOINT>`.

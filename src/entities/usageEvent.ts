@@ -1,6 +1,6 @@
 import { BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { Event, UsageEvent } from "../../generated/schema";
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../constants";
+import { BIG_DECIMAL_1E18, BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../constants";
 
 export function getUsageEvent(e: ethereum.Event): UsageEvent {
   let timestamp = e.block.timestamp;
@@ -14,8 +14,8 @@ export function getUsageEvent(e: ethereum.Event): UsageEvent {
   usageEvent.blockTimestamp = timestamp;
   usageEvent.orderTime = BIG_INT_ZERO;
   usageEvent.day = day;
-  usageEvent.getDebitedFromSilo = BIG_INT_ZERO;
-  usageEvent.getCreditedToDepot = BIG_INT_ZERO;
+  usageEvent.getDebitedFromSilo = BIG_DECIMAL_ZERO;
+  usageEvent.getCreditedToDepot = BIG_DECIMAL_ZERO;
   usageEvent.event = "";
   usageEvent.nftIndex = BIG_INT_ZERO;
   usageEvent.type = "";
@@ -45,10 +45,10 @@ export function createUsageEvent(
     usageEvent.longitude = event.longitude;
   }
 
-  if (type === "MINT") {
-    usageEvent.getDebitedFromSilo = getUsed;
-  } else if (type === "INVALIDATE" || type === "SCAN" || type === "CHECK_IN") {
-    usageEvent.getCreditedToDepot = getUsed;
+  if (type == "MINT") {
+    usageEvent.getDebitedFromSilo = getUsed.divDecimal(BIG_DECIMAL_1E18);
+  } else if (type == "INVALIDATE" || type == "SCAN" || type == "CHECK_IN") {
+    usageEvent.getCreditedToDepot = getUsed.divDecimal(BIG_DECIMAL_1E18);
   }
 
   usageEvent.save();

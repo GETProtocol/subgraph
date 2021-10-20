@@ -2,42 +2,42 @@ specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
-  # - kind: ethereum/contract
-  #   name: BaseGETV1
-  #   network: matic
-  #   source:
-  #     address: "0x308e44cA2153C61103b0DC67Fd038De650912b73"
-  #     abi: BaseGETV1
-  #     startBlock: 15980526
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.4
-  #     language: wasm/assemblyscript
-  #     entities:
-  #       - primarySaleMint
-  #       - ticketInvalidated
-  #       - ticketScanned
-  #       - nftClaimed
-  #     abis:
-  #       - name: BaseGETV1
-  #         file: ./abis/v1/BaseGET.json
-  #     eventHandlers:
-  #       - event: primarySaleMint(indexed uint256,indexed uint64,address,address,uint256,indexed uint64)
-  #         handler: handlePrimarySaleMint
-  #       - event: ticketInvalidated(indexed uint256,indexed uint64,address,indexed uint64)
-  #         handler: handleTicketInvalidated
-  #       - event: ticketScanned(indexed uint256,indexed uint64,indexed uint64)
-  #         handler: handleTicketScanned
-  #       - event: nftClaimed(indexed uint256,indexed uint64,address,indexed uint64)
-  #         handler: handleNftClaimed
-  #     file: ./src/mappings/v1/baseGET.ts
+  - kind: ethereum/contract
+    name: BaseGETV1
+    network: matic
+    source:
+      address: "0x308e44cA2153C61103b0DC67Fd038De650912b73"
+      abi: BaseGETV1
+      startBlock: 15980526
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - primarySaleMint
+        - ticketInvalidated
+        - ticketScanned
+        - nftClaimed
+      abis:
+        - name: BaseGETV1
+          file: ./abis/v1/BaseGET.json
+      eventHandlers:
+        - event: primarySaleMint(indexed uint256,indexed uint64,address,address,uint256,indexed uint64)
+          handler: handlePrimarySaleMint
+        - event: ticketInvalidated(indexed uint256,indexed uint64,address,indexed uint64)
+          handler: handleTicketInvalidated
+        - event: ticketScanned(indexed uint256,indexed uint64,indexed uint64)
+          handler: handleTicketScanned
+        - event: nftClaimed(indexed uint256,indexed uint64,address,indexed uint64)
+          handler: handleNftClaimed
+      file: ./src/mappings/v1/baseGET.ts
   - kind: ethereum/contract
     name: BaseGETV2
-    network: mumbai
+    network: matic
     source:
-      address: "0xDf97dB4828a8D985c9ef617004a9BD9f9eE3fac2"
+      address: "0xbce1b23c7544422f1E2208d29A6A3AA9fAbAB250"
       abi: BaseGETV2
-      startBlock: 20145380
+      startBlock: 20363107
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -63,33 +63,33 @@ dataSources:
         - event: NftClaimed(indexed uint256,indexed uint64,indexed uint64)
           handler: handleNftClaimed
       file: ./src/mappings/v2/baseGET.ts
-  # - kind: ethereum/contract
-  #   name: EventMetadataStorageV1
-  #   network: matic
-  #   source:
-  #     address: "0xcDA348fF8C175f305Ed8682003ec6F8743067f79"
-  #     abi: EventMetadataStorageV1
-  #     startBlock: 15980516
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.4
-  #     language: wasm/assemblyscript
-  #     entities:
-  #       - newEventRegistered
-  #     abis:
-  #       - name: EventMetadataStorageV1
-  #         file: ./abis/v1/EventMetadataStorage.json
-  #     eventHandlers:
-  #       - event: newEventRegistered(indexed address,indexed uint256,string,indexed uint256)
-  #         handler: handleNewEventRegistered
-  #     file: ./src/mappings/v1/eventMetadataStorage.ts
+  - kind: ethereum/contract
+    name: EventMetadataStorageV1
+    network: matic
+    source:
+      address: "0xcDA348fF8C175f305Ed8682003ec6F8743067f79"
+      abi: EventMetadataStorageV1
+      startBlock: 15980516
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - newEventRegistered
+      abis:
+        - name: EventMetadataStorageV1
+          file: ./abis/v1/EventMetadataStorage.json
+      eventHandlers:
+        - event: newEventRegistered(indexed address,indexed uint256,string,indexed uint256)
+          handler: handleNewEventRegistered
+      file: ./src/mappings/v1/eventMetadataStorage.ts
   - kind: ethereum/contract
     name: EventMetadataStorageV2
-    network: mumbai
+    network: matic
     source:
-      address: "0x8Af4404b7158Eb0fe8dD5f7AC57e783cbDf68bF0"
+      address: "0x08C2aF3F01A36AD9F274ccE77f6f77cf9aa1dfC9"
       abi: EventMetadataStorageV2
-      startBlock: 20145380
+      startBlock: 20363134
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -105,11 +105,11 @@ dataSources:
       file: ./src/mappings/v2/eventMetadataStorage.ts
   - kind: ethereum/contract
     name: EconomicsGETV2
-    network: mumbai
+    network: matic
     source:
-      address: "0x0736421dd21aBBd00D95AE98c39A5069795f1652"
+      address: "0x5A71e9E08561D14551dc067FD4fa130be8083B75"
       abi: EconomicsGETV2
-      startBlock: 20145380
+      startBlock: 20363125
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4

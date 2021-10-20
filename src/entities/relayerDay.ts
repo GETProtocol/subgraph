@@ -12,8 +12,8 @@ export function getRelayerDay(e: ethereum.Event): RelayerDay {
     relayerDay = new RelayerDay(id);
     relayerDay.relayer = relayerAddress;
     relayerDay.day = day;
-    relayerDay.getDebitedFromSilo = BIG_INT_ZERO;
-    relayerDay.getCreditedToDepot = BIG_INT_ZERO;
+    relayerDay.getDebitedFromSilo = BIG_DECIMAL_ZERO;
+    relayerDay.getCreditedToDepot = BIG_DECIMAL_ZERO;
     relayerDay.averageGetPerMint = BIG_DECIMAL_ZERO;
     relayerDay.mintCount = BIG_INT_ZERO;
     relayerDay.scanCount = BIG_INT_ZERO;
