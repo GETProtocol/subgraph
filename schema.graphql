@@ -51,6 +51,7 @@ type Relayer @entity {
   checkInCount: BigInt!
   claimCount: BigInt!
   events: [Event!]! @derivedFrom(field: "relayer")
+  tickets: [Ticket!]! @derivedFrom(field: "relayer")
   relayerDays: [RelayerDay!]! @derivedFrom(field: "relayer")
   usageEvents: [UsageEvent!]! @derivedFrom(field: "relayer")
 }
@@ -72,8 +73,10 @@ type RelayerDay @entity {
 
 type Event @entity {
   id: ID!
+  createTx: Bytes!
   relayer: Relayer!
   usageEvents: [UsageEvent!]! @derivedFrom(field: "event")
+  tickets: [Ticket!]! @derivedFrom(field: "event")
   getDebitedFromSilo: BigDecimal!
   getHeldInFuelTanks: BigDecimal!
   getCreditedToDepot: BigDecimal!
@@ -90,12 +93,29 @@ type Event @entity {
   orderTime: BigInt!
   latitude: BigDecimal!
   longitude: BigDecimal!
+  currency: String!
+  startTime: BigInt!
+  endTime: BigInt!
+  ticketeerName: String!
+}
+
+type Ticket @entity {
+  id: ID!
+  createTx: Bytes!
+  usageEvents: [UsageEvent!]! @derivedFrom(field: "ticket")
+  event: Event!
+  relayer: Relayer!
+  basePrice: BigInt!
+  getDebitedFromSilo: BigDecimal!
+  getHeldInFuelTank: BigDecimal!
+  getCreditedToDepot: BigDecimal!
 }
 
 type UsageEvent @entity {
   id: ID! # Composite PK: txHash-logIndex
   txHash: Bytes!
   relayer: Relayer!
+  relayerAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   orderTime: BigInt!
@@ -104,6 +124,8 @@ type UsageEvent @entity {
   getCreditedToDepot: BigDecimal!
   type: UsageEventType!
   event: Event!
+  eventAddress: Bytes!
+  ticket: Ticket!
   nftIndex: BigInt!
   latitude: BigDecimal!
   longitude: BigDecimal!

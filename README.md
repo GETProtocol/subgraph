@@ -14,6 +14,10 @@ There are a number of key entities to be aware of:
 
 Indexes all metadata for an _Event_ by its `address` as each Event has it's own independent address on-chain. Updates to an _Event_ will overwrite the data within this entity, so this will always represent the latest state. All actions visible through the associated `usageEvents` field.
 
+#### Ticket [Cross-sectional]
+
+Holds individual records for each _Ticket_, represented by a unique NFT on-chain and ID'd by its `nftIndex`. All actions visible through the associated `usageEvents` field.
+
 #### Protocol [Aggregate]
 
 All-time data for protocol-wide metrics, aggregated. This is used to capture the all-time usage on the protocol across all integrators. Singleton with ID '1'.
@@ -86,7 +90,12 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
 
 ```graphql
 {
-  relayerDays(orderBy: day, orderDirection: desc, first: 30, where: { relayer: "0x4afdae9cca053e3d456a9cb697081bf083a3340b" }) {
+  relayerDays(
+    orderBy: day
+    orderDirection: desc
+    first: 30
+    where: { relayer: "0x4afdae9cca053e3d456a9cb697081bf083a3340b" }
+  ) {
     relayer {
       id
     }
@@ -120,6 +129,29 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
       id
     }
     getDebitedFromSilo
+  }
+}
+```
+
+### Ticket Explorer Lifecycle Data
+
+```graphql
+{
+  ticket(id: "21") {
+    id
+    basePrice
+    event {
+      id
+      currency
+      shopUrl
+      startTime
+      ticketeerName
+    }
+    usageEvents(orderBy: orderTime, orderDirection: asc) {
+      orderTime
+      txHash
+      type
+    }
   }
 }
 ```

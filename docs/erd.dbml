@@ -56,6 +56,7 @@ Table Relayer {
   scanCount bigint
   claimCount bigint
   events Event[] [ref: > Event.relayer]
+  tickets Ticket[] [ref: > Ticket.relayer]
   relayerDays RelayerDay[] [ref: > RelayerDay.relayer]
   usageEvents UsageEvent[] [ref: > UsageEvent.relayer]
 }
@@ -77,8 +78,10 @@ Table RelayerDay {
 
 Table Event {
   id id
+  createTx bytes
   relayer Relayer
   usageEvents UsageEvent[] [ref: > UsageEvent.event]
+  tickets Ticket[] [ref: > Ticket.event]
   getDebitedFromSilo bigdecimal
   getHeldInFuelTanks bigdecimal
   getCreditedToDepot bigdecimal
@@ -95,11 +98,28 @@ Table Event {
   orderTime bigint
   latitude bigdecimal
   longitude bigdecimal
+  currency string
+  ticketeerName string
+  startTime bigint
+  endtime bigint
+}
+
+Table Ticket {
+  id id
+  createTx bytes
+  usageEvents UsageEvent[] [ref: > UsageEvent.event]
+  event Event
+  relayer Relayer
+  getDebitedFromSilo bigdecimal
+  getHeldInFuelTank bigdecimal
+  getCreditedToDepot bigdecimal
 }
 
 Table UsageEvent {
   id id
+  txHash bytes
   relayer Relayer
+  relayerAddress bytes
   blockNumber bigint
   blockTimestamp bigint
   orderTime bigint
@@ -108,6 +128,8 @@ Table UsageEvent {
   getCreditedToDepot bigdecimal
   interaction Interaction
   event event
+  eventAddress bytes
+  ticket Ticket
   nftIndex bigint
   latitude bigdecimal
   longitude bigdecimal

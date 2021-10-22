@@ -1,8 +1,7 @@
-import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
 
 export let EVENT_METADATA_STORAGE_ADDRESS_V1 = Address.fromString("0xcDA348fF8C175f305Ed8682003ec6F8743067f79");
 export let EVENT_METADATA_STORAGE_ADDRESS_V2 = Address.fromString("0x08C2aF3F01A36AD9F274ccE77f6f77cf9aa1dfC9");
-export let NFT_ADDRESS_V1 = Address.fromString("0x308e44cA2153C61103b0DC67Fd038De650912b73");
 export let NFT_ADDRESS_V2 = Address.fromString("0xbce1b23c7544422f1E2208d29A6A3AA9fAbAB250");
 export let ADDRESS_ZERO = Address.fromString("0x0000000000000000000000000000000000000000");
 
@@ -27,3 +26,5 @@ export let BIG_INT_TWO = BigInt.fromI32(2);
 export let BIG_INT_TEN = BigInt.fromI32(10);
 export let BIG_INT_ONE_HUNDRED = BigInt.fromI32(100);
 export let BIG_INT_ONE_DAY_SECONDS = BigInt.fromI32(86400);
+
+export let BYTES_EMPTY = Bytes.empty();

@@ -7,8 +7,12 @@ export function handleDepotSwiped(e: DepotSwiped): void {
   let protocolDay = getProtocolDay(e);
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    protocol.getMovedToFeeCollector = protocol.getMovedToFeeCollector.plus(e.params.balance.divDecimal(BIG_DECIMAL_1E18));
-    protocolDay.getMovedToFeeCollector = protocolDay.getMovedToFeeCollector.plus(e.params.balance.divDecimal(BIG_DECIMAL_1E18));
+    protocol.getMovedToFeeCollector = protocol.getMovedToFeeCollector.plus(
+      e.params.balance.divDecimal(BIG_DECIMAL_1E18)
+    );
+    protocolDay.getMovedToFeeCollector = protocolDay.getMovedToFeeCollector.plus(
+      e.params.balance.divDecimal(BIG_DECIMAL_1E18)
+    );
     protocol.save();
     protocolDay.save();
   }
