@@ -11,7 +11,7 @@ dataSources:
       startBlock: 15980526
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - primarySaleMint
@@ -42,7 +42,7 @@ dataSources:
       startBlock: 20363107
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - PrimarySaleMint
@@ -76,7 +76,7 @@ dataSources:
       startBlock: 15980516
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - newEventRegistered
@@ -96,7 +96,7 @@ dataSources:
       startBlock: 20363134
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - NewEventRegistered
@@ -116,7 +116,7 @@ dataSources:
       startBlock: 20363125
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - DepotSwiped

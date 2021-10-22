@@ -14,8 +14,13 @@ export function handleNewEventRegistered(e: newEventRegistered): void {
 
   let latitude = BigDecimal.fromString(eventData.value5[0].toString());
   let longitude = BigDecimal.fromString(eventData.value5[1].toString());
+  let currency = eventData.value5[2].toString();
+  let ticketeerName = eventData.value5[3].toString();
+  let startTime = eventData.value6[0];
+  let endTime = eventData.value6[1];
 
   let event = getEvent(address.toHexString());
+  event.createTx = e.transaction.hash;
   event.relayer = eventData.value0.toHexString();
   event.eventName = eventData.value2;
   event.shopUrl = eventData.value3;
@@ -23,6 +28,10 @@ export function handleNewEventRegistered(e: newEventRegistered): void {
   event.orderTime = e.params.orderTime;
   event.latitude = latitude;
   event.longitude = longitude;
+  event.currency = currency;
+  event.ticketeerName = ticketeerName;
+  event.startTime = startTime;
+  event.endTime = endTime;
 
   event.save();
 
