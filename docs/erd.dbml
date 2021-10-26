@@ -106,6 +106,7 @@ Table Event {
 
 Table Ticket {
   id id
+  nftIndex
   createTx bytes
   usageEvents UsageEvent[] [ref: > UsageEvent.event]
   event Event
