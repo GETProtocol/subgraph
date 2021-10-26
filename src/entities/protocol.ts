@@ -7,7 +7,7 @@ export function getProtocol(): Protocol {
   let protocol = Protocol.load(id);
 
   if (protocol == null) {
-    protocol = new Protocol(id.toString());
+    protocol = new Protocol(id);
     protocol.getDebitedFromSilos = BIG_DECIMAL_ZERO;
     protocol.getHeldInFuelTanks = BIG_DECIMAL_ZERO;
     protocol.getCreditedToDepot = BIG_DECIMAL_ZERO;

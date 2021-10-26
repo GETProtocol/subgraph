@@ -43,6 +43,7 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   if (event.currency == "GBP") rate = 138;
   ticket.basePrice = e.params.primaryPrice.times(BigInt.fromI32(rate)).div(BigInt.fromI32(1000));
 
+  protocol.mintCount = protocol.mintCount.plus(BIG_INT_ONE);
   protocolDay.mintCount = protocolDay.mintCount.plus(BIG_INT_ONE);
   relayer.mintCount = relayer.mintCount.plus(BIG_INT_ONE);
   relayerDay.mintCount = relayerDay.mintCount.plus(BIG_INT_ONE);
@@ -149,8 +150,8 @@ export function handleNftClaimed(e: nftClaimed): void {
   relayerDay.claimCount = relayerDay.claimCount.plus(BIG_INT_ONE);
   event.claimCount = event.claimCount.plus(BIG_INT_ONE);
 
-  protocolDay.save();
   protocol.save();
+  protocolDay.save();
   relayer.save();
   relayerDay.save();
   event.save();

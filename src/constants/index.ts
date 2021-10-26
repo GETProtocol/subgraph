@@ -5,13 +5,15 @@ export let EVENT_METADATA_STORAGE_ADDRESS_V2 = Address.fromString("0x08C2aF3F01A
 export let NFT_ADDRESS_V2 = Address.fromString("0xbce1b23c7544422f1E2208d29A6A3AA9fAbAB250");
 export let ADDRESS_ZERO = Address.fromString("0x0000000000000000000000000000000000000000");
 
-// endBlock is not yet natively supported in subgraph.yaml meaning that we manually need to skip
-// events for old ABI versions after the point they are switched. If the event name changes then
-// this would not be required, but we apply this across all hanlders for safety and consistency.
+// endBlock is not yet natively supported in subgraph.yaml meaning that we manually need to skip events for old ABI
+// versions after the point they are switched. If the event name changes then this would not be required, but we apply
+// this across all hanlders for safety and consistency.
 // See: https://github.com/graphprotocol/support/issues/49
 export let V1_END_BLOCK = BigInt.fromI32(20384301);
-// txHash: 0x47bdbebd125bd5c1ec8ce0d6a719da55543875f7c2cd7c1a49da19bbf04208ec
-export let FUEL_ACTIVATED_BLOCK = BigInt.fromI32(20386345);
+// Note that this is not the specific block in which the fuel usage went live, rather it was activated sometime after
+// this block. From here onwards we guarantee that all fuel usage will be 0 prior to launch when it will only be GET.
+export let FUEL_ACTIVATED_BLOCK = BigInt.fromI32(20637829);
+export let CURRENCY_CONVERSION_ACTIVATED_BLOCK = BigInt.fromI32(20410204);
 
 export let BIG_DECIMAL_ZERO = BigDecimal.fromString("0");
 export let BIG_DECIMAL_ONE = BigDecimal.fromString("1");

@@ -10,7 +10,7 @@ The GET Protocol subgraph acts as the complete data interface to all on-chain da
 
 There are a number of key entities to be aware of:
 
-#### Events [Cross-sectional]
+#### Event [Cross-sectional]
 
 Indexes all metadata for an _Event_ by its `address` as each Event has it's own independent address on-chain. Updates to an _Event_ will overwrite the data within this entity, so this will always represent the latest state. All actions visible through the associated `usageEvents` field.
 
@@ -37,6 +37,10 @@ Usage statistics per-relayer-day. Used to track and compare protocol usage by re
 #### UsageEvent [Time-series]
 
 Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `CREATE_EVENT`, `MINT`, `SCAN`. Comes with lat/long, the relayer, the GET used as fuel, the exact timestamp of the block, and the day as an integer. ID is a composite key of `txHash-logIndex`.
+
+## Hosted Service
+
+The GET Protocol Subgraph is available on [The Graph Hosted Service](https://thegraph.com/hosted-service/subgraph/getprotocol/get-protocol-subgraph), which offers a playground environment for testing queries and exploring entity relationships.
 
 ## Tracking the flow of GET
 
@@ -137,7 +141,7 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
 
 ```graphql
 {
-  ticket(id: "21") {
+  ticket(id: "209049") {
     id
     basePrice
     event {

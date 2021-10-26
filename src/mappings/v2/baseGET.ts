@@ -1,4 +1,13 @@
-import { BIG_DECIMAL_1E18, BIG_INT_ONE, FUEL_ACTIVATED_BLOCK } from "../../constants";
+import { BigInt } from "@graphprotocol/graph-ts";
+import {
+  ADDRESS_ZERO,
+  BIG_DECIMAL_1E18,
+  BIG_INT_ONE,
+  BIG_INT_ZERO,
+  CURRENCY_CONVERSION_ACTIVATED_BLOCK,
+  FUEL_ACTIVATED_BLOCK,
+  NFT_ADDRESS_V2,
+} from "../../constants";
 import {
   PrimarySaleMint,
   TicketInvalidated,
@@ -6,6 +15,7 @@ import {
   NftClaimed,
   CheckedIn,
   SecondarySale,
+  BaseGETV2 as BaseGETContractV2,
 } from "../../../generated/BaseGETV2/BaseGETV2";
 import {
   getProtocol,
@@ -13,7 +23,6 @@ import {
   getProtocolDay,
   getRelayerDay,
   getEvent,
-  getEventByNftIndexV2,
   getTicket,
   createUsageEvent,
 } from "../../entities";
@@ -21,16 +30,42 @@ import {
 export function handlePrimarySaleMint(e: PrimarySaleMint): void {
   let nftIndex = e.params.nftIndex;
   let ticket = getTicket(nftIndex);
+
+  let ticketData = BaseGETContractV2.bind(NFT_ADDRESS_V2).try_ticketMetadataIndex(nftIndex);
+  let primaryPrice = BIG_INT_ZERO;
+  let eventAddress = ADDRESS_ZERO.toHexString();
+  if (!ticketData.reverted) {
+    primaryPrice = ticketData.value.value2[0];
+    eventAddress = ticketData.value.value0.toHexString();
+  }
+
   let protocol = getProtocol();
   let protocolDay = getProtocolDay(e);
   let relayerDay = getRelayerDay(e);
   let relayer = getRelayer(e);
-  let event = getEventByNftIndexV2(nftIndex);
+  let event = getEvent(eventAddress);
 
   ticket.createTx = e.transaction.hash;
   ticket.relayer = relayer.id;
   ticket.event = event.id;
-  ticket.basePrice = e.params.basePrice;
+  // The basePrice is always denominated in USD but the conversion did not go live for this until after the start of
+  // this contract. For that reason we fetch the primary price (in local currency) from the contract view function
+  // before making the conversion. This was only necessary for the first day of the contract launch (2020-10-20).
+  //
+  // You may also notice that these values differ slightly from those in the v1/baseGET mapping due to being able to
+  // select the exact date required, whereas the v1 mappings cover the period from contract start to the v2 release.
+  //
+  // From this point onwards all conversion will be handled by TicketEngine and all basePrice (USD) will be passed in.
+  if (e.block.number.lt(CURRENCY_CONVERSION_ACTIVATED_BLOCK)) {
+    let rate = 100;
+    if (event.currency == "AUD") rate = 75;
+    if (event.currency == "CAD") rate = 81;
+    if (event.currency == "EUR") rate = 116;
+    if (event.currency == "GBP") rate = 138;
+    ticket.basePrice = primaryPrice.times(BigInt.fromI32(rate)).div(BigInt.fromI32(1000));
+  } else {
+    ticket.basePrice = e.params.basePrice.div(BigInt.fromI32(10));
+  }
 
   protocol.mintCount = protocol.mintCount.plus(BIG_INT_ONE);
   protocolDay.mintCount = protocolDay.mintCount.plus(BIG_INT_ONE);

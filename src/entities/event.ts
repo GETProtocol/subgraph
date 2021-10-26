@@ -1,7 +1,5 @@
-import { BigInt } from "@graphprotocol/graph-ts";
 import { Event } from "../../generated/schema";
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY, NFT_ADDRESS_V2, ADDRESS_ZERO } from "../constants";
-import { BaseGETV2 as BaseGETContractV2 } from "../../generated/BaseGETV2/BaseGETV2";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY } from "../constants";
 
 export function getEvent(eventAddress: string): Event {
   let event = Event.load(eventAddress);
@@ -31,15 +29,4 @@ export function getEvent(eventAddress: string): Event {
   }
 
   return event as Event;
-}
-
-export function getEventByNftIndexV2(nftIndex: BigInt): Event {
-  let baseGETContract = BaseGETContractV2.bind(NFT_ADDRESS_V2);
-  let eventAddress = baseGETContract.try_viewEventOfIndex(nftIndex);
-
-  if (!eventAddress.reverted) {
-    return getEvent(eventAddress.value.toHexString());
-  }
-
-  return getEvent(ADDRESS_ZERO.toHexString());
 }

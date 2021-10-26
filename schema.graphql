@@ -101,6 +101,7 @@ type Event @entity {
 
 type Ticket @entity {
   id: ID!
+  nftIndex: BigInt! # For sorting, unable to sort against ID as it's a string.
   createTx: Bytes!
   usageEvents: [UsageEvent!]! @derivedFrom(field: "ticket")
   event: Event!
