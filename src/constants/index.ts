@@ -3,6 +3,7 @@ import { Address, BigDecimal, BigInt, Bytes } from "@graphprotocol/graph-ts";
 export let EVENT_METADATA_STORAGE_ADDRESS_V1 = Address.fromString("0xcDA348fF8C175f305Ed8682003ec6F8743067f79");
 export let EVENT_METADATA_STORAGE_ADDRESS_V2 = Address.fromString("0x08C2aF3F01A36AD9F274ccE77f6f77cf9aa1dfC9");
 export let NFT_ADDRESS_V2 = Address.fromString("0xbce1b23c7544422f1E2208d29A6A3AA9fAbAB250");
+export let ECONOMICS_ADDRESS_V2 = Address.fromString("0x07faA643ad0eE4ee358d5E101573A5fdfBEcD0a9");
 export let ADDRESS_ZERO = Address.fromString("0x0000000000000000000000000000000000000000");
 
 // endBlock is not yet natively supported in subgraph.yaml meaning that we manually need to skip events for old ABI
