@@ -34,40 +34,6 @@ dataSources:
           handler: handleNftClaimed
       file: ./src/mappings/v1/baseGET.ts
   - kind: ethereum/contract
-    name: BaseGETV2
-    network: matic
-    source:
-      address: "0xbce1b23c7544422f1E2208d29A6A3AA9fAbAB250"
-      abi: BaseGETV2
-      startBlock: 20363107
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - PrimarySaleMint
-        - TicketInvalidated
-        - TicketScanned
-        - CheckedIn
-        - NftClaimed
-      abis:
-        - name: BaseGETV2
-          file: ./abis/v2/BaseGET.json
-      eventHandlers:
-        - event: PrimarySaleMint(indexed uint256,indexed uint64,indexed uint64,uint256)
-          handler: handlePrimarySaleMint
-        - event: TicketInvalidated(indexed uint256,indexed uint64,indexed uint64)
-          handler: handleTicketInvalidated
-        - event: SecondarySale(indexed uint256,indexed uint64,indexed uint64,uint256)
-          handler: handleSecondarySale
-        - event: TicketScanned(indexed uint256,indexed uint64,indexed uint64)
-          handler: handleTicketScanned
-        - event: CheckedIn(indexed uint256,indexed uint64,indexed uint64)
-          handler: handleCheckedIn
-        - event: NftClaimed(indexed uint256,indexed uint64,indexed uint64)
-          handler: handleNftClaimed
-      file: ./src/mappings/v2/baseGET.ts
-  - kind: ethereum/contract
     name: EventMetadataStorageV1
     network: matic
     source:
@@ -87,6 +53,42 @@ dataSources:
         - event: newEventRegistered(indexed address,indexed uint256,string,indexed uint256)
           handler: handleNewEventRegistered
       file: ./src/mappings/v1/eventMetadataStorage.ts
+  - kind: ethereum/contract
+    name: BaseGETV2
+    network: matic
+    source:
+      address: "0xbce1b23c7544422f1E2208d29A6A3AA9fAbAB250"
+      abi: BaseGETV2
+      startBlock: 20363107
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - PrimarySaleMint
+        - TicketInvalidated
+        - TicketScanned
+        - CheckedIn
+        - NftClaimed
+      abis:
+        - name: BaseGETV2
+          file: ./abis/v2/BaseGET.json
+        - name: EconomicsGETV2
+          file: ./abis/v2/EconomicsGET.json
+      eventHandlers:
+        - event: PrimarySaleMint(indexed uint256,indexed uint64,indexed uint64,uint256)
+          handler: handlePrimarySaleMint
+        - event: TicketInvalidated(indexed uint256,indexed uint64,indexed uint64)
+          handler: handleTicketInvalidated
+        - event: SecondarySale(indexed uint256,indexed uint64,indexed uint64,uint256)
+          handler: handleSecondarySale
+        - event: TicketScanned(indexed uint256,indexed uint64,indexed uint64)
+          handler: handleTicketScanned
+        - event: CheckedIn(indexed uint256,indexed uint64,indexed uint64)
+          handler: handleCheckedIn
+        - event: NftClaimed(indexed uint256,indexed uint64,indexed uint64)
+          handler: handleNftClaimed
+      file: ./src/mappings/v2/baseGET.ts
   - kind: ethereum/contract
     name: EventMetadataStorageV2
     network: matic
