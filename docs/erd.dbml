@@ -1,6 +1,6 @@
 // Enums
 
-Enum Interaction {
+Enum UsageEventType {
   NEW_EVENT
   MINT
   INVALIDATE
@@ -20,6 +20,7 @@ Table Protocol {
   getMovedToFeeCollector bigdecimal
   averageGetPerMint bigdecimal
   mintCount bigint
+  depotBalance bigdecimal
   invalidateCount bigint
   resaleCount bigint
   scanCount bigint
@@ -34,6 +35,7 @@ Table ProtocolDay {
   getCreditedToDepot bigdecimal
   getMovedToFeeCollector bigdecimal
   averageGetPerMint bigdecimal
+  depotBalance bigdecimal
   mintCount bigint
   invalidateCount bigint
   resaleCount bigint
@@ -49,6 +51,9 @@ Table Relayer {
   getHeldInFuelTanks bigdecimal
   getCreditedToDepot bigdecimal
   averageGetPerMint bigdecimal
+  siloBalance bigdecimal
+  basePrice bigdecimal
+  bufferAddress bytes
   mintCount bigint
   invalidateCount bigint
   resaleCount bigint
@@ -59,6 +64,7 @@ Table Relayer {
   tickets Ticket[] [ref: > Ticket.relayer]
   relayerDays RelayerDay[] [ref: > RelayerDay.relayer]
   usageEvents UsageEvent[] [ref: > UsageEvent.relayer]
+  topUpEvents TopUpEvent[] [ref: > TopUpEvent.relayer]
 }
 
 Table RelayerDay {
@@ -68,6 +74,8 @@ Table RelayerDay {
   getDebitedFromSilo bigdecimal
   getCreditedToDepot bigdecimal
   averageGetPerMint bigdecimal
+  siloBalance bigdecimal
+  basePrice bigdecimal
   mintCount bigint
   invalidateCount bigint
   resaleCount bigint
@@ -106,7 +114,7 @@ Table Event {
 
 Table Ticket {
   id id
-  nftIndex
+  nftIndex bigint
   createTx bytes
   usageEvents UsageEvent[] [ref: > UsageEvent.event]
   event Event
@@ -114,6 +122,19 @@ Table Ticket {
   getDebitedFromSilo bigdecimal
   getHeldInFuelTank bigdecimal
   getCreditedToDepot bigdecimal
+}
+
+Table TopUpEvent {
+  id id
+  txHash bytes
+  relayer Relayer
+  relayerAddress bytes
+  blockNumber bigint
+  blockTimestamp bigint
+  orderTime bigint
+  day int
+  amount bigdecimal
+  price bigdecimal
 }
 
 Table UsageEvent {
@@ -125,9 +146,9 @@ Table UsageEvent {
   blockTimestamp bigint
   orderTime bigint
   day int
+  type UsageEventType
   getDebitedFromSilo bigdecimal
   getCreditedToDepot bigdecimal
-  interaction Interaction
   event event
   eventAddress bytes
   ticket Ticket

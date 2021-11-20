@@ -97,6 +97,10 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
       relayer.averageGetPerMint = relayer.getDebitedFromSilo.div(relayer.mintCount.toBigDecimal());
       relayerDay.averageGetPerMint = relayerDay.getDebitedFromSilo.div(relayerDay.mintCount.toBigDecimal());
       event.averageGetPerMint = event.getDebitedFromSilo.div(event.mintCount.toBigDecimal());
+
+      relayer.siloBalance = relayer.siloBalance.minus(getUsed);
+      // We store the newly set relayer.siloBalance on the relayerDay as-is to be able to track the balance over time.
+      relayerDay.siloBalance = relayer.siloBalance;
     }
   }
 
@@ -139,6 +143,9 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
     relayer.getHeldInFuelTanks = relayer.getHeldInFuelTanks.minus(getUsed);
     event.getHeldInFuelTanks = event.getHeldInFuelTanks.minus(getUsed);
     ticket.getHeldInFuelTank = ticket.getHeldInFuelTank.minus(getUsed);
+
+    protocol.depotBalance = protocol.depotBalance.plus(getUsed);
+    protocolDay.depotBalance = protocol.depotBalance;
   }
 
   protocol.save();
@@ -204,6 +211,9 @@ export function handleTicketScanned(e: TicketScanned): void {
     relayer.getHeldInFuelTanks = relayer.getHeldInFuelTanks.minus(getUsed);
     event.getHeldInFuelTanks = event.getHeldInFuelTanks.minus(getUsed);
     ticket.getHeldInFuelTank = ticket.getHeldInFuelTank.minus(getUsed);
+
+    protocol.depotBalance = protocol.depotBalance.plus(getUsed);
+    protocolDay.depotBalance = protocol.depotBalance;
   }
 
   protocol.save();
@@ -245,6 +255,9 @@ export function handleCheckedIn(e: CheckedIn): void {
     relayer.getHeldInFuelTanks = relayer.getHeldInFuelTanks.minus(getUsed);
     event.getHeldInFuelTanks = event.getHeldInFuelTanks.minus(getUsed);
     ticket.getHeldInFuelTank = ticket.getHeldInFuelTank.minus(getUsed);
+
+    protocol.depotBalance = protocol.depotBalance.plus(getUsed);
+    protocolDay.depotBalance = protocol.depotBalance;
   }
 
   protocol.save();

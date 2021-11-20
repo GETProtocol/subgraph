@@ -2,24 +2,9 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "getUsed", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "orderTime", "type": "uint64" }
     ],
     "name": "CheckedIn",
     "type": "event"
@@ -27,61 +12,29 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "basePrice",
-        "type": "uint256"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "getUsed", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "orderTime", "type": "uint64" },
+      { "indexed": false, "internalType": "uint256", "name": "basePrice", "type": "uint256" }
     ],
     "name": "CollateralizedMint",
     "type": "event"
   },
   {
     "anonymous": false,
-    "inputs": [],
-    "name": "ContractSyncCompleted",
+    "inputs": [
+      { "indexed": false, "internalType": "bool", "name": "stateOfSwitch", "type": "bool" },
+      { "indexed": false, "internalType": "uint256", "name": "refactorSwapIndex", "type": "uint256" }
+    ],
+    "name": "EconomicsFlipped",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "getUsed", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "orderTime", "type": "uint64" }
     ],
     "name": "IllegalCheckIn",
     "type": "event"
@@ -89,24 +42,9 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "getUsed", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "orderTime", "type": "uint64" }
     ],
     "name": "IllegalScan",
     "type": "event"
@@ -114,49 +52,9 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      }
-    ],
-    "name": "NFTCheckedIn",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "getUsed", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "orderTime", "type": "uint64" }
     ],
     "name": "NftClaimed",
     "type": "event"
@@ -164,55 +62,10 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "netTokenURI",
-        "type": "string"
-      }
-    ],
-    "name": "NftTokenURIEdited",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "basePrice",
-        "type": "uint256"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "getUsed", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "orderTime", "type": "uint64" },
+      { "indexed": false, "internalType": "uint256", "name": "basePrice", "type": "uint256" }
     ],
     "name": "PrimarySaleMint",
     "type": "event"
@@ -220,30 +73,10 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "resalePrice",
-        "type": "uint256"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "getUsed", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "orderTime", "type": "uint64" },
+      { "indexed": false, "internalType": "uint256", "name": "resalePrice", "type": "uint256" }
     ],
     "name": "SecondarySale",
     "type": "event"
@@ -251,24 +84,9 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "getUsed", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "orderTime", "type": "uint64" }
     ],
     "name": "TicketInvalidated",
     "type": "event"
@@ -276,24 +94,9 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "getUsed",
-        "type": "uint64"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint64",
-        "name": "orderTime",
-        "type": "uint64"
-      }
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "getUsed", "type": "uint64" },
+      { "indexed": true, "internalType": "uint64", "name": "orderTime", "type": "uint64" }
     ],
     "name": "TicketScanned",
     "type": "event"
@@ -301,69 +104,33 @@
   {
     "inputs": [],
     "name": "CONFIGURATION",
-    "outputs": [
-      {
-        "internalType": "contract IGETProtocolConfiguration",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "contract IGETProtocolConfiguration", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_configurationAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_configurationAddress", "type": "address" }],
     "name": "__BaseGETNFT_init",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_configurationAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_configurationAddress", "type": "address" }],
     "name": "__FoundationContract_init",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_originAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_originAddress", "type": "address" }],
     "name": "addressToIndex",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_basketContract",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_basketContract", "type": "address" }],
     "name": "approveBasket",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -371,16 +138,8 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_originAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_orderTime",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "_originAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_orderTime", "type": "uint256" }
     ],
     "name": "checkIn",
     "outputs": [],
@@ -389,21 +148,9 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_originAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_externalAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_orderTime",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "_originAddress", "type": "address" },
+      { "internalType": "address", "name": "_externalAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_orderTime", "type": "uint256" }
     ],
     "name": "claimgetNFT",
     "outputs": [],
@@ -412,26 +159,10 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_basketAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_eventAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_primaryPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32[]",
-        "name": "_ticketMetadata",
-        "type": "bytes32[]"
-      }
+      { "internalType": "address", "name": "_basketAddress", "type": "address" },
+      { "internalType": "address", "name": "_eventAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_primaryPrice", "type": "uint256" },
+      { "internalType": "bytes32[]", "name": "_ticketMetadata", "type": "bytes32[]" }
     ],
     "name": "collateralMint",
     "outputs": [],
@@ -440,16 +171,8 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_originAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_orderTime",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "_originAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_orderTime", "type": "uint256" }
     ],
     "name": "invalidateAddressNFT",
     "outputs": [],
@@ -458,84 +181,39 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_originAddress",
-        "type": "address"
-      }
+      { "internalType": "uint256", "name": "_nftIndex", "type": "uint256" },
+      { "internalType": "address", "name": "_originAddress", "type": "address" }
     ],
     "name": "isNFTClaimable",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "_claim",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "_claim", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_originAddress",
-        "type": "address"
-      }
+      { "internalType": "uint256", "name": "_nftIndex", "type": "uint256" },
+      { "internalType": "address", "name": "_originAddress", "type": "address" }
     ],
     "name": "isNFTSellable",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "_sell",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "_sell", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "onChainEconomics",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_destinationAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_eventAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_primaryPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_basePrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_orderTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes32[]",
-        "name": "_ticketMetadata",
-        "type": "bytes32[]"
-      }
+      { "internalType": "address", "name": "_destinationAddress", "type": "address" },
+      { "internalType": "address", "name": "_eventAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_primaryPrice", "type": "uint256" },
+      { "internalType": "uint256", "name": "_basePrice", "type": "uint256" },
+      { "internalType": "uint256", "name": "_orderTime", "type": "uint256" },
+      { "internalType": "bytes32[]", "name": "_ticketMetadata", "type": "bytes32[]" }
     ],
     "name": "primarySale",
     "outputs": [],
@@ -543,37 +221,15 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "returnStructTicket",
     "outputs": [
       {
         "components": [
-          {
-            "internalType": "address",
-            "name": "eventAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes32[]",
-            "name": "ticketMetadata",
-            "type": "bytes32[]"
-          },
-          {
-            "internalType": "uint32[2]",
-            "name": "salePrices",
-            "type": "uint32[2]"
-          },
-          {
-            "internalType": "enum BaseGET.TicketStates",
-            "name": "state",
-            "type": "uint8"
-          }
+          { "internalType": "address", "name": "eventAddress", "type": "address" },
+          { "internalType": "bytes32[]", "name": "ticketMetadata", "type": "bytes32[]" },
+          { "internalType": "uint32[2]", "name": "salePrices", "type": "uint32[2]" },
+          { "internalType": "enum BaseGET.TicketStates", "name": "state", "type": "uint8" }
         ],
         "internalType": "struct BaseGET.TicketData",
         "name": "",
@@ -585,16 +241,8 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_originAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_orderTime",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "_originAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_orderTime", "type": "uint256" }
     ],
     "name": "scanNFT",
     "outputs": [],
@@ -603,26 +251,10 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_originAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_destinationAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_orderTime",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_secondaryPrice",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "_originAddress", "type": "address" },
+      { "internalType": "address", "name": "_destinationAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_orderTime", "type": "uint256" },
+      { "internalType": "uint256", "name": "_secondaryPrice", "type": "uint256" }
     ],
     "name": "secondaryTransfer",
     "outputs": [],
@@ -630,178 +262,78 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "syncConfiguration",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
+    "inputs": [
+      { "internalType": "bool", "name": "_switchState", "type": "bool" },
+      { "internalType": "uint256", "name": "_refactorSwapIndex", "type": "uint256" }
     ],
+    "name": "setOnChainSwitch",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_originAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
+    "name": "syncConfiguration",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_originAddress", "type": "address" }],
     "name": "ticketMetadataAddress",
     "outputs": [
-      {
-        "internalType": "address",
-        "name": "_eventAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32[]",
-        "name": "_ticketMetadata",
-        "type": "bytes32[]"
-      },
-      {
-        "internalType": "uint32[2]",
-        "name": "_salePrices",
-        "type": "uint32[2]"
-      },
-      {
-        "internalType": "enum BaseGET.TicketStates",
-        "name": "_state",
-        "type": "uint8"
-      }
+      { "internalType": "address", "name": "_eventAddress", "type": "address" },
+      { "internalType": "bytes32[]", "name": "_ticketMetadata", "type": "bytes32[]" },
+      { "internalType": "uint32[2]", "name": "_salePrices", "type": "uint32[2]" },
+      { "internalType": "enum BaseGET.TicketStates", "name": "_state", "type": "uint8" }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "ticketMetadataIndex",
     "outputs": [
-      {
-        "internalType": "address",
-        "name": "_eventAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes32[]",
-        "name": "_ticketMetadata",
-        "type": "bytes32[]"
-      },
-      {
-        "internalType": "uint32[2]",
-        "name": "_salePrices",
-        "type": "uint32[2]"
-      },
-      {
-        "internalType": "enum BaseGET.TicketStates",
-        "name": "_stateTicket",
-        "type": "uint8"
-      }
+      { "internalType": "address", "name": "_eventAddress", "type": "address" },
+      { "internalType": "bytes32[]", "name": "_ticketMetadata", "type": "bytes32[]" },
+      { "internalType": "uint32[2]", "name": "_salePrices", "type": "uint32[2]" },
+      { "internalType": "enum BaseGET.TicketStates", "name": "_stateTicket", "type": "uint8" }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "viewEventOfIndex",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "viewLatestResalePrice",
-    "outputs": [
-      {
-        "internalType": "uint32",
-        "name": "",
-        "type": "uint32"
-      }
-    ],
+    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "viewPrimaryPrice",
-    "outputs": [
-      {
-        "internalType": "uint32",
-        "name": "",
-        "type": "uint32"
-      }
-    ],
+    "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "viewTicketMetadata",
-    "outputs": [
-      {
-        "internalType": "bytes32[]",
-        "name": "",
-        "type": "bytes32[]"
-      }
-    ],
+    "outputs": [{ "internalType": "bytes32[]", "name": "", "type": "bytes32[]" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "viewTicketState",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   }

@@ -34,6 +34,10 @@ Similar content to _Protocol_ but aggregrated to each UTC-day. Used to track pro
 
 Usage statistics per-relayer-day. Used to track and compare protocol usage by relayer. ID is a composite key of `relayerAddress-dayInteger`.
 
+#### TopUpEvent [Time-series]
+
+Tracks each individual relayer top-up as a separate record to allow for a full record of the amount of each top up and its price in USD. ID is a composite key of `txHash-logIndex`.
+
 #### UsageEvent [Time-series]
 
 Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `CREATE_EVENT`, `MINT`, `SCAN`. Comes with lat/long, the relayer, the GET used as fuel, the exact timestamp of the block, and the day as an integer. ID is a composite key of `txHash-logIndex`.
@@ -53,6 +57,8 @@ Available on Relayer and Protocol entities:
 - `getDebitedFromSilos` contains the amount of GET moved from the Silo to the NFT Fuel Tank when minting NFT tickets.
 - `getHeldInFuelTanks` contains the total amount of all GET held within the NFT Fuel Tanks, awaiting a move to the depot.
 - `getCreditedToDepot` records the GET balance credited to the Depot balance when a ticket is checked-in (finalized).
+- `deplotBalance` (Protocol) holds the live/real-time value of the depot balance waiting to be transferred to the fee collector.
+- `siloBalance` (Relayer) maintains the live/real-time balance available to be used for NFT minting.
 
 Available only on the Protocol entities:
 
@@ -133,6 +139,18 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
       id
     }
     getDebitedFromSilo
+  }
+}
+```
+
+### 5 Most Recent Relayer Top-Ups
+
+```graphql
+{
+  usageEvents(orderBy: blockTimestamp, orderDirection: desc, first: 5) {
+    relayerAddress
+    amount
+    price
   }
 }
 ```

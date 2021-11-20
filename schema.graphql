@@ -15,6 +15,7 @@ type Protocol @entity {
   getCreditedToDepot: BigDecimal!
   getMovedToFeeCollector: BigDecimal!
   averageGetPerMint: BigDecimal!
+  depotBalance: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -30,6 +31,7 @@ type ProtocolDay @entity {
   getCreditedToDepot: BigDecimal!
   getMovedToFeeCollector: BigDecimal!
   averageGetPerMint: BigDecimal!
+  depotBalance: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -44,6 +46,9 @@ type Relayer @entity {
   getHeldInFuelTanks: BigDecimal!
   getCreditedToDepot: BigDecimal!
   averageGetPerMint: BigDecimal!
+  siloBalance: BigDecimal!
+  basePrice: BigDecimal!
+  bufferAddress: Bytes!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -63,6 +68,8 @@ type RelayerDay @entity {
   getDebitedFromSilo: BigDecimal!
   getCreditedToDepot: BigDecimal!
   averageGetPerMint: BigDecimal!
+  siloBalance: BigDecimal!
+  basePrice: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -112,6 +119,18 @@ type Ticket @entity {
   getCreditedToDepot: BigDecimal!
 }
 
+type TopUpEvent @entity {
+  id: ID! # Composite PK: txHash-logIndex
+  txHash: Bytes!
+  relayer: Relayer!
+  relayerAddress: Bytes!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  day: Int!
+  amount: BigDecimal!
+  price: BigDecimal!
+}
+
 type UsageEvent @entity {
   id: ID! # Composite PK: txHash-logIndex
   txHash: Bytes!
@@ -121,9 +140,9 @@ type UsageEvent @entity {
   blockTimestamp: BigInt!
   orderTime: BigInt!
   day: Int!
+  type: UsageEventType!
   getDebitedFromSilo: BigDecimal!
   getCreditedToDepot: BigDecimal!
-  type: UsageEventType!
   event: Event!
   eventAddress: Bytes!
   ticket: Ticket!

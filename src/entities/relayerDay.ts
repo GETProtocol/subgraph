@@ -1,9 +1,9 @@
-import { ethereum } from "@graphprotocol/graph-ts";
+import { Address, ethereum } from "@graphprotocol/graph-ts";
 import { RelayerDay } from "../../generated/schema";
 import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../constants";
 
-export function getRelayerDay(e: ethereum.Event): RelayerDay {
-  let relayerAddress = e.transaction.from.toHexString();
+function findOrBuildRelayerDay(address: Address, e: ethereum.Event): RelayerDay {
+  let relayerAddress = address.toHexString();
   let day = e.block.timestamp.toI32() / 86400;
   let id = relayerAddress.concat("-").concat(day.toString());
   let relayerDay = RelayerDay.load(id);
@@ -15,6 +15,8 @@ export function getRelayerDay(e: ethereum.Event): RelayerDay {
     relayerDay.getDebitedFromSilo = BIG_DECIMAL_ZERO;
     relayerDay.getCreditedToDepot = BIG_DECIMAL_ZERO;
     relayerDay.averageGetPerMint = BIG_DECIMAL_ZERO;
+    relayerDay.siloBalance = BIG_DECIMAL_ZERO;
+    relayerDay.basePrice = BIG_DECIMAL_ZERO;
     relayerDay.mintCount = BIG_INT_ZERO;
     relayerDay.invalidateCount = BIG_INT_ZERO;
     relayerDay.resaleCount = BIG_INT_ZERO;
@@ -24,4 +26,12 @@ export function getRelayerDay(e: ethereum.Event): RelayerDay {
   }
 
   return relayerDay as RelayerDay;
+}
+
+export function getRelayerDay(e: ethereum.Event): RelayerDay {
+  return findOrBuildRelayerDay(e.transaction.from, e) as RelayerDay;
+}
+
+export function getRelayerDayByAddress(address: Address, e: ethereum.Event): RelayerDay {
+  return findOrBuildRelayerDay(address, e) as RelayerDay;
 }

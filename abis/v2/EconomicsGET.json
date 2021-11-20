@@ -2,24 +2,9 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "relayerUpdated",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "oldRelayerPrice",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "newRelayerPrice",
-        "type": "uint256"
-      }
+      { "indexed": true, "internalType": "address", "name": "relayerUpdated", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "oldRelayerPrice", "type": "uint256" },
+      { "indexed": true, "internalType": "uint256", "name": "newRelayerPrice", "type": "uint256" }
     ],
     "name": "AveragePriceUpdated",
     "type": "event"
@@ -27,24 +12,9 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "relayerAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "oldPrice",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "newPrice",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "oldPrice", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "newPrice", "type": "uint256" }
     ],
     "name": "AverageSiloPriceUpdated",
     "type": "event"
@@ -52,18 +22,8 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amountCollected",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "amountCollected", "type": "uint256" }
     ],
     "name": "BackPackDrainedBasic",
     "type": "event"
@@ -71,56 +31,23 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "nftIndex",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amountCollected",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "amountCollected", "type": "uint256" }
     ],
     "name": "BackPackDrainedUpsell",
     "type": "event"
   },
   {
     "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "newDepotBalance",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "indexed": false, "internalType": "uint256", "name": "newDepotBalance", "type": "uint256" }],
     "name": "CollectedDepotNullified",
     "type": "event"
   },
   {
     "anonymous": false,
-    "inputs": [],
-    "name": "ContractSyncCompleted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "feeCollectorAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "balance",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "address", "name": "feeCollectorAddress", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "balance", "type": "uint256" }
     ],
     "name": "DepotSwiped",
     "type": "event"
@@ -128,50 +55,32 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "relayerAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "mintFactor",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "address", "name": "recipientFuel", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "amountFuel", "type": "uint256" }
+    ],
+    "name": "EmergencyWithdraw",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "mintFactor", "type": "uint256" }
     ],
     "name": "FactorUpdated",
     "type": "event"
   },
   {
     "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "newFeeCollector",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "indexed": false, "internalType": "address", "name": "newFeeCollector", "type": "address" }],
     "name": "FeeCollectorSet",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "relayerAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amountToppedUp",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "amountToppedUp", "type": "uint256" }
     ],
     "name": "ReceiptInDrawer",
     "type": "event"
@@ -179,62 +88,45 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "relayerAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32[12]",
-        "name": "dynamicRates",
-        "type": "uint32[12]"
-      }
+      { "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "bufferAddressRelayer", "type": "address" }
+    ],
+    "name": "RelayerBufferMapped",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "indexed": false, "internalType": "uint32[12]", "name": "dynamicRates", "type": "uint32[12]" }
     ],
     "name": "RelayerConfiguration",
     "type": "event"
   },
   {
     "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "relayerAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" }],
     "name": "RelayerConfigurationCleared",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "relayerAddress",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "topUpAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "priceGETTopUp",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "newsiloprice",
-        "type": "uint256"
-      }
+      { "indexed": true, "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "topUpAmount", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "priceGETTopUp", "type": "uint256" },
+      { "indexed": true, "internalType": "uint256", "name": "newsiloprice", "type": "uint256" }
+    ],
+    "name": "RelayerToppedUp",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "indexed": true, "internalType": "uint256", "name": "topUpAmount", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "priceGETTopUp", "type": "uint256" },
+      { "indexed": true, "internalType": "uint256", "name": "newsiloprice", "type": "uint256" }
     ],
     "name": "RelayerToppedUpBuffer",
     "type": "event"
@@ -242,30 +134,10 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "relayerAddress",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "oldBalance",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "newBalance",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "difference",
-        "type": "uint256"
-      }
+      { "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "oldBalance", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "newBalance", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "difference", "type": "uint256" }
     ],
     "name": "SiloBalanceCorrected",
     "type": "event"
@@ -273,88 +145,47 @@
   {
     "inputs": [],
     "name": "CONFIGURATION",
-    "outputs": [
-      {
-        "internalType": "contract IGETProtocolConfiguration",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "contract IGETProtocolConfiguration", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_configurationAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_configurationAddress", "type": "address" }],
     "name": "__EconomicsGET_init",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_configurationAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_configurationAddress", "type": "address" }],
     "name": "__FoundationContract_init",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_relayerAddress", "type": "address" }],
     "name": "balanceRelayerSilo",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "chargeTaxRateBasic",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_relayerAddress", "type": "address" }],
+    "name": "checkRelayerConfiguration",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_relayerAddress", "type": "address" }],
     "name": "clearDynamicRateStruct",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -362,16 +193,8 @@
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_newBalance",
-        "type": "uint256"
-      }
+      { "internalType": "address", "name": "_relayerAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_newBalance", "type": "uint256" }
     ],
     "name": "correctBalanceSilo",
     "outputs": [],
@@ -379,131 +202,41 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_newDepotBalance",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_newDepotBalance", "type": "uint256" }],
     "name": "correctedDepotCorrection",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [],
+    "name": "emergencyWithdrawAllFuel",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "emptyBackpackBasic",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      }
-    ],
-    "name": "estimateNFTMints",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_basePrice",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "_nftIndex", "type": "uint256" },
+      { "internalType": "address", "name": "_relayerAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_basePrice", "type": "uint256" }
     ],
     "name": "fuelBackpackTicket",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "receiptDrawer",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "amountToppedUp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "priceGETUSDTopUp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "newDCAPrice",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint32[12]",
-        "name": "dynamicRates",
-        "type": "uint32[12]"
-      }
+      { "internalType": "address", "name": "_relayerAddress", "type": "address" },
+      { "internalType": "uint32[12]", "name": "dynamicRates", "type": "uint32[12]" }
     ],
     "name": "setDynamicRateStruct",
     "outputs": [],
@@ -511,260 +244,114 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "swipeDepotBalance",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
+    "inputs": [
+      { "internalType": "address", "name": "_relayerAddress", "type": "address" },
+      { "internalType": "address", "name": "_bufferAddressRelayer", "type": "address" }
     ],
+    "name": "setRelayerBuffer",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
+  { "inputs": [], "name": "swipeDepotBalance", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
   {
     "inputs": [],
     "name": "syncConfiguration",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_topUpAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_priceGETTopUp",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      }
+      { "internalType": "uint256", "name": "_topUpAmount", "type": "uint256" },
+      { "internalType": "uint256", "name": "_priceGETTopUp", "type": "uint256" },
+      { "internalType": "address", "name": "_relayerAddress", "type": "address" }
     ],
-    "name": "topUpRelayer",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "name": "topUpRelayerFromBuffer",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_relayerAddress", "type": "address" }],
     "name": "valueRelayerSilo",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_nftIndex", "type": "uint256" }],
     "name": "viewBackPackBalance",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_nftIndex",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      }
+      { "internalType": "uint256", "name": "_nftIndex", "type": "uint256" },
+      { "internalType": "address", "name": "_relayerAddress", "type": "address" }
     ],
     "name": "viewBackPackValue",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_relayerAddress", "type": "address" }],
+    "name": "viewBufferOfRelayer",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "viewDepotBalance",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "viewDepotValue",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_relayerAddress", "type": "address" }],
     "name": "viewRelayerFactor",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_relayerAddress", "type": "address" }],
     "name": "viewRelayerGETPrice",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_relayerAddress", "type": "address" }],
     "name": "viewRelayerRates",
     "outputs": [
       {
         "components": [
-          {
-            "internalType": "uint32",
-            "name": "mintRate",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "resellRate",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "claimRate",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "crowdRate",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "scalperFee",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "extraFee",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "shareRate",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "editRate",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "maxBasePrice",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "minBasePrice",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "reserveSlot_1",
-            "type": "uint32"
-          },
-          {
-            "internalType": "uint32",
-            "name": "reserveSlot_2",
-            "type": "uint32"
-          }
+          { "internalType": "bool", "name": "configured", "type": "bool" },
+          { "internalType": "uint32", "name": "mintRate", "type": "uint32" },
+          { "internalType": "uint32", "name": "resellRate", "type": "uint32" },
+          { "internalType": "uint32", "name": "claimRate", "type": "uint32" },
+          { "internalType": "uint32", "name": "crowdRate", "type": "uint32" },
+          { "internalType": "uint32", "name": "scalperFee", "type": "uint32" },
+          { "internalType": "uint32", "name": "extraFee", "type": "uint32" },
+          { "internalType": "uint32", "name": "shareRate", "type": "uint32" },
+          { "internalType": "uint32", "name": "editRate", "type": "uint32" },
+          { "internalType": "uint32", "name": "maxBasePrice", "type": "uint32" },
+          { "internalType": "uint32", "name": "minBasePrice", "type": "uint32" },
+          { "internalType": "uint32", "name": "reserveSlot_1", "type": "uint32" },
+          { "internalType": "uint32", "name": "reserveSlot_2", "type": "uint32" }
         ],
-        "internalType": "struct EconomicsGET.DynamicRateStruct",
+        "internalType": "struct EconomicsGET721V1.DynamicRateStruct",
         "name": "",
         "type": "tuple"
       }

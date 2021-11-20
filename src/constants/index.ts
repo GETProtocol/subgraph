@@ -17,7 +17,8 @@ export let FUEL_ACTIVATED_BLOCK = BigInt.fromI32(20637829);
 export let CURRENCY_CONVERSION_ACTIVATED_BLOCK = BigInt.fromI32(20410204);
 
 export let BIG_DECIMAL_ZERO = BigDecimal.fromString("0");
-export let BIG_DECIMAL_ONE = BigDecimal.fromString("1");
+export let BIG_DECIML_ONE = BigDecimal.fromString("1");
+export let BIG_DECIMAL_1E3 = BigDecimal.fromString("1e3");
 export let BIG_DECIMAL_1E6 = BigDecimal.fromString("1e6");
 export let BIG_DECIMAL_1E12 = BigDecimal.fromString("1e12");
 export let BIG_DECIMAL_1E18 = BigDecimal.fromString("1e18");
