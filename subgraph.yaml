@@ -128,4 +128,12 @@ dataSources:
       eventHandlers:
         - event: DepotSwiped(address,uint256)
           handler: handleDepotSwiped
+        - event: RelayerToppedUpBuffer(indexed address,indexed uint256,uint256,indexed uint256)
+          handler: handleRelayerToppedUpBuffer
+        - event: AveragePriceUpdated(indexed address,indexed uint256,indexed uint256)
+          handler: handleAveragePriceUpdated
+        - event: AverageSiloPriceUpdated(address,uint256,uint256)
+          handler: handleAverageSiloPriceUpdated
+        - event: RelayerBufferMapped(address,address)
+          handler: handleRelayerBufferMapped
       file: ./src/mappings/v2/economicsGET.ts

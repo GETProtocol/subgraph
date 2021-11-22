@@ -13,6 +13,7 @@ export function getProtocol(): Protocol {
     protocol.getCreditedToDepot = BIG_DECIMAL_ZERO;
     protocol.getMovedToFeeCollector = BIG_DECIMAL_ZERO;
     protocol.averageGetPerMint = BIG_DECIMAL_ZERO;
+    protocol.depotBalance = BIG_DECIMAL_ZERO;
     protocol.mintCount = BIG_INT_ZERO;
     protocol.invalidateCount = BIG_INT_ZERO;
     protocol.resaleCount = BIG_INT_ZERO;
