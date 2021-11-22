@@ -5,6 +5,7 @@ import {
   BIG_INT_ONE,
   BIG_INT_ZERO,
   CURRENCY_CONVERSION_ACTIVATED_BLOCK,
+  ECONOMICS_ADDRESS_V2,
   FUEL_ACTIVATED_BLOCK,
   NFT_ADDRESS_V2,
 } from "../../constants";
@@ -17,6 +18,7 @@ import {
   SecondarySale,
   BaseGETV2 as BaseGETContractV2,
 } from "../../../generated/BaseGETV2/BaseGETV2";
+import { EconomicsGETV2 as EconomicsGETContractV2 } from "../../../generated/EconomicsGETV2/EconomicsGETV2";
 import {
   getProtocol,
   getRelayer,
@@ -74,25 +76,28 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
   event.mintCount = event.mintCount.plus(BIG_INT_ONE);
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    let getUsed = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
+    let getUsedResult = EconomicsGETContractV2.bind(ECONOMICS_ADDRESS_V2).try_viewBackPackBalance(nftIndex);
 
-    protocol.getDebitedFromSilos = protocol.getDebitedFromSilos.plus(getUsed);
-    protocolDay.getDebitedFromSilos = protocolDay.getDebitedFromSilos.plus(getUsed);
-    relayer.getDebitedFromSilo = relayer.getDebitedFromSilo.plus(getUsed);
-    relayerDay.getDebitedFromSilo = relayerDay.getDebitedFromSilo.plus(getUsed);
-    event.getDebitedFromSilo = event.getDebitedFromSilo.plus(getUsed);
-    ticket.getDebitedFromSilo = ticket.getDebitedFromSilo.plus(getUsed);
+    if (!getUsedResult.reverted) {
+      let getUsed = getUsedResult.value.divDecimal(BIG_DECIMAL_1E18);
+      protocol.getDebitedFromSilos = protocol.getDebitedFromSilos.plus(getUsed);
+      protocolDay.getDebitedFromSilos = protocolDay.getDebitedFromSilos.plus(getUsed);
+      relayer.getDebitedFromSilo = relayer.getDebitedFromSilo.plus(getUsed);
+      relayerDay.getDebitedFromSilo = relayerDay.getDebitedFromSilo.plus(getUsed);
+      event.getDebitedFromSilo = event.getDebitedFromSilo.plus(getUsed);
+      ticket.getDebitedFromSilo = ticket.getDebitedFromSilo.plus(getUsed);
 
-    protocol.getHeldInFuelTanks = protocol.getHeldInFuelTanks.plus(getUsed);
-    relayer.getHeldInFuelTanks = relayer.getHeldInFuelTanks.plus(getUsed);
-    event.getHeldInFuelTanks = event.getHeldInFuelTanks.plus(getUsed);
-    ticket.getHeldInFuelTank = ticket.getHeldInFuelTank.plus(getUsed);
+      protocol.getHeldInFuelTanks = protocol.getHeldInFuelTanks.plus(getUsed);
+      relayer.getHeldInFuelTanks = relayer.getHeldInFuelTanks.plus(getUsed);
+      event.getHeldInFuelTanks = event.getHeldInFuelTanks.plus(getUsed);
+      ticket.getHeldInFuelTank = ticket.getHeldInFuelTank.plus(getUsed);
 
-    protocol.averageGetPerMint = protocol.getDebitedFromSilos.div(protocol.mintCount.toBigDecimal());
-    protocolDay.averageGetPerMint = protocolDay.getDebitedFromSilos.div(protocolDay.mintCount.toBigDecimal());
-    relayer.averageGetPerMint = relayer.getDebitedFromSilo.div(relayer.mintCount.toBigDecimal());
-    relayerDay.averageGetPerMint = relayerDay.getDebitedFromSilo.div(relayerDay.mintCount.toBigDecimal());
-    event.averageGetPerMint = event.getDebitedFromSilo.div(event.mintCount.toBigDecimal());
+      protocol.averageGetPerMint = protocol.getDebitedFromSilos.div(protocol.mintCount.toBigDecimal());
+      protocolDay.averageGetPerMint = protocolDay.getDebitedFromSilos.div(protocolDay.mintCount.toBigDecimal());
+      relayer.averageGetPerMint = relayer.getDebitedFromSilo.div(relayer.mintCount.toBigDecimal());
+      relayerDay.averageGetPerMint = relayerDay.getDebitedFromSilo.div(relayerDay.mintCount.toBigDecimal());
+      event.averageGetPerMint = event.getDebitedFromSilo.div(event.mintCount.toBigDecimal());
+    }
   }
 
   protocol.save();
@@ -121,7 +126,7 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
   event.invalidateCount = event.invalidateCount.plus(BIG_INT_ONE);
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    let getUsed = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
+    let getUsed = ticket.getHeldInFuelTank;
 
     protocol.getCreditedToDepot = protocol.getCreditedToDepot.plus(getUsed);
     protocolDay.getCreditedToDepot = protocolDay.getCreditedToDepot.plus(getUsed);
@@ -186,7 +191,7 @@ export function handleTicketScanned(e: TicketScanned): void {
   event.scanCount = event.scanCount.plus(BIG_INT_ONE);
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    let getUsed = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
+    let getUsed = ticket.getHeldInFuelTank;
 
     protocol.getCreditedToDepot = protocol.getCreditedToDepot.plus(getUsed);
     protocolDay.getCreditedToDepot = protocolDay.getCreditedToDepot.plus(getUsed);
@@ -227,7 +232,7 @@ export function handleCheckedIn(e: CheckedIn): void {
   event.claimCount = event.claimCount.plus(BIG_INT_ONE);
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    let getUsed = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
+    let getUsed = ticket.getHeldInFuelTank;
 
     protocol.getCreditedToDepot = protocol.getCreditedToDepot.plus(getUsed);
     protocolDay.getCreditedToDepot = protocolDay.getCreditedToDepot.plus(getUsed);

@@ -24,3 +24,7 @@ Unlike the V1 contracts thee eventAddress is no longer emitted with the PrimaryS
 ### 3. On-Chain Economics
 
 The on-chain economics and accounting of GET went live during the V2 contracts. This was enabled on block 20637829 and the economics fields should only be used from within an if statement allowing blocks greater than or equal to 20637829. Any events from blocks previous to this can be assumed to be for testing purposes only and should be set to 0. Transaction: https://polygonscan.com/tx/0xe9ef44375aa2a2cb70fb6244e60ca6c8ca60fca3dd6e0fa3b42e779d1d0faba3
+
+### 4. uint64 Accuracy
+
+In earlier versions of the contract gasUsed was chosen to be emitted as a uint64 rather than a uint256. Upon casting the uint256 gasUsed variable to a uint64 it rounds down to a floor set by the maximum precision available on a 64-bit integer. Over time this causes a slight drift in the amount of GET used as fuel in the fuel metrics. Future versions of the contract will emit a uint256 to avoid this issue. The workaround for this version is to fetch the fuel tank balance for each ticket after minting and use that as the getUsed. At this stage all actions to reduce the fuel tank balance will empty it in full, so we can assume that the getUsed for scanning and check-in is always equal to the fuel tank balance.
