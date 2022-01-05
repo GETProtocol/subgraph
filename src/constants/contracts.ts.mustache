@@ -1,0 +1,16 @@
+import { Address, BigInt } from "@graphprotocol/graph-ts";
+
+export let CURRENCY_CONVERSION_ACTIVATED_BLOCK = BigInt.fromI32(20410204);
+export let EVENT_METADATA_STORAGE_ADDRESS_V1 = Address.fromString("{{ EventMetadataStorageV1.address }}");
+export let EVENT_METADATA_STORAGE_ADDRESS_V2 = Address.fromString("{{ EventMetadataStorageV2.address }}");
+export let NFT_ADDRESS_V2 = Address.fromString("{{ BaseGETV2.address }}");
+export let ECONOMICS_ADDRESS_V2 = Address.fromString("{{ EconomicsGETV2.address }}");
+
+// endBlock is not yet natively supported in subgraph.yaml meaning that we manually need to skip events for old ABI
+// versions after the point they are switched. If the event name changes then this would not be required, but we apply
+// this across all hanlders for safety and consistency.
+// See: https://github.com/graphprotocol/support/issues/49
+export let V1_END_BLOCK = BigInt.fromI32({{ v1EndBlock }});
+// The block in which the on-chain economics was switched on.
+// See: https://polygonscan.com/tx/0xe9ef44375aa2a2cb70fb6244e60ca6c8ca60fca3dd6e0fa3b42e779d1d0faba3
+export let FUEL_ACTIVATED_BLOCK = BigInt.fromI32({{ fuelActivatedBlock }});

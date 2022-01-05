@@ -1,4 +1,6 @@
-build
-generated
-node_modules
+build/
+generated/
+node_modules/
+src/constants/contracts.ts
 .eslintcache
+subgraph.yaml

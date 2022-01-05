@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: BaseGETV1
-    network: matic
+    network: {{ network }} 
     source:
-      address: "0x308e44cA2153C61103b0DC67Fd038De650912b73"
+      address: "{{ BaseGETV1.address }}"
       abi: BaseGETV1
-      startBlock: 15980526
+      startBlock: {{ BaseGETV1.startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -35,11 +35,11 @@ dataSources:
       file: ./src/mappings/v1/baseGET.ts
   - kind: ethereum/contract
     name: EventMetadataStorageV1
-    network: matic
+    network: {{ network }}
     source:
-      address: "0xcDA348fF8C175f305Ed8682003ec6F8743067f79"
+      address: "{{ EventMetadataStorageV1.address }}"
       abi: EventMetadataStorageV1
-      startBlock: 15980516
+      startBlock: {{ EventMetadataStorageV2.startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -55,11 +55,11 @@ dataSources:
       file: ./src/mappings/v1/eventMetadataStorage.ts
   - kind: ethereum/contract
     name: BaseGETV2
-    network: matic
+    network: {{ network }}
     source:
-      address: "0xbce1b23c7544422f1E2208d29A6A3AA9fAbAB250"
+      address: "{{ BaseGETV2.address }}"
       abi: BaseGETV2
-      startBlock: 20363107
+      startBlock: {{ BaseGETV2.startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -91,11 +91,11 @@ dataSources:
       file: ./src/mappings/v2/baseGET.ts
   - kind: ethereum/contract
     name: EventMetadataStorageV2
-    network: matic
+    network: {{ network }}
     source:
-      address: "0x08C2aF3F01A36AD9F274ccE77f6f77cf9aa1dfC9"
+      address: "{{ EventMetadataStorageV2.address }}"
       abi: EventMetadataStorageV2
-      startBlock: 20363134
+      startBlock: {{ EventMetadataStorageV2.startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -111,11 +111,11 @@ dataSources:
       file: ./src/mappings/v2/eventMetadataStorage.ts
   - kind: ethereum/contract
     name: EconomicsGETV2
-    network: matic
+    network: {{ network }}
     source:
-      address: "0x07faA643ad0eE4ee358d5E101573A5fdfBEcD0a9"
+      address: "{{ EconomicsGETV2.address }}"
       abi: EconomicsGETV2
-      startBlock: 20637233
+      startBlock: {{ EconomicsGETV2.startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
