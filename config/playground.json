@@ -1,0 +1,25 @@
+{
+  "network": "mumbai",
+  "fuelActivatedBlock": 21394534,
+  "v1EndBlock": 20383760,
+  "BaseGETV1": {
+    "address": "0x10fAC2847b8F4f85CFd62e796aB091b3a435325F",
+    "startBlock": 14955469
+  },
+  "EventMetadataStorageV1": {
+    "address": "0x84418467496606DAA7fBc3ED072e1F5519024368",
+    "startBlock": 14955456
+  },
+  "BaseGETV2": {
+    "address": "0x265a8aD18560022f6933F52a50E9DC9456EF2283",
+    "startBlock": 20223023
+  },
+  "EventMetadataStorageV2": {
+    "address": "0x3e1414554eb69bf633d56d7cffaec2b6f2593f61",
+    "startBlock": 20223040
+  },
+  "EconomicsGETV2": {
+    "address": "0x4585467f3bc6A78F4Ebb02F8A212A66efb4C27D6",
+    "startBlock": 20223036
+  }
+}

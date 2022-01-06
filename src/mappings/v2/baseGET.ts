@@ -2,6 +2,7 @@ import { BigInt } from "@graphprotocol/graph-ts";
 import {
   ADDRESS_ZERO,
   BIG_DECIMAL_1E18,
+  BIG_DECIMAL_ZERO,
   BIG_INT_ONE,
   BIG_INT_ZERO,
   CURRENCY_CONVERSION_ACTIVATED_BLOCK,
@@ -101,6 +102,8 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
       relayer.siloBalance = relayer.siloBalance.minus(getUsed);
       // We store the newly set relayer.siloBalance on the relayerDay as-is to be able to track the balance over time.
       relayerDay.siloBalance = relayer.siloBalance;
+
+      createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, getUsed);
     }
   }
 
@@ -110,8 +113,6 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
   relayerDay.save();
   event.save();
   ticket.save();
-
-  createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, e.params.getUsed);
 }
 
 export function handleTicketInvalidated(e: TicketInvalidated): void {
@@ -146,6 +147,8 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
 
     protocol.depotBalance = protocol.depotBalance.plus(getUsed);
     protocolDay.depotBalance = protocol.depotBalance;
+
+    createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, getUsed);
   }
 
   protocol.save();
@@ -154,8 +157,6 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
   relayerDay.save();
   event.save();
   ticket.save();
-
-  createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, e.params.getUsed);
 }
 
 export function handleSecondarySale(e: SecondarySale): void {
@@ -179,7 +180,7 @@ export function handleSecondarySale(e: SecondarySale): void {
   relayerDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, e.params.getUsed);
+  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketScanned(e: TicketScanned): void {
@@ -214,6 +215,8 @@ export function handleTicketScanned(e: TicketScanned): void {
 
     protocol.depotBalance = protocol.depotBalance.plus(getUsed);
     protocolDay.depotBalance = protocol.depotBalance;
+
+    createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, getUsed);
   }
 
   protocol.save();
@@ -222,8 +225,6 @@ export function handleTicketScanned(e: TicketScanned): void {
   relayerDay.save();
   event.save();
   ticket.save();
-
-  createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, e.params.getUsed);
 }
 
 export function handleCheckedIn(e: CheckedIn): void {
@@ -258,6 +259,8 @@ export function handleCheckedIn(e: CheckedIn): void {
 
     protocol.depotBalance = protocol.depotBalance.plus(getUsed);
     protocolDay.depotBalance = protocol.depotBalance;
+
+    createUsageEvent(e, event, nftIndex, "CHECK_IN", e.params.orderTime, getUsed);
   }
 
   protocol.save();
@@ -266,8 +269,6 @@ export function handleCheckedIn(e: CheckedIn): void {
   relayerDay.save();
   event.save();
   ticket.save();
-
-  createUsageEvent(e, event, nftIndex, "CHECK_IN", e.params.orderTime, e.params.getUsed);
 }
 
 export function handleNftClaimed(e: NftClaimed): void {
@@ -291,5 +292,5 @@ export function handleNftClaimed(e: NftClaimed): void {
   relayerDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, e.params.getUsed);
+  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, BIG_DECIMAL_ZERO);
 }

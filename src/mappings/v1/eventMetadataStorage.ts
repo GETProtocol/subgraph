@@ -3,7 +3,7 @@ import {
   EventMetadataStorageV1 as EventMetadataStorageContract,
   newEventRegistered,
 } from "../../../generated/EventMetadataStorageV1/EventMetadataStorageV1";
-import { BIG_INT_ZERO, EVENT_METADATA_STORAGE_ADDRESS_V1, V1_END_BLOCK } from "../../constants";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, EVENT_METADATA_STORAGE_ADDRESS_V1, V1_END_BLOCK } from "../../constants";
 import { getEvent, createUsageEvent } from "../../entities";
 
 export function handleNewEventRegistered(e: newEventRegistered): void {
@@ -35,5 +35,5 @@ export function handleNewEventRegistered(e: newEventRegistered): void {
 
   event.save();
 
-  createUsageEvent(e, event, BIG_INT_ZERO, "NEW_EVENT", e.params.orderTime, e.params.getUsed);
+  createUsageEvent(e, event, BIG_INT_ZERO, "NEW_EVENT", e.params.orderTime, BIG_DECIMAL_ZERO);
 }

@@ -44,7 +44,7 @@ Not to be confused with a real-world Event, these are 'events' that describe an 
 
 ## Hosted Service
 
-The GET Protocol Subgraph is available on [The Graph Hosted Service](https://thegraph.com/hosted-service/subgraph/getprotocol/get-protocol-subgraph), which offers a playground environment for testing queries and exploring entity relationships.
+The GET Protocol Subgraph is available on [The Graph Hosted Service](https://thegraph.com/hosted-service/subgraph/getprotocol/get-protocol-subgraph), which offers a playground environment for testing queries and exploring entity relationships. A [Playground Environment](https://thegraph.com/hosted-service/subgraph/getprotocol/playground-get-protocol-subgraph) is also available for integrator testing.
 
 ## Tracking the flow of GET
 
@@ -192,10 +192,19 @@ Start by setting up a [graphprotocol/graph-node](https://github.com/graphprotoco
 
 At this point you should now have a local graph-node available for local development and you can continue to deploy the get-protcol-subgraph to your local cluster.
 
-1. `yarn create-local` to create the local graph namespace.
-2. `yarn deploy-local` to deploy the graph to the local instance.
+1. `yarn create:local` to create the local graph namespace.
+2. `yarn deploy:local` to deploy the graph to the local instance.
 
 The local GraphiQL explorer can be found at http://localhost:8000/subgraphs/name/get-protocol-subgraph/graphql. Follow the terminal logs from the `docker compose up` command to follow progress on the indexing.
+
+## Deployment
+
+Both playground and production deployments are handled within this repository using [Mustache](https://mustache.github.io/) for generating templates. The Graph CLI does not have a native way of handling this so the environment that you wish to deploy must first be staged as the main deployment:
+
+1. `yarn prepare:playground` will replace the `subgraph.yaml` and `constants/contracts.ts` with the correct values for the playground environment.
+2. `yarn deploy:playground` would then deploy this to the playground hosted graph.
+
+Prior to deploying an environment you must always ensure to have prepared the correct subgraph.yaml to prevent deploying to the wrong hosted graph.
 
 ## Contributing
 

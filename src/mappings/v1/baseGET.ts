@@ -1,4 +1,4 @@
-import { BIG_INT_ONE, V1_END_BLOCK } from "../../constants";
+import { BIG_DECIMAL_ZERO, BIG_INT_ONE, V1_END_BLOCK } from "../../constants";
 import {
   primarySaleMint,
   ticketInvalidated,
@@ -56,7 +56,7 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   event.save();
   ticket.save();
 
-  createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, e.params.getUsed);
+  createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketInvalidated(e: ticketInvalidated): void {
@@ -81,7 +81,7 @@ export function handleTicketInvalidated(e: ticketInvalidated): void {
   relayerDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, e.params.getUsed);
+  createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, BIG_DECIMAL_ZERO);
 }
 
 export function handleSecondarySale(e: secondarySale): void {
@@ -106,7 +106,7 @@ export function handleSecondarySale(e: secondarySale): void {
   relayerDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, e.params.getUsed);
+  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketScanned(e: ticketScanned): void {
@@ -131,7 +131,7 @@ export function handleTicketScanned(e: ticketScanned): void {
   relayerDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, e.params.getUsed);
+  createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, BIG_DECIMAL_ZERO);
 }
 
 export function handleNftClaimed(e: nftClaimed): void {
@@ -156,5 +156,5 @@ export function handleNftClaimed(e: nftClaimed): void {
   relayerDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, e.params.getUsed);
+  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, BIG_DECIMAL_ZERO);
 }

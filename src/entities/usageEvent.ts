@@ -1,6 +1,6 @@
-import { BigInt, ByteArray, Bytes, ethereum } from "@graphprotocol/graph-ts";
+import { BigDecimal, BigInt, ByteArray, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { Event, UsageEvent } from "../../generated/schema";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY, FUEL_ACTIVATED_BLOCK } from "../constants";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY, FUEL_ACTIVATED_BLOCK } from "../constants";
 
 export function getUsageEvent(e: ethereum.Event): UsageEvent {
   let timestamp = e.block.timestamp;
@@ -34,7 +34,7 @@ export function createUsageEvent(
   nftIndex: BigInt,
   type: string,
   orderTime: BigInt,
-  getUsed: BigInt
+  getUsed: BigDecimal
 ): UsageEvent {
   let usageEvent = getUsageEvent(e);
 
@@ -52,9 +52,9 @@ export function createUsageEvent(
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
     if (type == "MINT") {
-      usageEvent.getDebitedFromSilo = getUsed.divDecimal(BIG_DECIMAL_1E18);
+      usageEvent.getDebitedFromSilo = getUsed;
     } else if (type == "INVALIDATE" || type == "SCAN" || type == "CHECK_IN") {
-      usageEvent.getCreditedToDepot = getUsed.divDecimal(BIG_DECIMAL_1E18);
+      usageEvent.getCreditedToDepot = getUsed;
     }
   }
 
