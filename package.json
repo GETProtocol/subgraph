@@ -4,9 +4,11 @@
   "scripts": {
     "codegen": "graph codegen",
     "create:local": "graph create --node http://localhost:8020/ get-protocol-subgraph",
+    "prepare:testing": "mustache config/testing.json subgraph.yaml.mustache > subgraph.yaml && mustache config/testing.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
     "prepare:playground": "mustache config/playground.json subgraph.yaml.mustache > subgraph.yaml && mustache config/playground.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
     "prepare:production": "mustache config/production.json subgraph.yaml.mustache > subgraph.yaml && mustache config/production.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
     "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 get-protocol-subgraph",
+    "deploy:testing": "graph deploy --product hosted-service getprotocol/testing-get-protocol-subgraph",
     "deploy:playground": "graph deploy --product hosted-service getprotocol/playground-get-protocol-subgraph",
     "deploy:production": "graph deploy --product hosted-service getprotocol/get-protocol-subgraph",
     "build": "graph build",
