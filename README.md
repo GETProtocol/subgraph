@@ -184,7 +184,7 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
 
 ## Setup
 
-To run the setup described below you need to have the Docker installed to run the subgraph, ipfs and postgress containers.
+To run the setup described below you need to have Docker installed to run the subgraph, ipfs, and postgres containers.
 
 Start by setting up a [graphprotocol/graph-node](https://github.com/graphprotocol/graph-node). For this you will also need a [Polygon RPC endpoint](https://docs.matic.network/docs/develop/network-details/network/) for the graph-node to index from. [Infura](https://infura.io/) or [Moralis (Speedy Nodes)](https://moralis.io/) provide enough capacity on their free-tiers. An archive server is recommended.
 
