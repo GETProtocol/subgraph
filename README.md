@@ -196,7 +196,7 @@ At this point you should now have a local graph-node available for local develop
 
 1. `yarn add cli-graph` to install the Graph CLI to interact with the graph-node container.
 2. `yarn add mustache` to install mustache which is used to create the subgraph configuration files.
-3. `yarn prepare:production` to prepare the subgraph configuration files. (More information in "Deployment" below)
+3. `yarn prepare:production` to prepare the subgraph configuration files. (More information in the "Deployment" chapter below)
 4. `yarn codegen` to generate the neccesary code for deployment.
 5. `yarn create:local` to create the local graph namespace.
 6. `yarn deploy:local` to deploy the graph to the local instance.
