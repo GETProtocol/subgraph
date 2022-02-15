@@ -184,16 +184,22 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
 
 ## Setup
 
+To run the setup described below you need to have Docker installed to run the subgraph, ipfs, and postgres containers.
+
 Start by setting up a [graphprotocol/graph-node](https://github.com/graphprotocol/graph-node). For this you will also need a [Polygon RPC endpoint](https://docs.matic.network/docs/develop/network-details/network/) for the graph-node to index from. [Infura](https://infura.io/) or [Moralis (Speedy Nodes)](https://moralis.io/) provide enough capacity on their free-tiers. An archive server is recommended.
 
-1. Clone graphprotocol/graph-node to a local directory.
+1. Clone graphprotocol/graph-node to a local directory and use this directory as your working directory during this setup.
 2. Edit the `services.graph-node.environment.ethereum` key within docker/docker-compose.yml to read `matic:<RPC_ENDPOINT>`.
 3. Run `docker compose up` to launch the graph-node instance.
 
 At this point you should now have a local graph-node available for local development and you can continue to deploy the get-protcol-subgraph to your local cluster.
 
-1. `yarn create:local` to create the local graph namespace.
-2. `yarn deploy:local` to deploy the graph to the local instance.
+1. `yarn add cli-graph` to install the Graph CLI to interact with the graph-node container.
+2. `yarn add mustache` to install mustache which is used to create the subgraph configuration files.
+3. `yarn prepare:production` to prepare the subgraph configuration files. (More information in the "Deployment" chapter below)
+4. `yarn codegen` to generate the neccesary code for deployment.
+5. `yarn create:local` to create the local graph namespace.
+6. `yarn deploy:local` to deploy the graph to the local instance.
 
 The local GraphiQL explorer can be found at http://localhost:8000/subgraphs/name/get-protocol-subgraph/graphql. Follow the terminal logs from the `docker compose up` command to follow progress on the indexing.
 
