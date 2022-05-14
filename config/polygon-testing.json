@@ -1,0 +1,69 @@
+{
+  "chainName": "polygon",
+  "network": "mumbai",
+  "relayers": [
+    ["0x069dd8c5f42c0a58d1c2f767b5d95579f22cae13", "1", "GET Shared Relayer"],
+    ["0x0d5bf3570ddf4c5b72afc014f4b728b67e44ea7f", "1", "GET Shared Relayer"],
+    ["0x35d59a290b08d2081441922aa9d4a36a9dd83dca", "1", "GET Shared Relayer"],
+    ["0x5400249158f83309afcd8210ce0c995db0b16e25", "1", "GET Shared Relayer"],
+    ["0x9ae4fd921556b4d132b3197b552e0686ab291775", "1", "GET Shared Relayer"]
+  ],
+  "ticketeers": [
+    ["", "1"],
+    ["GET Tickets", "1"],
+    ["GUTS", "2"],
+    ["Wicket", "3"],
+    ["Tectix", "4"]
+  ],
+  "v1": {
+    "BaseGET": {
+      "address": "0xdD1dd60661e26ab34db1f89c9fE5f5B578f8388b",
+      "startBlock": 14955208
+    },
+    "EconomicsGET": {
+      "address": "0xd634F790349966cdbd9E73f12BF54312D67975f5",
+      "startBlock": 14955189
+    },
+    "EventMetadataStorage": {
+      "address": "0x535d2aa374f8d9ce4D6fF68938b1A75642328cF6",
+      "startBlock": 14955196
+    }
+  },
+  "v1_1": {
+    "fuelActivatedBlock": 20198770,
+    "BaseGET": {
+      "address": "0x1c7a119c851DE77DD9A19b4a629861Ec03929f06",
+      "startBlock": 20190398
+    },
+    "EconomicsGET": {
+      "address": "0x5c26C062C74Cec95Bb155DE172EdAd3dC02713cc",
+      "startBlock": 20190406
+    },
+    "EventMetadataStorage": {
+      "address": "0x1c9a79D553ABE5D52c64BD5F1007C47DBCcC21c5",
+      "startBlock": 20190412
+    },
+    "GETProtocolConfigurationV2": {
+      "address": "0xF89Ea661259001e910Dd11E8d0FDc9A22a74e913",
+      "startBlock": 20190392
+    }
+  },
+  "v2": {
+    "Economics": {
+      "address": "0x08BE321c13417416b4D32ba2A8B71A5BdaA59a00",
+      "startBlock": 26281842
+    },
+    "EventFactory": {
+      "address": "0x28a9555578198820B8c0aFa7B2F7A81DA7bF8305",
+      "startBlock": 26281861
+    },
+    "PriceOracle": {
+      "address": "0xfBC98cC45834D0f318373268Ef95988c2067bEED",
+      "startBlock": 26281877
+    },
+    "TopUp": {
+      "address": "0x62c44f1572B502555702168729B7c43C1Bce0E9e",
+      "startBlock": 26281886
+    }
+  }
+}

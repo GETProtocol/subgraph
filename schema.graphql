@@ -8,14 +8,20 @@ enum UsageEventType {
   CLAIM
 }
 
+enum TopUpEventType {
+  NON_CUSTODIAL
+  CUSTODIAL
+}
+
 type Protocol @entity {
   id: ID!
-  getDebitedFromSilos: BigDecimal!
-  getHeldInFuelTanks: BigDecimal!
-  getCreditedToDepot: BigDecimal!
-  getMovedToFeeCollector: BigDecimal!
-  averageGetPerMint: BigDecimal!
-  depotBalance: BigDecimal!
+  averageReservedPerTicket: BigDecimal!
+  reservedFuel: BigDecimal!
+  currentReservedFuel: BigDecimal!
+  spentFuel: BigDecimal!
+  currentSpentFuel: BigDecimal!
+  collectedSpentFuel: BigDecimal!
+  totalTicketValue: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -27,11 +33,55 @@ type Protocol @entity {
 type ProtocolDay @entity {
   id: ID!
   day: Int!
-  getDebitedFromSilos: BigDecimal!
-  getCreditedToDepot: BigDecimal!
-  getMovedToFeeCollector: BigDecimal!
-  averageGetPerMint: BigDecimal!
-  depotBalance: BigDecimal!
+  averageReservedPerTicket: BigDecimal!
+  reservedFuel: BigDecimal!
+  spentFuel: BigDecimal!
+  currentSpentFuel: BigDecimal!
+  collectedSpentFuel: BigDecimal!
+  totalTicketValue: BigDecimal!
+  mintCount: BigInt!
+  invalidateCount: BigInt!
+  resaleCount: BigInt!
+  scanCount: BigInt!
+  checkInCount: BigInt!
+  claimCount: BigInt!
+}
+
+type Integrator @entity {
+  id: ID!
+  averageReservedPerTicket: BigDecimal!
+  availableFuel: BigDecimal!
+  reservedFuel: BigDecimal!
+  currentReservedFuel: BigDecimal!
+  spentFuel: BigDecimal!
+  price: BigDecimal!
+  activeTicketCount: Int!
+  isBillingEnabled: Boolean!
+  isConfigured: Boolean!
+  name: String!
+  mintCount: BigInt!
+  invalidateCount: BigInt!
+  resaleCount: BigInt!
+  scanCount: BigInt!
+  checkInCount: BigInt!
+  claimCount: BigInt!
+  relayers: [Relayer!]! @derivedFrom(field: "integrator")
+  events: [Event!]! @derivedFrom(field: "integrator")
+  tickets: [Ticket!]! @derivedFrom(field: "integrator")
+  integratorDays: [IntegratorDay!]! @derivedFrom(field: "integrator")
+  usageEvents: [UsageEvent!]! @derivedFrom(field: "integrator")
+  topUpEvents: [TopUpEvent!]! @derivedFrom(field: "integrator")
+}
+
+type IntegratorDay @entity {
+  id: ID! # Composite PK: integratorIndex-timestampAsDay
+  integrator: Integrator!
+  day: Int!
+  averageReservedPerTicket: BigDecimal!
+  availableFuel: BigDecimal!
+  reservedFuel: BigDecimal!
+  spentFuel: BigDecimal!
+  price: BigDecimal!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -42,111 +92,117 @@ type ProtocolDay @entity {
 
 type Relayer @entity {
   id: ID!
-  getDebitedFromSilo: BigDecimal!
-  getHeldInFuelTanks: BigDecimal!
-  getCreditedToDepot: BigDecimal!
-  averageGetPerMint: BigDecimal!
-  siloBalance: BigDecimal!
-  basePrice: BigDecimal!
-  bufferAddress: Bytes!
-  mintCount: BigInt!
-  invalidateCount: BigInt!
-  resaleCount: BigInt!
-  scanCount: BigInt!
-  checkInCount: BigInt!
-  claimCount: BigInt!
-  events: [Event!]! @derivedFrom(field: "relayer")
-  tickets: [Ticket!]! @derivedFrom(field: "relayer")
-  relayerDays: [RelayerDay!]! @derivedFrom(field: "relayer")
-  usageEvents: [UsageEvent!]! @derivedFrom(field: "relayer")
-}
-
-type RelayerDay @entity {
-  id: ID! # Composite PK: relayerAddress-timestampAsDay
-  relayer: Relayer!
-  day: Int!
-  getDebitedFromSilo: BigDecimal!
-  getCreditedToDepot: BigDecimal!
-  averageGetPerMint: BigDecimal!
-  siloBalance: BigDecimal!
-  basePrice: BigDecimal!
-  mintCount: BigInt!
-  invalidateCount: BigInt!
-  resaleCount: BigInt!
-  scanCount: BigInt!
-  checkInCount: BigInt!
-  claimCount: BigInt!
+  integrator: Integrator!
+  isEnabled: Boolean!
 }
 
 type Event @entity {
   id: ID!
+  eventIndex: BigInt!
   createTx: Bytes!
+  integrator: Integrator!
   relayer: Relayer!
   usageEvents: [UsageEvent!]! @derivedFrom(field: "event")
   tickets: [Ticket!]! @derivedFrom(field: "event")
-  getDebitedFromSilo: BigDecimal!
-  getHeldInFuelTanks: BigDecimal!
-  getCreditedToDepot: BigDecimal!
-  averageGetPerMint: BigDecimal!
+  reservedFuel: BigDecimal!
+  averageReservedPerTicket: BigDecimal!
   mintCount: BigInt!
-  invalidateCount: BigInt!
   resaleCount: BigInt!
   scanCount: BigInt!
   checkInCount: BigInt!
+  invalidateCount: BigInt!
   claimCount: BigInt!
-  eventName: String!
+  name: String!
   shopUrl: String!
   imageUrl: String!
-  orderTime: BigInt!
   latitude: BigDecimal!
   longitude: BigDecimal!
   currency: String!
   startTime: BigInt!
   endTime: BigInt!
-  ticketeerName: String!
 }
 
 type Ticket @entity {
   id: ID!
-  nftIndex: BigInt! # For sorting, unable to sort against ID as it's a string.
+  tokenId: BigInt!
   createTx: Bytes!
   usageEvents: [UsageEvent!]! @derivedFrom(field: "ticket")
   event: Event!
+  integrator: Integrator!
   relayer: Relayer!
-  basePrice: BigInt!
-  getDebitedFromSilo: BigDecimal!
-  getHeldInFuelTank: BigDecimal!
-  getCreditedToDepot: BigDecimal!
+  basePrice: BigDecimal!
+  reservedFuel: BigDecimal!
+  isScanned: Boolean!
+  isCheckedIn: Boolean!
+  isInvalidated: Boolean!
+  isClaimed: Boolean!
+}
+
+type PriceOracle @entity {
+  id: ID!
+  price: BigDecimal!
+  lastUpdateTimestamp: BigInt!
+  lastUpdateTx: Bytes!
+  lastCustodialSwapPrice: BigDecimal!
+}
+
+type SpentFuelRecipient @entity {
+  id: ID!
+  collectedSpentFuel: BigDecimal!
+  label: String!
+  percentage: BigDecimal!
+  isEnabled: Boolean!
+  spentFuelCollectedEvents: [SpentFuelCollectedEvent!]! @derivedFrom(field: "recipient")
 }
 
 type TopUpEvent @entity {
   id: ID! # Composite PK: txHash-logIndex
   txHash: Bytes!
-  relayer: Relayer!
-  relayerAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   day: Int!
+  integrator: Integrator!
+  integratorIndex: String!
+  type: TopUpEventType!
   amount: BigDecimal!
   price: BigDecimal!
+  externalId: Bytes!
 }
 
 type UsageEvent @entity {
   id: ID! # Composite PK: txHash-logIndex
   txHash: Bytes!
-  relayer: Relayer!
-  relayerAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
-  orderTime: BigInt!
   day: Int!
+  integrator: Integrator!
+  integratorIndex: String!
+  relayer: Relayer!
+  relayerAddress: Bytes!
+  orderTime: BigInt!
   type: UsageEventType!
-  getDebitedFromSilo: BigDecimal!
-  getCreditedToDepot: BigDecimal!
+  getUsed: BigDecimal!
+  nftId: String!
   event: Event!
+  eventIndex: BigInt!
   eventAddress: Bytes!
   ticket: Ticket!
-  nftIndex: BigInt!
+  tokenId: BigInt!
   latitude: BigDecimal!
   longitude: BigDecimal!
+}
+
+type SpentFuelCollectedEvent @entity {
+  id: ID! # Composite PK: txHash-logIndex
+  txHash: Bytes!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  day: Int!
+  recipient: SpentFuelRecipient!
+  recipientAddress: Bytes!
+  recipientLabel: String!
+  recipientPercentage: BigDecimal!
+  amount: BigDecimal!
+  totalAmountCollected: BigDecimal!
+  totalTicketsCollected: BigInt!
 }

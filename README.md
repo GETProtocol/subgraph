@@ -22,25 +22,41 @@ Holds individual records for each _Ticket_, represented by a unique NFT on-chain
 
 All-time data for protocol-wide metrics, aggregated. This is used to capture the all-time usage on the protocol across all integrators. Singleton with ID '1'.
 
-#### Relayer [Aggregate]
-
-All-time data for individual relayer, with total usage and counts. ID'd by the `relayerAddress`.
-
 #### ProtocolDay [Time-series]
 
 Similar content to _Protocol_ but aggregrated to each UTC-day. Used to track protocol usage over time. ID is a `dayInteger` from the unix epoch (unix / 86400).
 
-#### RelayerDay [Time-series]
+#### Relayer [Cross-sectional]
 
-Usage statistics per-relayer-day. Used to track and compare protocol usage by relayer. ID is a composite key of `relayerAddress-dayInteger`.
+Relayers track the address/account used to mint tickets on behalf of an integrator. No aggregate statistics are kept here and are only used as a reference for the addresses submiting transactions for the integrator.
+
+#### Integrator [Aggregate]
+
+All-time data for individual integrator, with total usage and counts. ID'd by the `integratorIndex`. Used for accounting and aggregate NFT statistics.
+
+#### IntegratorDay [Time-series]
+
+Usage statistics per-integrator-day. Used to track and compare protocol usage by integrator. ID is a composite key of `integratorIndex-dayInteger`.
+
+#### SpentFuelRecipient [Cross-sectional]
+
+Tracks the configured destination addresses of the spent fuel. Harvesting the spent fuel is a public function and can be executed by any account, so this entity tracks the amount of GET sent to each configured address.
+
+#### PriceOracle [Cross-sectional]
+
+The on-chain price oracle is used to set the price of non-custodial top-ups (integrators that bring their own GET fuel). Here we track the current price of the oracle and the time it was last updated.
 
 #### TopUpEvent [Time-series]
 
-Tracks each individual relayer top-up as a separate record to allow for a full record of the amount of each top up and its price in USD. ID is a composite key of `txHash-logIndex`.
+Tracks each individual integrator top-up as a separate record to allow for a full record of the amount of each top up and its price in USD. ID is a composite key of `txHash-logIndex`.
 
 #### UsageEvent [Time-series]
 
-Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `CREATE_EVENT`, `MINT`, `SCAN`. Comes with lat/long, the relayer, the GET used as fuel, the exact timestamp of the block, and the day as an integer. ID is a composite key of `txHash-logIndex`.
+Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `NEW_EVENT`, `MINT`, `SCAN`. Comes with lat/long, the relayer & integrator, the GET used as fuel, the exact timestamp of the block, and the day as an integer. ID is a composite key of `txHash-logIndex`.
+
+#### SpentFuelCollectedEvent [Time-series]
+
+Records each collection of spent fuel within the economics contract per-recipient. When multiple recipient destinations are present, one event will be recorded for each. Tracks where the spent fuel is flowing to.
 
 ## Hosted Service
 
@@ -52,19 +68,20 @@ Please see the [DAO Token Economics Documentation](https://docs.get-protocol.io/
 
 There are a number of steps that GET takes throughout its lifecycle and the subgraph aggregated this for easier charting and analysis. There are a number of key field that help with this:
 
-Available on Relayer and Protocol entities:
+- `availableFuel` acts as the available balance-on-account for an integrator, used to pay for actions.
+- `reservedFuel` contains the total amount of GET fuel that has been reserved.
+- `currentReservedFuel` is the fuel currently held within the system, and will be released when a ticket is finalized.
+- `spentFuel` the total aggregate amount of fuel that has moved from reserved to spent status.
+- `currentSpendFuel` the amount of spent fuel ready to be collected and sent to the recipients.
+- `collectedSpentFuel` the amount of fuel that has already been sent to recipient addresses. Only at Protocol-level.
 
-- `getDebitedFromSilos` contains the amount of GET moved from the Silo to the NFT Fuel Tank when minting NFT tickets.
-- `getHeldInFuelTanks` contains the total amount of all GET held within the NFT Fuel Tanks, awaiting a move to the depot.
-- `getCreditedToDepot` records the GET balance credited to the Depot balance when a ticket is checked-in (finalized).
-- `deplotBalance` (Protocol) holds the live/real-time value of the depot balance waiting to be transferred to the fee collector.
-- `siloBalance` (Relayer) maintains the live/real-time balance available to be used for NFT minting.
+No GET is created within this system, so we can define some rules:
 
-Available only on the Protocol entities:
+- `availableFuel` is equal to the total amount of top-ups, minus the `reservedFuel`.
+- `spentFuel` can never be greater than `reservedFuel`, and is equal to `reservedFuel + currentReservedFuel`.
+- `spentFuel` is also equal to `currentSpentFuel + collectedSpentFuel`.
 
-- `getMovedToFeeCollector` the amount of GET moving from the depot to the DAO Fee Collector address. The depot is a global balance and not specifc to a single relayer.
-
-Additionally the `averageGetPerMint` provides the average amount of GET that has been required per-ticket (mint) for the selected entity. This means that `ProtocolDay.averageGetPerMint` will show the average GET/ticket across all relayers aggregated by day.
+Additionally the `averageReservedPerTicket` provides the average amount of GET that has been required per-ticket. This reserved amount remains in the system until the ticket is either checked-in or invalidated but gives an accurate measure of the token-revenue per NFT-ticket minted. For example, `ProtocolDay.averageReservedPerTicket` will show the average GET/ticket across all integrators aggregated by day.
 
 ## Examples
 
@@ -89,30 +106,25 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
 {
   protocolDays(orderBy: day, orderDirection: desc, first: 7) {
     day
-    getDebitedFromSilos
-    getCreditedToDepot
-    averageGetPerMint
+    reservedFuel
+    spentFuel
+    averageReservedPerTicket
   }
 }
 ```
 
-### Last 30 days of GET Usage for a Single Relayer
+### Last 30 days of GET Usage for a Single Integrator
 
 ```graphql
 {
-  relayerDays(
-    orderBy: day
-    orderDirection: desc
-    first: 30
-    where: { relayer: "0x4afdae9cca053e3d456a9cb697081bf083a3340b" }
-  ) {
-    relayer {
+  integratorDays(orderBy: day, orderDirection: desc, first: 30, where: { integrator: "0" }) {
+    integrator {
       id
     }
     day
-    getDebitedFromSilo
-    getCreditedToDepot
-    averageGetPerMint
+    reservedFuel
+    spentFuel
+    averageReservedPerTicket
   }
 }
 ```
@@ -123,7 +135,7 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
 {
   events {
     id
-    eventName
+    name
   }
 }
 ```
@@ -134,21 +146,21 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
 {
   usageEvents(orderBy: blockTimestamp, orderDirection: desc, first: 100) {
     type
-    nftIndex
+    nftId
     event {
       id
     }
-    getDebitedFromSilo
+    getUsed
   }
 }
 ```
 
-### 5 Most Recent Relayer Top-Ups
+### 5 Most Recent Integrator Top-Ups
 
 ```graphql
 {
-  usageEvents(orderBy: blockTimestamp, orderDirection: desc, first: 5) {
-    relayerAddress
+  topUpEvents(orderBy: blockTimestamp, orderDirection: desc, first: 5) {
+    integratorIndex
     amount
     price
   }
@@ -159,7 +171,7 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
 
 ```graphql
 {
-  ticket(id: "209049") {
+  ticket(id: "POLYGON-0-209049") {
     id
     basePrice
     event {
@@ -167,13 +179,26 @@ Additionally the `averageGetPerMint` provides the average amount of GET that has
       currency
       shopUrl
       startTime
-      ticketeerName
+      integrator {
+        name
+      }
     }
     usageEvents(orderBy: orderTime, orderDirection: asc) {
       orderTime
       txHash
       type
     }
+  }
+}
+```
+
+### Latest Price Oracle Data
+
+```graphql
+{
+  priceOracle(id: "1") {
+    price
+    lastUpdateTimestamp
   }
 }
 ```
@@ -194,12 +219,11 @@ Start by setting up a [graphprotocol/graph-node](https://github.com/graphprotoco
 
 At this point you should now have a local graph-node available for local development and you can continue to deploy the get-protcol-subgraph to your local cluster.
 
-1. `yarn add cli-graph` to install the Graph CLI to interact with the graph-node container.
-2. `yarn add mustache` to install mustache which is used to create the subgraph configuration files.
-3. `yarn prepare:production` to prepare the subgraph configuration files. (More information in the "Deployment" chapter below)
-4. `yarn codegen` to generate the neccesary code for deployment.
-5. `yarn create:local` to create the local graph namespace.
-6. `yarn deploy:local` to deploy the graph to the local instance.
+1. `yarn install` to install dependencies.
+2. `yarn prepare:production` to prepare the subgraph configuration files. (More information in the "Deployment" chapter below)
+3. `yarn codegen` to generate the neccesary code for deployment.
+4. `yarn create:local` to create the local graph namespace.
+5. `yarn deploy:local` to deploy the graph to the local instance.
 
 The local GraphiQL explorer can be found at http://localhost:8000/subgraphs/name/get-protocol-subgraph/graphql. Follow the terminal logs from the `docker compose up` command to follow progress on the indexing.
 

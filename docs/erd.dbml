@@ -10,17 +10,23 @@ Enum UsageEventType {
   CLAIM
 }
 
+Enum TopUpEventType {
+  NON_CUSTODIAL
+  CUSTODIAL
+}
+
 // Entities
 
 Table Protocol {
   id id
-  getDebitedFromSilos bigdecimal
-  getHeldInFuelTanks bigdecimal
-  getCreditedToDepot bigdecimal
-  getMovedToFeeCollector bigdecimal
-  averageGetPerMint bigdecimal
+  averageReservedPerTicket bigdecimal
+  reservedFuel bigdecimal
+  currentReservedFuel bigdecimal
+  spentFuel bigdecimal
+  currentSpentFuel bigdecimal
+  collectedSpentFuel bigdecimal
+  totalTicketValue bigdecimal
   mintCount bigint
-  depotBalance bigdecimal
   invalidateCount bigint
   resaleCount bigint
   scanCount bigint
@@ -31,11 +37,12 @@ Table Protocol {
 Table ProtocolDay {
   id id
   day int
-  getDebitedFromSilos bigdecimal
-  getCreditedToDepot bigdecimal
-  getMovedToFeeCollector bigdecimal
-  averageGetPerMint bigdecimal
-  depotBalance bigdecimal
+  averageReservedPerTicket bigdecimal
+  reservedFuel bigdecimal
+  spentFuel bigdecimal
+  currentSpentFuel bigdecimal
+  collectedSpentFuel bigdecimal
+  totalTicketValue bigdecimal
   mintCount bigint
   invalidateCount bigint
   resaleCount bigint
@@ -44,115 +51,163 @@ Table ProtocolDay {
   claimCount bigint
 }
 
+
+Table Integrator {
+  id id
+  averageReservedPerTicket bigdecimal
+  availableFuel bigdecimal
+  reservedFuel bigdecimal
+  currentReservedFuel bigdecimal
+  spentFuel bigdecimal
+  price bigdecimal
+  activeTicketCount bigint
+  isBillingEnabled boolean
+  isConfigured boolean
+  name string
+  mintCount bigint
+  invalidateCount bigint
+  resaleCount bigint
+  scanCount bigint
+  checkInCount bigint
+  claimCount bigint
+  relayers Relayer[] [ref: > Relayer.integrator]
+  events Event[] [ref: > Event.integrator]
+  tickets Ticket[] [ref: > Ticket.integrator]
+  integratorDays IntegratorDay[] [ref: > IntegratorDay.integrator]
+  usageEvents UsageEvent[] [ref: > UsageEvent.integrator]
+  topUpEvents TopUpEvent[] [ref: > TopUpEvent.integrator]
+}
+
+Table IntegratorDay {
+  id id
+  integrator Integrator
+  day int
+  averageReservedPerTicket bigdecimal
+  availableFuel bigdecimal
+  reservedFuel bigdecimal
+  spentFuel bigdecimal
+  price bigdecimal
+  mintCount bigint
+  invalidateCount bigint
+  resaleCount bigint
+  scanCount bigint
+  checkInCount bigint
+  claimCount bigint
+}
 
 Table Relayer {
   id id
-  getDebitedFromSilo bigdecimal
-  getHeldInFuelTanks bigdecimal
-  getCreditedToDepot bigdecimal
-  averageGetPerMint bigdecimal
-  siloBalance bigdecimal
-  basePrice bigdecimal
-  bufferAddress bytes
-  mintCount bigint
-  invalidateCount bigint
-  resaleCount bigint
-  checkInCount bigint
-  scanCount bigint
-  claimCount bigint
-  events Event[] [ref: > Event.relayer]
-  tickets Ticket[] [ref: > Ticket.relayer]
-  relayerDays RelayerDay[] [ref: > RelayerDay.relayer]
-  usageEvents UsageEvent[] [ref: > UsageEvent.relayer]
-  topUpEvents TopUpEvent[] [ref: > TopUpEvent.relayer]
-}
-
-Table RelayerDay {
-  id id
-  relayer Relayer
-  day int
-  getDebitedFromSilo bigdecimal
-  getCreditedToDepot bigdecimal
-  averageGetPerMint bigdecimal
-  siloBalance bigdecimal
-  basePrice bigdecimal
-  mintCount bigint
-  invalidateCount bigint
-  resaleCount bigint
-  checkInCount bigint
-  scanCount bigint
-  claimCount bigint
+  integrator Integrator
+  isEnabled boolean
 }
 
 Table Event {
   id id
+  eventIndex bigint
   createTx bytes
+  integrator Integrator
   relayer Relayer
   usageEvents UsageEvent[] [ref: > UsageEvent.event]
   tickets Ticket[] [ref: > Ticket.event]
-  getDebitedFromSilo bigdecimal
-  getHeldInFuelTanks bigdecimal
-  getCreditedToDepot bigdecimal
-  averageGetPerMint bigdecimal
+  reservedFuel bigdecimal
+  averageReservedPerTicket bigdecimal
   mintCount bigint
-  invalidateCount bigint
   resaleCount bigint
-  checkInCount bigint
   scanCount bigint
+  checkInCount bigint
+  invalidateCount bigint
   claimCount bigint
-  eventName string
+  name string
   shopUrl string
   imageUrl string
-  orderTime bigint
   latitude bigdecimal
   longitude bigdecimal
   currency string
-  ticketeerName string
   startTime bigint
-  endtime bigint
+  endTime bigint
 }
 
 Table Ticket {
   id id
-  nftIndex bigint
+  tokenId bigint
   createTx bytes
-  usageEvents UsageEvent[] [ref: > UsageEvent.event]
+  usageEvents UsageEvent[] [ref: > UsageEvent.ticket]
   event Event
+  integrator Integrator
   relayer Relayer
-  getDebitedFromSilo bigdecimal
-  getHeldInFuelTank bigdecimal
-  getCreditedToDepot bigdecimal
+  basePrice bigdecimal
+  reservedFuel bigdecimal
+  isScanned boolean
+  isCheckedIn boolean
+  isInvalidated boolean
+  isClaimed boolean
+}
+
+Table PriceOracle {
+  id id
+  price bigdecimal
+  lastUpdateTimestamp bigint
+  lastUpdateTx bytes
+  lastCustodialSwapPrice bigdecimal
+}
+
+Table SpentFuelRecipient {
+  id id
+  collectedSpentFuel bigdecimal
+  label string
+  percentage bigdecimal
+  isEnabled boolean
+  spentFuelCollectedEvents SpentFuelCollectedEvent[] [ref: > SpentFuelCollectedEvent.recipient]
 }
 
 Table TopUpEvent {
   id id
   txHash bytes
-  relayer Relayer
-  relayerAddress bytes
   blockNumber bigint
   blockTimestamp bigint
-  orderTime bigint
   day int
+  integrator Integrator
+  integratorIndex string
+  type TopUpEventType
   amount bigdecimal
   price bigdecimal
+  externalId bytes
 }
 
 Table UsageEvent {
   id id
   txHash bytes
-  relayer Relayer
-  relayerAddress bytes
   blockNumber bigint
   blockTimestamp bigint
-  orderTime bigint
   day int
+  integrator Integrator
+  integratorIndex string
+  relayer Relayer
+  relayerAddress bytes
+  orderTime bigint
   type UsageEventType
-  getDebitedFromSilo bigdecimal
-  getCreditedToDepot bigdecimal
-  event event
+  getUsed bigdecimal
+  nftId string
+  event Event
+  eventIndex bigint
   eventAddress bytes
   ticket Ticket
-  nftIndex bigint
+  tokenId bigint
   latitude bigdecimal
   longitude bigdecimal
+}
+
+Table SpentFuelCollectedEvent {
+  id id
+  txHash bytes
+  blockNumber bigint
+  blockTimestamp bigint
+  day int
+  recipient SpentFuelRecipient
+  recipientAddress bytes
+  recipientLabel string
+  recipientPercentage bigdecimal
+  amount bigdecimal
+  totalAmountCollected bigdecimal
+  totalTicketsCollected bigint
 }

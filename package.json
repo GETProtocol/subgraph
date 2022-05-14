@@ -2,15 +2,17 @@
   "name": "get-protocol-subgraph",
   "license": "MIT",
   "scripts": {
+    "clean": "rm -r generated/* build/*",
     "codegen": "graph codegen",
     "create:local": "graph create --node http://localhost:8020/ get-protocol-subgraph",
-    "prepare:testing": "mustache config/testing.json subgraph.yaml.mustache > subgraph.yaml && mustache config/testing.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
-    "prepare:playground": "mustache config/playground.json subgraph.yaml.mustache > subgraph.yaml && mustache config/playground.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
-    "prepare:production": "mustache config/production.json subgraph.yaml.mustache > subgraph.yaml && mustache config/production.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
+    "prepare:polygon-development": "mustache config/polygon-development.json subgraph.yaml.mustache > subgraph.yaml && mustache config/polygon-development.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
+    "prepare:polygon-testing": "mustache config/polygon-testing.json subgraph.yaml.mustache > subgraph.yaml && mustache config/polygon-testing.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
+    "prepare:polygon-playground": "mustache config/polygon-playground.json subgraph.yaml.mustache > subgraph.yaml && mustache config/polygon-playground.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
+    "prepare:polygon-production": "mustache config/polygon-production.json subgraph.yaml.mustache > subgraph.yaml && mustache config/polygon-production.json src/constants/contracts.ts.mustache > src/constants/contracts.ts",
     "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 get-protocol-subgraph",
-    "deploy:testing": "graph deploy --product hosted-service getprotocol/testing-get-protocol-subgraph",
-    "deploy:playground": "graph deploy --product hosted-service getprotocol/playground-get-protocol-subgraph",
-    "deploy:production": "graph deploy --product hosted-service getprotocol/get-protocol-subgraph",
+    "deploy:polygon-testing": "graph deploy --product hosted-service getprotocol/testing-get-protocol-subgraph",
+    "deploy:polygon-playground": "graph deploy --product hosted-service getprotocol/playground-get-protocol-subgraph",
+    "deploy:polygon-production": "graph deploy --product hosted-service getprotocol/get-protocol-subgraph",
     "build": "graph build",
     "prepare": "husky install",
     "check": "eslint . && prettier --check --ignore-path .gitignore .",
@@ -18,22 +20,22 @@
     "format": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.22.4",
-    "@graphprotocol/graph-ts": "0.22.1"
+    "@graphprotocol/graph-cli": "0.29.2",
+    "@graphprotocol/graph-ts": "0.26.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^13.2.1",
-    "@commitlint/config-conventional": "^13.2.0",
-    "@typescript-eslint/eslint-plugin": "^5.1.0",
-    "@typescript-eslint/parser": "^5.1.0",
-    "eslint": "^8.0.1",
-    "eslint-config-prettier": "^8.3.0",
-    "husky": ">=7.0.4",
-    "lint-staged": ">=11.2.3",
+    "@commitlint/cli": "^16.2.4",
+    "@commitlint/config-conventional": "^16.2.4",
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "husky": ">=8.0.1",
+    "lint-staged": ">=12.4.1",
     "mustache": "^4.2.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.4.1",
-    "typescript": "^4.4.4"
+    "prettier": "^2.6.2",
+    "typescript": "^4.6.4"
   },
   "lint-staged": {
     "*.ts": "eslint --cache --fix",

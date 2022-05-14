@@ -1,0 +1,415 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateAccessControl",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint256", "name": "_old", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "_new", "type": "uint256" }
+    ],
+    "name": "UpdateBasicTaxRate",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateBufferGlobal",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateERC721",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateEconomics",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateFeeCollector",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateFinancing",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateFueltoken",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint256", "name": "_old", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "_new", "type": "uint256" }
+    ],
+    "name": "UpdateGETUSD",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateGoverance",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_oldPoolGETETH", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_oldPoolUSDCETH", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_newPoolGETETH", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_newPoolUSDCETH", "type": "address" }
+    ],
+    "name": "UpdateLiquidityPoolAddress",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateMetdata",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateStakingContract",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdateTreasuryDAO",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "_old", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "_new", "type": "address" }
+    ],
+    "name": "UpdatebaseGETNFT",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "AccessControlGET_proxy_address",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "GETgovernanceAddress",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "__GETProtocolConfiguration_init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "__GETProtocolConfiguration_init_unchained",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "baseGETNFT_proxy_address",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "basicTaxRate",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "bufferAddressGlobal",
+    "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "economicsGET_proxy_address",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "emergencyAddress",
+    "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "eventMetadataStorage_proxy_address",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeCollectorAddress",
+    "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "fueltoken_get_address",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getEventFinancing_proxy_address",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNFT_ERC721_proxy_address",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "liquidityPoolETHUSDC",
+    "outputs": [{ "internalType": "contract IUniswapV2Pair", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "liquidityPoolGETETH",
+    "outputs": [{ "internalType": "contract IUniswapV2Pair", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "priceGETUSD",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [{ "internalType": "address", "name": "_access_control_proxy", "type": "address" }],
+    "name": "setAccessControlGETProxy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_access_control_proxy", "type": "address" },
+      { "internalType": "address", "name": "_base_proxy", "type": "address" },
+      { "internalType": "address", "name": "_erc721_proxy", "type": "address" },
+      { "internalType": "address", "name": "_metadata_proxy", "type": "address" },
+      { "internalType": "address", "name": "_financing_proxy", "type": "address" },
+      { "internalType": "address", "name": "_economics_proxy", "type": "address" }
+    ],
+    "name": "setAllContractsStorageProxies",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_base_proxy", "type": "address" }],
+    "name": "setBASEProxy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_basicTaxRate", "type": "uint256" }],
+    "name": "setBasicTaxRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address payable", "name": "_newBufferGlobal", "type": "address" }],
+    "name": "setBufferAddressGlobal",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_erc721_proxy", "type": "address" }],
+    "name": "setERC721Proxy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_economics_proxy", "type": "address" }],
+    "name": "setEconomicsProxy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address payable", "name": "_newFeeCollector", "type": "address" }],
+    "name": "setFeeCollector",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_financing_proxy", "type": "address" }],
+    "name": "setFinancingProxy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_fueltoken_get_address", "type": "address" }],
+    "name": "setFueltoken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_newGETUSD", "type": "uint256" }],
+    "name": "setGETUSD",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_newGovernance", "type": "address" }],
+    "name": "setGovernance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_metadata_proxy", "type": "address" }],
+    "name": "setMetaProxy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address payable", "name": "_newStaking", "type": "address" }],
+    "name": "setStakingContract",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address payable", "name": "_newTreasury", "type": "address" }],
+    "name": "setTreasuryDAO",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "_getNFT_ERC721", "type": "address" }],
+    "name": "setgetNFT_ERC721",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stakingContractAddress",
+    "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "treasuryDAOAddress",
+    "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]

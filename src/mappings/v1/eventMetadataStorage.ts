@@ -3,11 +3,10 @@ import {
   EventMetadataStorageV1 as EventMetadataStorageContract,
   newEventRegistered,
 } from "../../../generated/EventMetadataStorageV1/EventMetadataStorageV1";
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, EVENT_METADATA_STORAGE_ADDRESS_V1, V1_END_BLOCK } from "../../constants";
-import { getEvent, createUsageEvent } from "../../entities";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, EVENT_METADATA_STORAGE_ADDRESS_V1 } from "../../constants";
+import { getEvent, createUsageEvent, getIntegratorByTicketeerName } from "../../entities";
 
 export function handleNewEventRegistered(e: newEventRegistered): void {
-  if (e.block.number.gt(V1_END_BLOCK)) return;
   let address = e.params.eventAddress;
   let eventMetadataStorageContract = EventMetadataStorageContract.bind(EVENT_METADATA_STORAGE_ADDRESS_V1);
   let eventData = eventMetadataStorageContract.getEventData(address);
@@ -19,17 +18,18 @@ export function handleNewEventRegistered(e: newEventRegistered): void {
   let startTime = eventData.value6[0];
   let endTime = eventData.value6[1];
 
-  let event = getEvent(address.toHexString());
+  let integrator = getIntegratorByTicketeerName(ticketeerName);
+  let event = getEvent(address);
+
   event.createTx = e.transaction.hash;
-  event.relayer = eventData.value0.toHexString();
-  event.eventName = eventData.value2;
+  event.integrator = integrator.id;
+  event.relayer = e.transaction.from.toHexString();
+  event.name = eventData.value2;
   event.shopUrl = eventData.value3;
   event.imageUrl = eventData.value4;
-  event.orderTime = e.params.orderTime;
   event.latitude = latitude;
   event.longitude = longitude;
   event.currency = currency;
-  event.ticketeerName = ticketeerName;
   event.startTime = startTime;
   event.endTime = endTime;
 

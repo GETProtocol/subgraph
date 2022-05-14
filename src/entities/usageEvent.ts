@@ -1,6 +1,6 @@
 import { BigDecimal, BigInt, ByteArray, Bytes, ethereum } from "@graphprotocol/graph-ts";
 import { Event, UsageEvent } from "../../generated/schema";
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY, FUEL_ACTIVATED_BLOCK } from "../constants";
+import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY, CHAIN_NAME, FUEL_ACTIVATED_BLOCK } from "../constants";
 
 export function getUsageEvent(e: ethereum.Event): UsageEvent {
   let timestamp = e.block.timestamp;
@@ -9,18 +9,20 @@ export function getUsageEvent(e: ethereum.Event): UsageEvent {
 
   let usageEvent = new UsageEvent(id);
   usageEvent.txHash = e.transaction.hash;
+  usageEvent.integrator = "";
+  usageEvent.integratorIndex = "0";
   usageEvent.relayer = e.transaction.from.toHexString();
   usageEvent.relayerAddress = e.transaction.from;
   usageEvent.blockNumber = e.block.number;
   usageEvent.blockTimestamp = timestamp;
   usageEvent.orderTime = BIG_INT_ZERO;
   usageEvent.day = day;
-  usageEvent.getDebitedFromSilo = BIG_DECIMAL_ZERO;
-  usageEvent.getCreditedToDepot = BIG_DECIMAL_ZERO;
+  usageEvent.getUsed = BIG_DECIMAL_ZERO;
   usageEvent.event = "";
+  usageEvent.eventIndex = BIG_INT_ZERO;
   usageEvent.eventAddress = BYTES_EMPTY;
   usageEvent.ticket = "";
-  usageEvent.nftIndex = BIG_INT_ZERO;
+  usageEvent.tokenId = BIG_INT_ZERO;
   usageEvent.type = "";
   usageEvent.latitude = BIG_DECIMAL_ZERO;
   usageEvent.longitude = BIG_DECIMAL_ZERO;
@@ -31,31 +33,30 @@ export function getUsageEvent(e: ethereum.Event): UsageEvent {
 export function createUsageEvent(
   e: ethereum.Event,
   event: Event,
-  nftIndex: BigInt,
+  tokenId: BigInt,
   type: string,
   orderTime: BigInt,
   getUsed: BigDecimal
 ): UsageEvent {
   let usageEvent = getUsageEvent(e);
+  let nftId = `${CHAIN_NAME}-${event.eventIndex.toString()}-${tokenId.toString()}`;
 
   usageEvent.orderTime = orderTime;
-  usageEvent.ticket = nftIndex.toString();
-  usageEvent.nftIndex = nftIndex;
+  usageEvent.ticket = nftId;
+  usageEvent.nftId = nftId;
+  usageEvent.tokenId = tokenId;
   usageEvent.type = type;
 
   if (event) {
     usageEvent.event = event.id;
+    usageEvent.eventIndex = event.eventIndex;
     usageEvent.eventAddress = Bytes.fromByteArray(ByteArray.fromHexString(event.id));
     usageEvent.latitude = event.latitude;
     usageEvent.longitude = event.longitude;
   }
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
-    if (type == "MINT") {
-      usageEvent.getDebitedFromSilo = getUsed;
-    } else if (type == "INVALIDATE" || type == "SCAN" || type == "CHECK_IN") {
-      usageEvent.getCreditedToDepot = getUsed;
-    }
+    usageEvent.getUsed = getUsed;
   }
 
   usageEvent.save();
