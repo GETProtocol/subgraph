@@ -1,5 +1,5 @@
-import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { Event, Ticket } from "../../generated/schema";
+import { BigInt } from "@graphprotocol/graph-ts";
+import { Ticket } from "../../generated/schema";
 import { BIG_DECIMAL_ZERO, BYTES_EMPTY, CHAIN_NAME } from "../constants";
 
 export function getTicket(eventIndex: BigInt, tokenId: BigInt): Ticket {
@@ -22,9 +22,4 @@ export function getTicket(eventIndex: BigInt, tokenId: BigInt): Ticket {
   }
 
   return ticket as Ticket;
-}
-
-export function getTicketByAddress(eventAddress: Address, tokenId: BigInt): Ticket {
-  let event = Event.load(eventAddress.toHexString());
-  return getTicket(event.eventIndex, tokenId);
 }

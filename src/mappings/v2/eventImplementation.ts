@@ -7,6 +7,7 @@ import {
   PrimaryMint,
   Scanned,
   SecondarySale,
+  Transfer,
 } from "../../../generated/templates/EventImplementation/EventImplementation";
 import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO } from "../../constants";
 import { createUsageEvent, getEvent, getTicket } from "../../entities";
@@ -83,7 +84,15 @@ export function handlePrimaryMint(e: PrimaryMint): void {
     ticket.save();
 
     cumulativeTicketValue = cumulativeTicketValue.plus(ticket.basePrice);
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "MINT", ticketAction.orderTime, reservedFuelPerTicket);
+    createUsageEvent(
+      e,
+      eventInstance,
+      ticketAction.tokenId,
+      "MINT",
+      ticketAction.orderTime,
+      ticket.basePrice,
+      reservedFuelPerTicket
+    );
   }
 
   protocol.updateTotalTicketValue(cumulativeTicketValue);
@@ -111,7 +120,15 @@ export function handleSecondarySale(e: SecondarySale): void {
     ticket.save();
 
     cumulativeTicketValue = cumulativeTicketValue.plus(ticket.basePrice);
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "RESALE", ticketAction.orderTime, reservedFuelPerTicket);
+    createUsageEvent(
+      e,
+      eventInstance,
+      ticketAction.tokenId,
+      "RESALE",
+      ticketAction.orderTime,
+      ticketAction.basePrice.divDecimal(BIG_DECIMAL_1E3),
+      reservedFuelPerTicket
+    );
   }
 
   protocol.updateTotalTicketValue(cumulativeTicketValue);
@@ -136,7 +153,15 @@ export function handleScanned(e: Scanned): void {
     ticket.isScanned = true;
     ticket.save();
 
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "SCAN", ticketAction.orderTime, BIG_DECIMAL_ZERO);
+    createUsageEvent(
+      e,
+      eventInstance,
+      ticketAction.tokenId,
+      "SCAN",
+      ticketAction.orderTime,
+      BIG_DECIMAL_ZERO,
+      BIG_DECIMAL_ZERO
+    );
   }
 
   protocol.updateScanned(countBigInt);
@@ -159,7 +184,15 @@ export function handleCheckedIn(e: CheckedIn): void {
     ticket.isCheckedIn = true;
     ticket.save();
 
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "CHECK_IN", ticketAction.orderTime, spentFuel);
+    createUsageEvent(
+      e,
+      eventInstance,
+      ticketAction.tokenId,
+      "CHECK_IN",
+      ticketAction.orderTime,
+      BIG_DECIMAL_ZERO,
+      spentFuel
+    );
   }
 
   protocol.updateCheckedIn(countBigInt, spentFuel);
@@ -182,7 +215,15 @@ export function handleInvalidated(e: Invalidated): void {
     ticket.isInvalidated = true;
     ticket.save();
 
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "INVALIDATE", ticketAction.orderTime, spentFuel);
+    createUsageEvent(
+      e,
+      eventInstance,
+      ticketAction.tokenId,
+      "INVALIDATE",
+      ticketAction.orderTime,
+      BIG_DECIMAL_ZERO,
+      spentFuel
+    );
   }
 
   protocol.updateInvalidated(countBigInt, spentFuel);
@@ -204,7 +245,15 @@ export function handleClaimed(e: Invalidated): void {
     ticket.isClaimed = true;
     ticket.save();
 
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "CLAIM", ticketAction.orderTime, BIG_DECIMAL_1E18);
+    createUsageEvent(
+      e,
+      eventInstance,
+      ticketAction.tokenId,
+      "CLAIM",
+      ticketAction.orderTime,
+      BIG_DECIMAL_ZERO,
+      BIG_DECIMAL_1E18
+    );
   }
 
   protocol.updateClaimed(countBigInt);
@@ -212,4 +261,11 @@ export function handleClaimed(e: Invalidated): void {
   integrator.updateClaimed(eventInstance.integrator, countBigInt);
   integratorDay.updateClaimed(eventInstance.integrator, e, countBigInt);
   event.updateClaimed(e.address, countBigInt);
+}
+
+export function handleTransfer(e: Transfer): void {
+  let eventInstance = getEvent(e.address);
+  let ticket = getTicket(eventInstance.eventIndex, e.params.tokenId);
+  ticket.owner = e.params.to;
+  ticket.save();
 }

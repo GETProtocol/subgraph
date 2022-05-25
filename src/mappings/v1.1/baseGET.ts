@@ -1,4 +1,4 @@
-import { Address, BigDecimal } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import {
   ADDRESS_ZERO,
   BIG_DECIMAL_1E18,
@@ -30,6 +30,23 @@ import {
   getIntegratorDayByIndexAndEvent,
 } from "../../entities";
 
+// The basePrice is always denominated in USD but the conversion did not go live for this until after the start of this
+// contract. For that reason we fetch the primary price (in local currency) from the contract view function before
+// making the conversion. This was only necessary for the first day of the contract launch (2020-10-20).
+//
+// You may also notice that these values differ slightly from those in the v1/baseGET mapping due to being able to
+// select the exact date required, whereas the v1 mappings cover the period from contract start to the v1.1 release.
+//
+// From this point onwards all conversion will be handled by TicketEngine and all basePrice (USD) will be passed in.
+function formatPrice(inputPrice: BigInt, currency: string): BigDecimal {
+  let rate = 100;
+  if (currency == "AUD") rate = 75;
+  if (currency == "CAD") rate = 81;
+  if (currency == "EUR") rate = 116;
+  if (currency == "GBP") rate = 138;
+  return inputPrice.toBigDecimal().times(BigDecimal.fromString(rate.toString())).div(BigDecimal.fromString("100000"));
+}
+
 export function handlePrimarySaleMint(e: PrimarySaleMint): void {
   let nftIndex = e.params.nftIndex;
   let ticket = getTicket(BIG_INT_ZERO, nftIndex);
@@ -56,24 +73,8 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
   ticket.createTx = e.transaction.hash;
   ticket.relayer = relayer.id;
   ticket.event = event.id;
-  // The basePrice is always denominated in USD but the conversion did not go live for this until after the start of
-  // this contract. For that reason we fetch the primary price (in local currency) from the contract view function
-  // before making the conversion. This was only necessary for the first day of the contract launch (2020-10-20).
-  //
-  // You may also notice that these values differ slightly from those in the v1/baseGET mapping due to being able to
-  // select the exact date required, whereas the v1 mappings cover the period from contract start to the v1.1 release.
-  //
-  // From this point onwards all conversion will be handled by TicketEngine and all basePrice (USD) will be passed in.
   if (e.block.number.lt(CURRENCY_CONVERSION_ACTIVATED_BLOCK)) {
-    let rate = 100;
-    if (event.currency == "AUD") rate = 75;
-    if (event.currency == "CAD") rate = 81;
-    if (event.currency == "EUR") rate = 116;
-    if (event.currency == "GBP") rate = 138;
-    ticket.basePrice = primaryPrice
-      .toBigDecimal()
-      .times(BigDecimal.fromString(rate.toString()))
-      .div(BigDecimal.fromString("100000"));
+    ticket.basePrice = formatPrice(primaryPrice, event.currency);
   } else {
     ticket.basePrice = primaryPrice.divDecimal(BIG_DECIMAL_1E3);
   }
@@ -113,7 +114,7 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
     );
     event.averageReservedPerTicket = event.reservedFuel.div(event.mintCount.toBigDecimal());
 
-    createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, getUsed);
+    createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, ticket.basePrice, getUsed);
   }
 
   protocol.save();
@@ -160,7 +161,7 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
     protocol.currentSpentFuel = protocol.currentSpentFuel.plus(getUsed);
     protocolDay.currentSpentFuel = protocol.currentSpentFuel;
 
-    createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, getUsed);
+    createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
   }
 
   protocol.save();
@@ -182,6 +183,13 @@ export function handleSecondarySale(e: SecondarySale): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
+  let price = BIG_DECIMAL_ZERO;
+  if (e.block.number.lt(CURRENCY_CONVERSION_ACTIVATED_BLOCK)) {
+    price = formatPrice(e.params.resalePrice, event.currency);
+  } else {
+    price = e.params.resalePrice.divDecimal(BIG_DECIMAL_1E3);
+  }
+
   protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
   protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
 
@@ -197,7 +205,7 @@ export function handleSecondarySale(e: SecondarySale): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, price, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketScanned(e: TicketScanned): void {
@@ -232,7 +240,7 @@ export function handleTicketScanned(e: TicketScanned): void {
     protocol.currentSpentFuel = protocol.currentSpentFuel.plus(getUsed);
     protocolDay.currentSpentFuel = protocol.currentSpentFuel;
 
-    createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, getUsed);
+    createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
   }
 
   protocol.save();
@@ -277,7 +285,7 @@ export function handleCheckedIn(e: CheckedIn): void {
     protocol.currentSpentFuel = protocol.currentSpentFuel.plus(getUsed);
     protocolDay.currentSpentFuel = protocol.currentSpentFuel;
 
-    createUsageEvent(e, event, nftIndex, "CHECK_IN", e.params.orderTime, getUsed);
+    createUsageEvent(e, event, nftIndex, "CHECK_IN", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
   }
 
   protocol.save();
@@ -311,5 +319,5 @@ export function handleNftClaimed(e: NftClaimed): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

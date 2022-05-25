@@ -23,7 +23,7 @@ export function handleNewEventRegistered(e: NewEventRegistered): void {
 
   event.createTx = e.transaction.hash;
   event.integrator = integrator.id;
-  event.relayer = e.transaction.from.toString();
+  event.relayer = e.transaction.from.toHexString();
   event.name = eventData.value2;
   event.shopUrl = eventData.value3;
   event.imageUrl = eventData.value4;
@@ -35,5 +35,5 @@ export function handleNewEventRegistered(e: NewEventRegistered): void {
 
   event.save();
 
-  createUsageEvent(e, event, BIG_INT_ZERO, "NEW_EVENT", e.params.orderTime, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, BIG_INT_ZERO, "NEW_EVENT", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

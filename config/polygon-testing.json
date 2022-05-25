@@ -10,10 +10,10 @@
   ],
   "ticketeers": [
     ["", "1"],
-    ["GET Tickets", "1"],
-    ["GUTS", "2"],
-    ["Wicket", "3"],
-    ["Tectix", "4"]
+    ["get tickets", "1"],
+    ["guts", "2"],
+    ["wicket", "3"],
+    ["tectix", "4"]
   ],
   "v1": {
     "BaseGET": {
@@ -43,6 +43,10 @@
       "address": "0x1c9a79D553ABE5D52c64BD5F1007C47DBCcC21c5",
       "startBlock": 20190412
     },
+    "getNFT_ERC721V3": {
+      "address": "0xC6da03A43EC0415695E4Ec46B58fD529d886FAd1",
+      "startBlock": 20190398
+    },
     "GETProtocolConfigurationV2": {
       "address": "0xF89Ea661259001e910Dd11E8d0FDc9A22a74e913",
       "startBlock": 20190392
@@ -50,20 +54,20 @@
   },
   "v2": {
     "Economics": {
-      "address": "0x08BE321c13417416b4D32ba2A8B71A5BdaA59a00",
-      "startBlock": 26281842
+      "address": "0xbBe1fF3efE3F28c1579CAd55f0a3AaeE31D015F4",
+      "startBlock": 26380115
     },
     "EventFactory": {
-      "address": "0x28a9555578198820B8c0aFa7B2F7A81DA7bF8305",
-      "startBlock": 26281861
+      "address": "0xC224A1DDF12334fac7Da89231140Ed2137eD43Ea",
+      "startBlock": 26380130
     },
     "PriceOracle": {
-      "address": "0xfBC98cC45834D0f318373268Ef95988c2067bEED",
-      "startBlock": 26281877
+      "address": "0xb4459F0D1D6A7E33A1D274D375E677f58C6Dc380",
+      "startBlock": 26380144
     },
     "TopUp": {
-      "address": "0x62c44f1572B502555702168729B7c43C1Bce0E9e",
-      "startBlock": 26281886
+      "address": "0x71B6d2A92Fb04670959bf48A256af477bd530fa8",
+      "startBlock": 26380151
     }
   }
 }

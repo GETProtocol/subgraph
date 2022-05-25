@@ -4,6 +4,7 @@ import {
   DepotSwiped,
   RelayerConfiguration,
   RelayerToppedUpBuffer,
+  SiloBalanceCorrected,
 } from "../../../generated/EconomicsGETV1_1/EconomicsGETV1_1";
 import {
   BIG_DECIMAL_1E18,
@@ -26,10 +27,15 @@ import { createTopUpEvent } from "../../entities/topUpEvent";
 
 export function handleRelayerConfiguration(e: RelayerConfiguration): void {
   let relayerAddress = e.params.relayerAddress;
-
-  let integratorIndex = RELAYER_MAPPING.get(relayerAddress.toHexString());
+  let relayerAddressString = relayerAddress.toHexString().toLowerCase();
   let relayer = getRelayer(relayerAddress);
-  relayer.integrator = integratorIndex.toString();
+
+  if (RELAYER_MAPPING.has(relayerAddressString)) {
+    let integratorIndex = RELAYER_MAPPING.get(relayerAddressString);
+    relayer.integrator = integratorIndex.toString();
+  } else {
+    relayer.integrator = "0";
+  }
 
   relayer.save();
 }
@@ -94,6 +100,18 @@ export function handleAverageSiloPriceUpdated(e: AverageSiloPriceUpdated): void 
 
   integrator.price = e.params.newPrice.divDecimal(BIG_DECIMAL_1E3);
   integratorDay.price = e.params.newPrice.divDecimal(BIG_DECIMAL_1E3);
+
+  integrator.save();
+  integratorDay.save();
+}
+
+export function handleSiloBalanceCorrected(e: SiloBalanceCorrected): void {
+  let relayerAddress = e.params.relayerAddress;
+  let integrator = getIntegratorByRelayerAddress(relayerAddress);
+  let integratorDay = getIntegratorDayByIndexAndEvent(integrator.id, e);
+
+  integrator.availableFuel = e.params.newBalance.divDecimal(BIG_DECIMAL_1E18);
+  integratorDay.availableFuel = e.params.newBalance.divDecimal(BIG_DECIMAL_1E18);
 
   integrator.save();
   integratorDay.save();

@@ -6,8 +6,8 @@ export function getRelayer(relayerAddress: Address): Relayer {
 
   if (relayer == null) {
     relayer = new Relayer(relayerAddress.toHexString());
-    relayer.integrator = "";
-    relayer.isEnabled = true;
+    relayer.integrator = "0";
+    relayer.isEnabled = false;
   }
 
   return relayer as Relayer;

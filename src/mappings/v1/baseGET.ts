@@ -1,3 +1,4 @@
+import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { BIG_DECIMAL_ZERO, BIG_INT_ONE, BIG_INT_ZERO } from "../../constants";
 import {
   primarySaleMint,
@@ -16,7 +17,23 @@ import {
   getIntegrator,
   getIntegratorDayByIndexAndEvent,
 } from "../../entities";
-import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+
+// Early releases of the ticket-engine passed through only the primaryPrice (as denominated in local currency).
+// As such we approximate the USD basePrice of these tickets by dividing by the average <CURRENCY>/USD rate across the
+// time period in which the v1 contracts were active.
+//
+// primaryPrice is denominated to a tenth of a cent and multiplying this by the rate (denominated to the cent), we then
+// divide by (100*1000) to return to decimal precision).
+function formatPrice(inputPrice: BigInt, currency: string): BigDecimal {
+  let rate = 100;
+  if (currency == "AUD") rate = 74;
+  if (currency == "CAD") rate = 79;
+  if (currency == "EUR") rate = 118;
+  if (currency == "GBP") rate = 138;
+  return BigDecimal.fromString(inputPrice.toString())
+    .times(BigDecimal.fromString(rate.toString()))
+    .div(BigDecimal.fromString("100000"));
+}
 
 export function handlePrimarySaleMint(e: primarySaleMint): void {
   let nftIndex = e.params.nftIndex;
@@ -29,23 +46,11 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   let relayer = getRelayer(e.transaction.from);
 
   ticket.createTx = e.transaction.hash;
+  ticket.owner = e.params.destinationAddress;
   ticket.event = event.id;
   ticket.integrator = integrator.id;
   ticket.relayer = relayer.id;
-  // Early releases of the ticket-engine passed through only the primaryPrice (as denominated in local currency).
-  // As such we approximate the USD basePrice of these tickets by dividing by the average <CURRENCY>/USD rate acros the
-  // time period in which the v1 contracts were active.
-  //
-  // primaryPrice is denominated to a tenth of a cent and multiplying this by the rate (denominated to the cent), we
-  // then divide by (100*1000) to return to decimal precision).
-  let rate = 100;
-  if (event.currency == "AUD") rate = 74;
-  if (event.currency == "CAD") rate = 79;
-  if (event.currency == "EUR") rate = 118;
-  if (event.currency == "GBP") rate = 138;
-  ticket.basePrice = BigDecimal.fromString(e.params.primaryPrice.toString())
-    .times(BigDecimal.fromString(rate.toString()))
-    .div(BigDecimal.fromString("100000"));
+  ticket.basePrice = formatPrice(e.params.primaryPrice, event.currency);
 
   protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
   protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
@@ -63,7 +68,7 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   event.save();
   ticket.save();
 
-  createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, ticket.basePrice, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketInvalidated(e: ticketInvalidated): void {
@@ -87,7 +92,7 @@ export function handleTicketInvalidated(e: ticketInvalidated): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }
 
 export function handleSecondarySale(e: secondarySale): void {
@@ -98,6 +103,9 @@ export function handleSecondarySale(e: secondarySale): void {
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
+  let price = formatPrice(e.params.secondaryPrice, event.currency);
+
+  ticket.owner = e.params.destinationAddress;
 
   protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
   protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
@@ -113,8 +121,9 @@ export function handleSecondarySale(e: secondarySale): void {
   integrator.save();
   integratorDay.save();
   event.save();
+  ticket.save();
 
-  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, price, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketScanned(e: ticketScanned): void {
@@ -138,7 +147,7 @@ export function handleTicketScanned(e: ticketScanned): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }
 
 export function handleNftClaimed(e: nftClaimed): void {
@@ -162,5 +171,5 @@ export function handleNftClaimed(e: nftClaimed): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

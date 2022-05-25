@@ -5,6 +5,7 @@ import { getIntegrator } from "./integrator";
 
 function getIntegratorDay(integratorIndex: string, day: i32): IntegratorDay {
   let id = integratorIndex.concat("-").concat(day.toString());
+  let integrator = getIntegrator(integratorIndex);
   let integratorDay = IntegratorDay.load(id);
 
   if (integratorDay == null) {
@@ -12,10 +13,10 @@ function getIntegratorDay(integratorIndex: string, day: i32): IntegratorDay {
     integratorDay.integrator = integratorIndex;
     integratorDay.day = day;
     integratorDay.averageReservedPerTicket = BIG_DECIMAL_ZERO;
-    integratorDay.availableFuel = BIG_DECIMAL_ZERO;
+    integratorDay.availableFuel = integrator.availableFuel;
     integratorDay.reservedFuel = BIG_DECIMAL_ZERO;
     integratorDay.spentFuel = BIG_DECIMAL_ZERO;
-    integratorDay.price = BIG_DECIMAL_ZERO;
+    integratorDay.price = integrator.price;
     integratorDay.mintCount = BIG_INT_ZERO;
     integratorDay.invalidateCount = BIG_INT_ZERO;
     integratorDay.resaleCount = BIG_INT_ZERO;

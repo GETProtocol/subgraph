@@ -16,19 +16,19 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "oldBalance",
+        "name": "oldAvailableFuel",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "newBalance",
+        "name": "newAvailableFuel",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "difference",
+        "name": "newReservedBalance",
         "type": "uint256"
       }
     ],
@@ -684,7 +684,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "_newBalance",
+        "name": "_newAvailableFuel",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_newReservedFuel",
         "type": "uint256"
       }
     ],
@@ -715,6 +720,29 @@
       }
     ],
     "name": "disableIntegratorBilling",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_asset",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "emergencyWithdraw",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -804,46 +832,53 @@
         "type": "uint256"
       },
       {
-        "components": [
-          {
-            "internalType": "uint24",
-            "name": "minFeePrimary",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "maxFeePrimary",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "primaryRate",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "minFeeSecondary",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "maxFeeSecondary",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "secondaryRate",
-            "type": "uint24"
-          }
-        ],
-        "internalType": "struct IEconomics.DynamicRates",
-        "name": "rates",
-        "type": "tuple"
-      },
-      {
         "internalType": "string",
         "name": "name",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "name": "integratorRates",
+    "outputs": [
+      {
+        "internalType": "uint24",
+        "name": "minFeePrimary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "maxFeePrimary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "primaryRate",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "minFeeSecondary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "maxFeeSecondary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "secondaryRate",
+        "type": "uint24"
       }
     ],
     "stateMutability": "view",

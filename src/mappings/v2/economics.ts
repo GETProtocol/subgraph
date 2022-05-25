@@ -1,5 +1,6 @@
 import { BigDecimal } from "@graphprotocol/graph-ts";
 import {
+  AccountBalanceCorrected,
   DisableIntegratorBilling,
   EnableIntegratorBilling,
   IntegratorConfigured,
@@ -18,6 +19,7 @@ export function handleIntegratorConfigured(e: IntegratorConfigured): void {
   let integrator = getIntegrator(e.params.integratorIndex.toString());
   let relayer = getRelayer(e.params.relayerAddress);
   relayer.integrator = integrator.id;
+  relayer.isEnabled = true;
   integrator.name = e.params.name;
   relayer.save();
   integrator.save();
@@ -33,6 +35,7 @@ export function handleIntegratorDisabled(e: IntegratorDisabled): void {
 export function handleRelayerAdded(e: RelayerAdded): void {
   let relayer = getRelayer(e.params.relayerAddress);
   relayer.integrator = e.params.integratorIndex.toString();
+  relayer.isEnabled = true;
   relayer.save();
 }
 
@@ -106,4 +109,17 @@ export function handleSpentFuelCollected(e: SpentFuelCollected): void {
     e.params.spentFuel.divDecimal(BIG_DECIMAL_1E18),
     e.params.spentFuelTicketCount
   );
+}
+
+export function handleAccountBalanceCorrected(e: AccountBalanceCorrected): void {
+  let integratorIndex = e.params.integratorIndex.toString();
+
+  let integrator = getIntegrator(integratorIndex);
+  let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
+
+  integrator.availableFuel = e.params.newBalance.divDecimal(BIG_DECIMAL_1E18);
+  integratorDay.availableFuel = e.params.newBalance.divDecimal(BIG_DECIMAL_1E18);
+
+  integrator.save();
+  integratorDay.save();
 }

@@ -130,6 +130,7 @@ type Ticket @entity {
   event: Event!
   integrator: Integrator!
   relayer: Relayer!
+  owner: Bytes!
   basePrice: BigDecimal!
   reservedFuel: BigDecimal!
   isScanned: Boolean!
@@ -180,6 +181,7 @@ type UsageEvent @entity {
   relayer: Relayer!
   relayerAddress: Bytes!
   orderTime: BigInt!
+  price: BigDecimal!
   type: UsageEventType!
   getUsed: BigDecimal!
   nftId: String!

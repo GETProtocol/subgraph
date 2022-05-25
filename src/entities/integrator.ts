@@ -34,12 +34,12 @@ export function getIntegratorByRelayerAddress(address: Address): Integrator {
   let relayer = getRelayer(address);
   if (relayer) return getIntegrator(relayer.integrator) as Integrator;
 
-  let integratorIndex = RELAYER_MAPPING.get(address.toHexString());
+  let integratorIndex = RELAYER_MAPPING.get(address.toHexString().toLowerCase());
   return getIntegrator(integratorIndex) as Integrator;
 }
 
 export function getIntegratorByTicketeerName(ticketeerName: string): Integrator {
-  let integratorIndex = TICKETEER_MAPPING.get(ticketeerName);
+  let integratorIndex = TICKETEER_MAPPING.get(ticketeerName.toLowerCase());
   return getIntegrator(integratorIndex) as Integrator;
 }
 

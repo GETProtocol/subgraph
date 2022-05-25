@@ -135,6 +135,7 @@ Table Ticket {
   event Event
   integrator Integrator
   relayer Relayer
+  owner bytes
   basePrice bigdecimal
   reservedFuel bigdecimal
   isScanned boolean
@@ -185,6 +186,7 @@ Table UsageEvent {
   relayer Relayer
   relayerAddress bytes
   orderTime bigint
+  price bigdecimal
   type UsageEventType
   getUsed bigdecimal
   nftId string

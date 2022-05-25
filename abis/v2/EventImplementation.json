@@ -492,7 +492,7 @@
           },
           {
             "internalType": "bool",
-            "name": "financingConfigured",
+            "name": "inventoryRegistered",
             "type": "bool"
           },
           {
@@ -734,7 +734,7 @@
       },
       {
         "internalType": "bool",
-        "name": "financingConfigured",
+        "name": "inventoryRegistered",
         "type": "bool"
       },
       {
@@ -1062,7 +1062,7 @@
           },
           {
             "internalType": "bool",
-            "name": "financingConfigured",
+            "name": "inventoryRegistered",
             "type": "bool"
           },
           {

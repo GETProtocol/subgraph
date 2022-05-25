@@ -1,6 +1,11 @@
 specVersion: 0.0.2
 schema:
   file: ./schema.graphql
+{{ #graft }}
+graft:
+  base: {{ graft.base }}
+  block: {{ graft.block }}
+{{ /graft }}
 dataSources:
 {{ #v1.BaseGET }}
   - kind: ethereum/contract
@@ -159,6 +164,8 @@ dataSources:
           handler: handleAveragePriceUpdated
         - event: AverageSiloPriceUpdated(address,uint256,uint256)
           handler: handleAverageSiloPriceUpdated
+        - event: SiloBalanceCorrected(address,uint256,uint256,uint256)
+          handler: handleSiloBalanceCorrected
       file: ./src/mappings/v1.1/economicsGET.ts
 
 {{ /v1_1.EconomicsGET }}
@@ -213,6 +220,31 @@ dataSources:
       file: ./src/mappings/v1.1/getProtocolConfigurationV2.ts
 
 {{ /v1_1.GETProtocolConfigurationV2 }}
+{{ #v1_1.getNFT_ERC721V3 }}
+  - kind: ethereum/contract
+    name: getNFT_ERC721V3V1_1
+    network: {{ network }}
+    source:
+      address: "{{ v1_1.getNFT_ERC721V3.address }}"
+      abi: getNFT_ERC721V3V1_1
+      startBlock: {{ v1_1.getNFT_ERC721V3.startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Event
+        - PriceOracle
+        - UsageEvent
+      abis:
+        - name: getNFT_ERC721V3V1_1
+          file: ./abis/v1.1/getNFT_ERC721V3.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mappings/v1.1/getNFTERC721V3.ts
+
+{{ /v1_1.getNFT_ERC721V3 }}
 {{ #v2.Economics }}
   - kind: ethereum/contract
     name: EconomicsV2 
@@ -252,6 +284,8 @@ dataSources:
           handler: handleUpdateSpentFuelDestinations
         - event: SpentFuelCollected((address,uint24,string),uint256,uint256,uint32)
           handler: handleSpentFuelCollected
+        - event: AccountBalanceCorrected(uint32,uint256,uint256,uint256)
+          handler: handleAccountBalanceCorrected
       file: ./src/mappings/v2/economics.ts
 
 {{ /v2.Economics }}
@@ -364,4 +398,6 @@ templates:
           handler: handleEventDataSet
         - event: EventDataUpdated((uint32,uint64,uint64,int32,int32,string,string,string,string))
           handler: handleEventDataUpdated
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
 {{ /v2.EventFactory }}

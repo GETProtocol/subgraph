@@ -5,11 +5,11 @@ import { getProtocol } from "./protocol";
 
 export function getProtocolDay(e: ethereum.Event): ProtocolDay {
   let day = e.block.timestamp.toI32() / 86400;
-  let id = day;
-  let protocolDay = ProtocolDay.load(id.toString());
+  let id = day.toString();
+  let protocolDay = ProtocolDay.load(id);
 
   if (protocolDay == null) {
-    protocolDay = new ProtocolDay(id.toString());
+    protocolDay = new ProtocolDay(id);
     protocolDay.day = day;
     protocolDay.averageReservedPerTicket = BIG_DECIMAL_ZERO;
     protocolDay.reservedFuel = BIG_DECIMAL_ZERO;

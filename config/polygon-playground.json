@@ -3,20 +3,20 @@
   "network": "matic",
   "v2": {
     "Economics": {
-      "address": "0xa89cf784cBFAdcaf872fa50e183f6D781eac264A",
-      "startBlock": 28260642
+      "address": "0xD0AF261f1Ce84dD8c31685367B368a7E100C0e16",
+      "startBlock": 28511865
     },
     "EventFactory": {
-      "address": "0x0b284A2F68D76ca637d7259FD985A6eaE59A5864",
-      "startBlock": 28260672
+      "address": "0xd823A1b122c4aC50d32A2485ea92d05C95E4F63d",
+      "startBlock": 28511891
     },
     "PriceOracle": {
-      "address": "0x51b3FbE279CEC64bc4c9f3b9b953781B0EFBE787",
-      "startBlock": 28260699
+      "address": "0x73790f7B7C3009399861eB4FB522d6fb9d0aA614",
+      "startBlock": 28511915
     },
     "TopUp": {
-      "address": "0x53F2f9B29E06624bce758aAc7ca728D559B749Ac",
-      "startBlock": 28260711
+      "address": "0x30A0Aa74eA2aFb9d5688355406b18CF6ea03Aa47",
+      "startBlock": 28511933
     }
   }
 }

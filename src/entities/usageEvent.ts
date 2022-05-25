@@ -16,6 +16,7 @@ export function getUsageEvent(e: ethereum.Event): UsageEvent {
   usageEvent.blockNumber = e.block.number;
   usageEvent.blockTimestamp = timestamp;
   usageEvent.orderTime = BIG_INT_ZERO;
+  usageEvent.price = BIG_DECIMAL_ZERO;
   usageEvent.day = day;
   usageEvent.getUsed = BIG_DECIMAL_ZERO;
   usageEvent.event = "";
@@ -36,12 +37,14 @@ export function createUsageEvent(
   tokenId: BigInt,
   type: string,
   orderTime: BigInt,
+  price: BigDecimal,
   getUsed: BigDecimal
 ): UsageEvent {
   let usageEvent = getUsageEvent(e);
   let nftId = `${CHAIN_NAME}-${event.eventIndex.toString()}-${tokenId.toString()}`;
 
   usageEvent.orderTime = orderTime;
+  usageEvent.price = price;
   usageEvent.ticket = nftId;
   usageEvent.nftId = nftId;
   usageEvent.tokenId = tokenId;

@@ -1,6 +1,10 @@
 {
   "chainName": "polygon",
   "network": "matic",
+  "graft": {
+    "base": "Qmd3czvdsCydhWUB87VHAS5FsEeRpQuUBSCCxwzgSk8aMm",
+    "block": 28544600
+  },
   "relayers": [
     ["0x4afdae9cca053e3d456a9cb697081bf083a3340b", "1", "GET White-Label"],
     ["0x383f07ecce503801f636ad455106e270748bde05", "1", "GET White-Label"],
@@ -8,24 +12,24 @@
     ["0xb9f77e8fe9aef5df3a4c3c465b9d88423e41f41a", "4", "YourTicketProvider"]
   ],
   "ticketeers": [
-    ["Dummy", "0"],
-    ["Demo", "0"],
+    ["dummy", "0"],
+    ["demo", "0"],
     ["", "1"],
-    ["GUTS", "2"],
-    ["XTIXS", "3"],
-    ["YourTicketProvider", "4"],
-    ["Wicket", "5"],
-    ["Tectix", "6"],
-    ["Djebber", "7"],
-    ["Jeike", "8"],
-    ["Jeike Ticketing", "8"],
-    ["DeFy", "9"],
-    ["DeFy Tickets", "9"],
-    ["Relic", "10"],
-    ["Relic Tickets", "10"],
-    ["Ontapp", "11"],
-    ["Ontapp Tickets", "11"],
-    ["NeonOx", "12"]
+    ["guts", "2"],
+    ["xtixs", "3"],
+    ["yourticketprovider", "4"],
+    ["wicket", "5"],
+    ["tectix", "6"],
+    ["djebber", "7"],
+    ["jeike", "8"],
+    ["jeike ticketing", "8"],
+    ["defy", "9"],
+    ["defy tickets", "9"],
+    ["relic", "10"],
+    ["relic tickets", "10"],
+    ["ontapp", "11"],
+    ["ontapp tickets", "11"],
+    ["neonox", "12"]
   ],
   "v1": {
     "BaseGET": {
@@ -55,9 +59,31 @@
       "address": "0x08C2aF3F01A36AD9F274ccE77f6f77cf9aa1dfC9",
       "startBlock": 20363134
     },
+    "getNFT_ERC721V3": {
+      "address": "0x2055244A719229d669488E389388f2d653A452F4",
+      "startBlock": 20363107
+    },
     "GETProtocolConfigurationV2": {
       "address": "0xbce1b23c7544422f1E2208d29A6A3AA9fAbAB250",
       "startBlock": 20363107
+    }
+  },
+  "v2": {
+    "Economics": {
+      "address": "0xd0e26e295976edE7364a0fef53d3Fd4153E96341",
+      "startBlock": 28544600
+    },
+    "EventFactory": {
+      "address": "0x9Ff56acD3996D3fd98d3757ECD5c0E824B97029e",
+      "startBlock": 28544618
+    },
+    "PriceOracle": {
+      "address": "0xD1F8aF61e6899F84e403db2c79f4615918114De1",
+      "startBlock": 28544635
+    },
+    "TopUp": {
+      "address": "0xD1F8aF61e6899F84e403db2c79f4615918114De1",
+      "startBlock": 28544635
     }
   }
 }
