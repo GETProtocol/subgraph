@@ -10,6 +10,7 @@ import {
   BIG_DECIMAL_1E18,
   BIG_DECIMAL_1E3,
   BIG_DECIMAL_ZERO,
+  BIG_INT_ONE,
   BIG_INT_ZERO,
   BYTES_EMPTY,
   RELAYER_MAPPING,
@@ -31,8 +32,7 @@ export function handleRelayerConfiguration(e: RelayerConfiguration): void {
   let relayer = getRelayer(relayerAddress);
 
   if (RELAYER_MAPPING.has(relayerAddressString)) {
-    let integratorIndex = RELAYER_MAPPING.get(relayerAddressString);
-    relayer.integrator = integratorIndex.toString();
+    relayer.integrator = RELAYER_MAPPING.get(relayerAddressString);
   } else {
     relayer.integrator = "0";
   }
@@ -52,10 +52,6 @@ export function handleDepotSwiped(e: DepotSwiped): void {
 
   protocol.collectedSpentFuel = protocol.collectedSpentFuel.plus(amount);
   protocolDay.collectedSpentFuel = protocolDay.collectedSpentFuel.plus(amount);
-
-  protocol.currentSpentFuel = protocol.currentSpentFuel.minus(amount);
-  protocolDay.currentSpentFuel = protocol.currentSpentFuel;
-
   spentFuelRecipient.collectedSpentFuel = spentFuelRecipient.collectedSpentFuel.plus(amount);
 
   protocol.save();
@@ -73,6 +69,9 @@ export function handleRelayerToppedUpBuffer(e: RelayerToppedUpBuffer): void {
   let amount = e.params.topUpAmount.divDecimal(BIG_DECIMAL_1E18);
   integrator.availableFuel = integrator.availableFuel.plus(amount);
   integratorDay.availableFuel = integrator.availableFuel;
+
+  integrator.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
+  integratorDay.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
 
   integrator.save();
   integratorDay.save();
@@ -110,8 +109,9 @@ export function handleSiloBalanceCorrected(e: SiloBalanceCorrected): void {
   let integrator = getIntegratorByRelayerAddress(relayerAddress);
   let integratorDay = getIntegratorDayByIndexAndEvent(integrator.id, e);
 
-  integrator.availableFuel = e.params.newBalance.divDecimal(BIG_DECIMAL_1E18);
-  integratorDay.availableFuel = e.params.newBalance.divDecimal(BIG_DECIMAL_1E18);
+  let difference = e.params.newBalance.minus(e.params.oldBalance);
+  integrator.availableFuel = integrator.availableFuel.plus(difference.divDecimal(BIG_DECIMAL_1E18));
+  integratorDay.availableFuel = integratorDay.availableFuel.plus(difference.divDecimal(BIG_DECIMAL_1E18));
 
   integrator.save();
   integratorDay.save();

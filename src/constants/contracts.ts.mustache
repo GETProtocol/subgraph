@@ -7,7 +7,7 @@ export let CHAIN_NAME = "{{ chainName }}".toUpperCase();
 export let CURRENCY_CONVERSION_ACTIVATED_BLOCK = BigInt.fromI32(20410204);
 export let EVENT_METADATA_STORAGE_ADDRESS_V1 = {{ ^v1.EventMetadataStorage.address }}Address.zero(){{ /v1.EventMetadataStorage.address }}{{ #v1.EventMetadataStorage.address }}Address.fromString("{{ v1.EventMetadataStorage.address }}"){{ /v1.EventMetadataStorage.address }};
 export let EVENT_METADATA_STORAGE_ADDRESS_V1_1 = {{ ^v1_1.EventMetadataStorage.address }}Address.zero(){{ /v1_1.EventMetadataStorage.address }}{{ #v1_1.EventMetadataStorage.address }}Address.fromString("{{ v1_1.EventMetadataStorage.address }}"){{ /v1_1.EventMetadataStorage.address }};
-export let NFT_ADDRESS_V1_1 = {{ ^v1_1.BaseGET.address }}Address.zero(){{ /v1_1.BaseGET.address }}{{ #v1_1.BaseGET.address }}Address.fromString("{{ v1_1.BaseGET.address }}"){{ /v1_1.BaseGET.address }};
+export let BASEGET_ADDRESS_V1_1 = {{ ^v1_1.BaseGET.address }}Address.zero(){{ /v1_1.BaseGET.address }}{{ #v1_1.BaseGET.address }}Address.fromString("{{ v1_1.BaseGET.address }}"){{ /v1_1.BaseGET.address }};
 export let ECONOMICS_ADDRESS_V1_1 = {{ ^v1_1.EconomicsGET.address }}Address.zero(){{ /v1_1.EconomicsGET.address }}{{ #v1_1.EconomicsGET.address }}Address.fromString("{{ v1_1.EconomicsGET.address }}"){{ /v1_1.EconomicsGET.address }};
 
 // The block in which the on-chain economics was switched on.

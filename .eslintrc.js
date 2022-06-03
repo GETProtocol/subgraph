@@ -11,6 +11,7 @@ module.exports = {
   },
   plugins: ["@typescript-eslint"],
   rules: {
+    "@typescript-eslint/ban-types": "off", // Allow BigInt type
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error",
     // The following are incompatible with AssemblyScript

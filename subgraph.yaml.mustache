@@ -5,6 +5,8 @@ schema:
 graft:
   base: {{ graft.base }}
   block: {{ graft.block }}
+features:
+  - grafting
 {{ /graft }}
 dataSources:
 {{ #v1.BaseGET }}
@@ -392,6 +394,8 @@ templates:
           handler: handleScanned
         - event: CheckedIn((uint256,bytes32,address,uint64,uint40)[],uint256)
           handler: handleCheckedIn
+        - event: Claimed((uint256,bytes32,address,uint64,uint40)[],uint256)
+          handler: handleClaimed
         - event: Invalidated((uint256,bytes32,address,uint64,uint40)[],uint256)
           handler: handleInvalidated
         - event: EventDataSet((uint32,uint64,uint64,int32,int32,string,string,string,string))

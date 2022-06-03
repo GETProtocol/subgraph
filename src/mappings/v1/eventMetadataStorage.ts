@@ -3,8 +3,16 @@ import {
   EventMetadataStorageV1 as EventMetadataStorageContract,
   newEventRegistered,
 } from "../../../generated/EventMetadataStorageV1/EventMetadataStorageV1";
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, EVENT_METADATA_STORAGE_ADDRESS_V1 } from "../../constants";
-import { getEvent, createUsageEvent, getIntegratorByTicketeerName } from "../../entities";
+import { Event } from "../../../generated/schema";
+import { BIG_DECIMAL_ZERO, BIG_INT_ONE, BIG_INT_ZERO, EVENT_METADATA_STORAGE_ADDRESS_V1 } from "../../constants";
+import {
+  getEvent,
+  createUsageEvent,
+  getIntegratorByTicketeerName,
+  getIntegratorDayByIndexAndEvent,
+  getProtocol,
+  getProtocolDay,
+} from "../../entities";
 
 export function handleNewEventRegistered(e: newEventRegistered): void {
   let address = e.params.eventAddress;
@@ -18,12 +26,33 @@ export function handleNewEventRegistered(e: newEventRegistered): void {
   let startTime = eventData.value6[0];
   let endTime = eventData.value6[1];
 
-  let integrator = getIntegratorByTicketeerName(ticketeerName);
+  // newEventRegistered is called even during event updates. Although not elegant we opt to check that the event exists
+  // by attempting to load it from the store. If this returns null then the event isn't found, so increment the counts
+  // and then continue to instantiate a new event as normal.
+  let existingEvent = Event.load(address.toHexString());
   let event = getEvent(address);
+  if (existingEvent == null) {
+    // Only set the integrator and relayer on first creation, do not allow switching of ticketeer.
+    let protocol = getProtocol();
+    let protocolDay = getProtocolDay(e);
+    let integrator = getIntegratorByTicketeerName(ticketeerName);
+    let integratorDay = getIntegratorDayByIndexAndEvent(integrator.id, e);
+    event.integrator = integrator.id;
+    event.relayer = e.transaction.from.toHexString();
+
+    protocol.eventCount = protocol.eventCount.plus(BIG_INT_ONE);
+    protocolDay.eventCount = protocolDay.eventCount.plus(BIG_INT_ONE);
+    integrator.eventCount = integrator.eventCount.plus(BIG_INT_ONE);
+    integratorDay.eventCount = integratorDay.eventCount.plus(BIG_INT_ONE);
+    protocol.save();
+    protocolDay.save();
+    integrator.save();
+    integratorDay.save();
+  }
 
   event.createTx = e.transaction.hash;
-  event.integrator = integrator.id;
-  event.relayer = e.transaction.from.toHexString();
+  event.blockNumber = e.block.number;
+  event.blockTimestamp = e.block.timestamp;
   event.name = eventData.value2;
   event.shopUrl = eventData.value3;
   event.imageUrl = eventData.value4;
@@ -32,8 +61,7 @@ export function handleNewEventRegistered(e: newEventRegistered): void {
   event.currency = currency;
   event.startTime = startTime;
   event.endTime = endTime;
-
   event.save();
 
-  createUsageEvent(e, event, BIG_INT_ZERO, "NEW_EVENT", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, BIG_INT_ZERO, "EVENT_CREATED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

@@ -1,6 +1,7 @@
 import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Event } from "../../generated/schema";
 import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY } from "../constants";
+import { getIntegratorByRelayerAddress } from "./integrator";
 
 export function getEvent(eventAddress: Address): Event {
   let event = Event.load(eventAddress.toHexString());
@@ -9,6 +10,8 @@ export function getEvent(eventAddress: Address): Event {
     event = new Event(eventAddress.toHexString());
     event.eventIndex = BIG_INT_ZERO;
     event.createTx = BYTES_EMPTY;
+    event.blockNumber = BIG_INT_ZERO;
+    event.blockTimestamp = BIG_INT_ZERO;
     event.integrator = "";
     event.relayer = "";
     event.reservedFuel = BIG_DECIMAL_ZERO;
@@ -30,6 +33,19 @@ export function getEvent(eventAddress: Address): Event {
   }
 
   return event as Event;
+}
+
+// In early versions of the protocol some tickets were created without an event, so when the the ticket is minted it
+// attempts to fetch an empty event. This has an empty integrator, instantiating an integrator with a blank ID. This
+// can be avoided by defaulting the integrator to the one attached to the relayer address.
+export function getEventWithFallbackIntegrator(eventAddress: Address, relayerAddress: Address): Event {
+  let integrator = getIntegratorByRelayerAddress(relayerAddress);
+  let event = getEvent(eventAddress);
+  if (event.integrator == "") {
+    event.integrator = integrator.id;
+    event.relayer = relayerAddress.toHexString();
+  }
+  return event;
 }
 
 export function updatePrimaryMint(eventAddress: Address, count: BigInt, reservedFuel: BigDecimal): void {

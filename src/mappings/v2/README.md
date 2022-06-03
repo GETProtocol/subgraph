@@ -32,3 +32,7 @@ This nftId is now used as the primary key of the Ticket entity within the subgra
 ### 4. Price Oracle
 
 We now have a Price Oracle on-chain for non-custodial top-ups. This is now exposed through the PriceOracle entity.
+
+### 5. currentSpentFuel, currentReservedFuel
+
+The 'current' values on Protocol and Integrator entities represent the real-time state of the system. `currentReservedFuel` being the amount of fuel held within the system awaiting release upon a check-in ticket action. `currentSpentFuel` is the amount of fuel ready to be collected by the SpentFuelRecipients. To avoid confusion these current values only track the V2 economics contract and do not include any amounts awaiting collection on the V1 contract. Over time as V1 events end and tickets are checked-in this should reduce to 0 on V1.

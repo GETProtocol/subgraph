@@ -15,6 +15,7 @@ export function getProtocol(): Protocol {
     protocol.currentSpentFuel = BIG_DECIMAL_ZERO;
     protocol.collectedSpentFuel = BIG_DECIMAL_ZERO;
     protocol.totalTicketValue = BIG_DECIMAL_ZERO;
+    protocol.eventCount = BIG_INT_ZERO;
     protocol.mintCount = BIG_INT_ZERO;
     protocol.invalidateCount = BIG_INT_ZERO;
     protocol.resaleCount = BIG_INT_ZERO;

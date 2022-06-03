@@ -1,13 +1,13 @@
 // Enums
 
 Enum UsageEventType {
-  NEW_EVENT
-  MINT
-  INVALIDATE
-  RESALE
-  SCAN
-  CHECK_IN
-  CLAIM
+  EVENT_CREATED
+  SOLD
+  RESOLD
+  SCANNED
+  INVALIDATED
+  CHECKED_IN
+  CLAIMED
 }
 
 Enum TopUpEventType {
@@ -26,6 +26,7 @@ Table Protocol {
   currentSpentFuel bigdecimal
   collectedSpentFuel bigdecimal
   totalTicketValue bigdecimal
+  eventCount bigint
   mintCount bigint
   invalidateCount bigint
   resaleCount bigint
@@ -43,6 +44,7 @@ Table ProtocolDay {
   currentSpentFuel bigdecimal
   collectedSpentFuel bigdecimal
   totalTicketValue bigdecimal
+  eventCount bigint
   mintCount bigint
   invalidateCount bigint
   resaleCount bigint
@@ -64,6 +66,8 @@ Table Integrator {
   isBillingEnabled boolean
   isConfigured boolean
   name string
+  eventCount bigint
+  topUpCount bigint
   mintCount bigint
   invalidateCount bigint
   resaleCount bigint
@@ -87,6 +91,8 @@ Table IntegratorDay {
   reservedFuel bigdecimal
   spentFuel bigdecimal
   price bigdecimal
+  eventCount bigint
+  topUpCount bigint
   mintCount bigint
   invalidateCount bigint
   resaleCount bigint
@@ -105,6 +111,8 @@ Table Event {
   id id
   eventIndex bigint
   createTx bytes
+  blockNumber bigint
+  blockTimestamp bigint
   integrator Integrator
   relayer Relayer
   usageEvents UsageEvent[] [ref: > UsageEvent.event]
@@ -131,6 +139,8 @@ Table Ticket {
   id id
   tokenId bigint
   createTx bytes
+  blockNumber bigint
+  blockTimestamp bigint
   usageEvents UsageEvent[] [ref: > UsageEvent.ticket]
   event Event
   integrator Integrator

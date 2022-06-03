@@ -1,4 +1,5 @@
 import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
+import { Event } from "../../../generated/schema";
 import {
   ADDRESS_ZERO,
   BIG_DECIMAL_1E18,
@@ -8,7 +9,7 @@ import {
   BIG_INT_ZERO,
   CURRENCY_CONVERSION_ACTIVATED_BLOCK,
   FUEL_ACTIVATED_BLOCK,
-  NFT_ADDRESS_V1_1,
+  BASEGET_ADDRESS_V1_1,
 } from "../../constants";
 import {
   PrimarySaleMint,
@@ -28,6 +29,8 @@ import {
   createUsageEvent,
   getIntegrator,
   getIntegratorDayByIndexAndEvent,
+  getEventWithFallbackIntegrator,
+  getIntegratorByRelayerAddress,
 } from "../../entities";
 
 // The basePrice is always denominated in USD but the conversion did not go live for this until after the start of this
@@ -53,7 +56,7 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
 
   // In this revision of the contracts the eventAddress was not emitted with the event meaning we need to fetch the data
   // from the node with an RPC call. Expensive to do in terms of indexing speed, can't be avoided here.
-  let ticketData = BaseGETContractV1_1.bind(NFT_ADDRESS_V1_1).try_ticketMetadataIndex(nftIndex);
+  let ticketData = BaseGETContractV1_1.bind(BASEGET_ADDRESS_V1_1).try_ticketMetadataIndex(nftIndex);
   let primaryPrice = BIG_INT_ZERO;
   let eventAddress = ADDRESS_ZERO;
   if (!ticketData.reverted) {
@@ -61,16 +64,26 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
     eventAddress = ticketData.value.value0;
   }
 
-  let event = getEvent(eventAddress);
+  let event = getEventWithFallbackIntegrator(eventAddress, e.transaction.from);
   let protocol = getProtocol();
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
   let relayer = getRelayer(e.transaction.from);
-  let billingIntegrator = getIntegrator(relayer.integrator);
-  let billingIntegratorDay = getIntegratorDayByIndexAndEvent(relayer.integrator, e);
+
+  // Short-lived bug in v1 when tickets were created without an event existing. Here we instantiate the bare mimumum
+  // data needed to not let the stats drift.
+  if (Event.load(eventAddress.toHexString()) == null) {
+    protocol.eventCount = protocol.eventCount.plus(BIG_INT_ONE);
+    protocolDay.eventCount = protocolDay.eventCount.plus(BIG_INT_ONE);
+    integrator.eventCount = integrator.eventCount.plus(BIG_INT_ONE);
+    integratorDay.eventCount = integratorDay.eventCount.plus(BIG_INT_ONE);
+  }
 
   ticket.createTx = e.transaction.hash;
+  ticket.blockNumber = e.block.number;
+  ticket.blockTimestamp = e.block.timestamp;
+  ticket.integrator = integrator.id;
   ticket.relayer = relayer.id;
   ticket.event = event.id;
   if (e.block.number.lt(CURRENCY_CONVERSION_ACTIVATED_BLOCK)) {
@@ -88,7 +101,12 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
   integratorDay.mintCount = integratorDay.mintCount.plus(BIG_INT_ONE);
   event.mintCount = event.mintCount.plus(BIG_INT_ONE);
 
+  integrator.save();
+  integratorDay.save();
+
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
+    let billingIntegrator = getIntegratorByRelayerAddress(e.transaction.from);
+    let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
     let getUsed = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
 
     protocol.reservedFuel = protocol.reservedFuel.plus(getUsed);
@@ -101,28 +119,22 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
     billingIntegrator.availableFuel = billingIntegrator.availableFuel.minus(getUsed);
     billingIntegratorDay.availableFuel = billingIntegrator.availableFuel;
 
-    protocol.currentReservedFuel = protocol.currentReservedFuel.plus(getUsed);
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.plus(getUsed);
 
     protocol.averageReservedPerTicket = protocol.reservedFuel.div(protocol.mintCount.toBigDecimal());
     protocolDay.averageReservedPerTicket = protocolDay.reservedFuel.div(protocolDay.mintCount.toBigDecimal());
-    billingIntegrator.averageReservedPerTicket = billingIntegrator.reservedFuel.div(
-      integrator.mintCount.toBigDecimal()
-    );
-    billingIntegratorDay.averageReservedPerTicket = billingIntegratorDay.reservedFuel.div(
-      integratorDay.mintCount.toBigDecimal()
-    );
+    billingIntegrator.averageReservedPerTicket = billingIntegrator.reservedFuel.div(integrator.mintCount.toBigDecimal());
+    billingIntegratorDay.averageReservedPerTicket = billingIntegratorDay.reservedFuel.div(integratorDay.mintCount.toBigDecimal());
     event.averageReservedPerTicket = event.reservedFuel.div(event.mintCount.toBigDecimal());
 
-    createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, ticket.basePrice, getUsed);
+    billingIntegrator.save();
+    billingIntegratorDay.save();
+
+    createUsageEvent(e, event, nftIndex, "SOLD", e.params.orderTime, ticket.basePrice, getUsed);
   }
 
   protocol.save();
   protocolDay.save();
-  integrator.save();
-  integratorDay.save();
-  billingIntegrator.save();
-  billingIntegratorDay.save();
   event.save();
   ticket.save();
 }
@@ -135,9 +147,6 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
-  let relayer = getRelayer(e.transaction.from);
-  let billingIntegrator = getIntegrator(relayer.integrator);
-  let billingIntegratorDay = getIntegratorDayByIndexAndEvent(relayer.integrator, e);
 
   protocol.invalidateCount = protocol.invalidateCount.plus(BIG_INT_ONE);
   protocolDay.invalidateCount = protocolDay.invalidateCount.plus(BIG_INT_ONE);
@@ -145,7 +154,14 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
   integratorDay.invalidateCount = integratorDay.invalidateCount.plus(BIG_INT_ONE);
   event.invalidateCount = event.invalidateCount.plus(BIG_INT_ONE);
 
+  integrator.save();
+  integratorDay.save();
+  event.save();
+  ticket.save();
+
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
+    let billingIntegrator = getIntegratorByRelayerAddress(e.transaction.from);
+    let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
     // The only mechanism used in V1.1 was to fully re-allocate the ticket's 'backpack' to the DAO fee collector
     // address. Because of this we can assume the getUsed to be the full reserved fuel for that ticket.
     let getUsed = ticket.reservedFuel;
@@ -155,23 +171,16 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
 
-    protocol.currentReservedFuel = protocol.currentReservedFuel.minus(getUsed);
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.minus(getUsed);
 
-    protocol.currentSpentFuel = protocol.currentSpentFuel.plus(getUsed);
-    protocolDay.currentSpentFuel = protocol.currentSpentFuel;
+    billingIntegrator.save();
+    billingIntegratorDay.save();
 
-    createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
+    createUsageEvent(e, event, nftIndex, "INVALIDATED", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
   }
 
   protocol.save();
   protocolDay.save();
-  integrator.save();
-  integratorDay.save();
-  billingIntegrator.save();
-  billingIntegratorDay.save();
-  event.save();
-  ticket.save();
 }
 
 export function handleSecondarySale(e: SecondarySale): void {
@@ -205,7 +214,7 @@ export function handleSecondarySale(e: SecondarySale): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, price, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "RESOLD", e.params.orderTime, price, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketScanned(e: TicketScanned): void {
@@ -216,9 +225,6 @@ export function handleTicketScanned(e: TicketScanned): void {
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
-  let relayer = getRelayer(e.transaction.from);
-  let billingIntegrator = getIntegrator(relayer.integrator);
-  let billingIntegratorDay = getIntegratorDayByIndexAndEvent(relayer.integrator, e);
 
   protocol.scanCount = protocol.scanCount.plus(BIG_INT_ONE);
   protocolDay.scanCount = protocolDay.scanCount.plus(BIG_INT_ONE);
@@ -226,7 +232,14 @@ export function handleTicketScanned(e: TicketScanned): void {
   integratorDay.scanCount = integratorDay.scanCount.plus(BIG_INT_ONE);
   event.scanCount = event.scanCount.plus(BIG_INT_ONE);
 
+  integrator.save();
+  integratorDay.save();
+  event.save();
+  ticket.save();
+
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
+    let billingIntegrator = getIntegratorByRelayerAddress(e.transaction.from);
+    let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
     let getUsed = ticket.reservedFuel;
 
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
@@ -234,23 +247,16 @@ export function handleTicketScanned(e: TicketScanned): void {
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
 
-    protocol.currentReservedFuel = protocol.currentReservedFuel.minus(getUsed);
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.minus(getUsed);
 
-    protocol.currentSpentFuel = protocol.currentSpentFuel.plus(getUsed);
-    protocolDay.currentSpentFuel = protocol.currentSpentFuel;
+    billingIntegrator.save();
+    billingIntegratorDay.save();
 
-    createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
+    createUsageEvent(e, event, nftIndex, "SCANNED", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
   }
 
   protocol.save();
   protocolDay.save();
-  integrator.save();
-  integratorDay.save();
-  billingIntegrator.save();
-  billingIntegratorDay.save();
-  event.save();
-  ticket.save();
 }
 
 export function handleCheckedIn(e: CheckedIn): void {
@@ -261,9 +267,6 @@ export function handleCheckedIn(e: CheckedIn): void {
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
-  let relayer = getRelayer(e.transaction.from);
-  let billingIntegrator = getIntegrator(relayer.integrator);
-  let billingIntegratorDay = getIntegratorDayByIndexAndEvent(relayer.integrator, e);
 
   protocol.checkInCount = protocol.checkInCount.plus(BIG_INT_ONE);
   protocolDay.checkInCount = protocolDay.checkInCount.plus(BIG_INT_ONE);
@@ -271,7 +274,14 @@ export function handleCheckedIn(e: CheckedIn): void {
   integratorDay.checkInCount = integratorDay.checkInCount.plus(BIG_INT_ONE);
   event.checkInCount = event.checkInCount.plus(BIG_INT_ONE);
 
+  integrator.save();
+  integratorDay.save();
+  event.save();
+  ticket.save();
+
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
+    let billingIntegrator = getIntegratorByRelayerAddress(e.transaction.from);
+    let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
     let getUsed = ticket.reservedFuel;
 
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
@@ -279,23 +289,16 @@ export function handleCheckedIn(e: CheckedIn): void {
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
 
-    protocol.currentReservedFuel = protocol.currentReservedFuel.minus(getUsed);
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.minus(getUsed);
 
-    protocol.currentSpentFuel = protocol.currentSpentFuel.plus(getUsed);
-    protocolDay.currentSpentFuel = protocol.currentSpentFuel;
+    billingIntegrator.save();
+    billingIntegratorDay.save();
 
-    createUsageEvent(e, event, nftIndex, "CHECK_IN", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
+    createUsageEvent(e, event, nftIndex, "CHECKED_IN", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
   }
 
   protocol.save();
   protocolDay.save();
-  integrator.save();
-  integratorDay.save();
-  billingIntegrator.save();
-  billingIntegratorDay.save();
-  event.save();
-  ticket.save();
 }
 
 export function handleNftClaimed(e: NftClaimed): void {
@@ -319,5 +322,5 @@ export function handleNftClaimed(e: NftClaimed): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "CLAIMED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

@@ -1,8 +1,5 @@
 import { BigDecimal } from "@graphprotocol/graph-ts";
-import {
-  UpdateFeeCollector,
-  UpdateGETUSD,
-} from "../../../generated/GETProtocolConfigurationV2V1_1/GETProtocolConfigurationV2V1_1";
+import { UpdateFeeCollector, UpdateGETUSD } from "../../../generated/GETProtocolConfigurationV2V1_1/GETProtocolConfigurationV2V1_1";
 import { BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO } from "../../constants";
 import { getSpentFuelRecipient } from "../../entities";
 import { getPriceOracle } from "../../entities/priceOracle";

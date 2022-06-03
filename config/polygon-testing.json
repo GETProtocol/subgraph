@@ -1,19 +1,19 @@
 {
-  "chainName": "polygon",
+  "chainName": "mumbai",
   "network": "mumbai",
   "relayers": [
-    ["0x069dd8c5f42c0a58d1c2f767b5d95579f22cae13", "1", "GET Shared Relayer"],
-    ["0x0d5bf3570ddf4c5b72afc014f4b728b67e44ea7f", "1", "GET Shared Relayer"],
-    ["0x35d59a290b08d2081441922aa9d4a36a9dd83dca", "1", "GET Shared Relayer"],
-    ["0x5400249158f83309afcd8210ce0c995db0b16e25", "1", "GET Shared Relayer"],
-    ["0x9ae4fd921556b4d132b3197b552e0686ab291775", "1", "GET Shared Relayer"]
+    ["0x069dd8c5f42c0a58d1c2f767b5d95579f22cae13", "1", "GET Shared Partners"],
+    ["0x0d5bf3570ddf4c5b72afc014f4b728b67e44ea7f", "1", "GET Shared Partners"],
+    ["0x35d59a290b08d2081441922aa9d4a36a9dd83dca", "1", "GET Shared Partners"],
+    ["0x5400249158f83309afcd8210ce0c995db0b16e25", "1", "GET Shared Partners"],
+    ["0x9ae4fd921556b4d132b3197b552e0686ab291775", "1", "GET Shared Partners"]
   ],
   "ticketeers": [
     ["", "1"],
-    ["get tickets", "1"],
-    ["guts", "2"],
-    ["wicket", "3"],
-    ["tectix", "4"]
+    ["get tickets", "2"],
+    ["guts", "3"],
+    ["wicket", "4"],
+    ["tectix", "5"]
   ],
   "v1": {
     "BaseGET": {

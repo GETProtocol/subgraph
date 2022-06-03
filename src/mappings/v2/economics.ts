@@ -11,7 +11,7 @@ import {
   SpentFuelCollected,
   UpdateSpentFuelDestinations,
 } from "../../../generated/EconomicsV2/EconomicsV2";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_ZERO } from "../../constants";
+import { BIG_DECIMAL_1E18, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getRelayer, getSpentFuelRecipient } from "../../entities";
 import { createSpentFuelCollectedEvent } from "../../entities/spentFuelCollectedEvent";
 
@@ -39,7 +39,7 @@ export function handleRelayerAdded(e: RelayerAdded): void {
   relayer.save();
 }
 
-export function handleRemoved(e: RelayerRemoved): void {
+export function handleRelayerRemoved(e: RelayerRemoved): void {
   let relayer = getRelayer(e.params.relayerAddress);
   relayer.isEnabled = false;
   relayer.save();
@@ -66,9 +66,13 @@ export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
 
   integrator.availableFuel = integrator.availableFuel.plus(amount);
-  integrator.price = price;
   integratorDay.availableFuel = integrator.availableFuel;
+
+  integrator.price = price;
   integratorDay.price = integrator.price;
+
+  integrator.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
+  integratorDay.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
 
   integrator.save();
   integratorDay.save();
@@ -117,8 +121,9 @@ export function handleAccountBalanceCorrected(e: AccountBalanceCorrected): void 
   let integrator = getIntegrator(integratorIndex);
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
 
-  integrator.availableFuel = e.params.newBalance.divDecimal(BIG_DECIMAL_1E18);
-  integratorDay.availableFuel = e.params.newBalance.divDecimal(BIG_DECIMAL_1E18);
+  let difference = e.params.newAvailableFuel.minus(e.params.oldAvailableFuel);
+  integrator.availableFuel = integrator.availableFuel.plus(difference.divDecimal(BIG_DECIMAL_1E18));
+  integratorDay.availableFuel = integratorDay.availableFuel.minus(difference.divDecimal(BIG_DECIMAL_1E18));
 
   integrator.save();
   integratorDay.save();

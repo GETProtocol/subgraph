@@ -1,12 +1,6 @@
 import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { BIG_DECIMAL_ZERO, BIG_INT_ONE, BIG_INT_ZERO } from "../../constants";
-import {
-  primarySaleMint,
-  ticketInvalidated,
-  ticketScanned,
-  nftClaimed,
-  secondarySale,
-} from "../../../generated/BaseGETV1/BaseGETV1";
+import { primarySaleMint, ticketInvalidated, ticketScanned, nftClaimed, secondarySale } from "../../../generated/BaseGETV1/BaseGETV1";
 import {
   getProtocol,
   getRelayer,
@@ -16,7 +10,9 @@ import {
   createUsageEvent,
   getIntegrator,
   getIntegratorDayByIndexAndEvent,
+  getEventWithFallbackIntegrator,
 } from "../../entities";
+import { Event } from "../../../generated/schema";
 
 // Early releases of the ticket-engine passed through only the primaryPrice (as denominated in local currency).
 // As such we approximate the USD basePrice of these tickets by dividing by the average <CURRENCY>/USD rate across the
@@ -30,22 +26,31 @@ function formatPrice(inputPrice: BigInt, currency: string): BigDecimal {
   if (currency == "CAD") rate = 79;
   if (currency == "EUR") rate = 118;
   if (currency == "GBP") rate = 138;
-  return BigDecimal.fromString(inputPrice.toString())
-    .times(BigDecimal.fromString(rate.toString()))
-    .div(BigDecimal.fromString("100000"));
+  return BigDecimal.fromString(inputPrice.toString()).times(BigDecimal.fromString(rate.toString())).div(BigDecimal.fromString("100000"));
 }
 
 export function handlePrimarySaleMint(e: primarySaleMint): void {
   let nftIndex = e.params.nftIndex;
   let ticket = getTicket(BIG_INT_ZERO, nftIndex);
-  let event = getEvent(e.params.eventAddress);
+  let event = getEventWithFallbackIntegrator(e.params.eventAddress, e.transaction.from);
   let protocol = getProtocol();
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
   let relayer = getRelayer(e.transaction.from);
 
+  // Short-lived bug in v1 when tickets were created without an event existing. Here we instantiate the bare mimumum
+  // data needed to not let the stats drift.
+  if (Event.load(e.params.eventAddress.toHexString()) == null) {
+    protocol.eventCount = protocol.eventCount.plus(BIG_INT_ONE);
+    protocolDay.eventCount = protocolDay.eventCount.plus(BIG_INT_ONE);
+    integrator.eventCount = integrator.eventCount.plus(BIG_INT_ONE);
+    integratorDay.eventCount = integratorDay.eventCount.plus(BIG_INT_ONE);
+  }
+
   ticket.createTx = e.transaction.hash;
+  ticket.blockNumber = e.block.number;
+  ticket.blockTimestamp = e.block.timestamp;
   ticket.owner = e.params.destinationAddress;
   ticket.event = event.id;
   ticket.integrator = integrator.id;
@@ -68,7 +73,7 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   event.save();
   ticket.save();
 
-  createUsageEvent(e, event, nftIndex, "MINT", e.params.orderTime, ticket.basePrice, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "SOLD", e.params.orderTime, ticket.basePrice, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketInvalidated(e: ticketInvalidated): void {
@@ -92,7 +97,7 @@ export function handleTicketInvalidated(e: ticketInvalidated): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "INVALIDATE", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "INVALIDATED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }
 
 export function handleSecondarySale(e: secondarySale): void {
@@ -123,7 +128,7 @@ export function handleSecondarySale(e: secondarySale): void {
   event.save();
   ticket.save();
 
-  createUsageEvent(e, event, nftIndex, "RESALE", e.params.orderTime, price, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "RESOLD", e.params.orderTime, price, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketScanned(e: ticketScanned): void {
@@ -147,7 +152,7 @@ export function handleTicketScanned(e: ticketScanned): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "SCAN", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "SCANNED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }
 
 export function handleNftClaimed(e: nftClaimed): void {
@@ -171,5 +176,5 @@ export function handleNftClaimed(e: nftClaimed): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "CLAIM", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, event, nftIndex, "CLAIMED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

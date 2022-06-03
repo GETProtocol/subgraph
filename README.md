@@ -52,7 +52,7 @@ Tracks each individual integrator top-up as a separate record to allow for a ful
 
 #### UsageEvent [Time-series]
 
-Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `NEW_EVENT`, `MINT`, `SCAN`. Comes with lat/long, the relayer & integrator, the GET used as fuel, the exact timestamp of the block, and the day as an integer. ID is a composite key of `txHash-logIndex`.
+Not to be confused with a real-world Event, these are 'events' that describe an individual uage of the protocol such as `EVENT_CREATED`, `SOLD`, `SCANNED`. Comes with lat/long, the relayer & integrator, the GET used as fuel, the exact timestamp of the block, and the day as an integer. ID is a composite key of `txHash-logIndex`.
 
 #### SpentFuelCollectedEvent [Time-series]
 
@@ -171,7 +171,7 @@ Additionally the `averageReservedPerTicket` provides the average amount of GET t
 
 ```graphql
 {
-  ticket(id: "POLYGON-0-209049") {
+  ticket(id: "POLYGON-0-209050") {
     id
     basePrice
     event {

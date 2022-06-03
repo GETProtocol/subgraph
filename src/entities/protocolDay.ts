@@ -17,6 +17,7 @@ export function getProtocolDay(e: ethereum.Event): ProtocolDay {
     protocolDay.currentSpentFuel = BIG_DECIMAL_ZERO;
     protocolDay.collectedSpentFuel = BIG_DECIMAL_ZERO;
     protocolDay.totalTicketValue = BIG_DECIMAL_ZERO;
+    protocolDay.eventCount = BIG_INT_ZERO;
     protocolDay.mintCount = BIG_INT_ZERO;
     protocolDay.invalidateCount = BIG_INT_ZERO;
     protocolDay.resaleCount = BIG_INT_ZERO;

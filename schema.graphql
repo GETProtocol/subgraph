@@ -1,11 +1,11 @@
 enum UsageEventType {
-  NEW_EVENT
-  MINT
-  INVALIDATE
-  RESALE
-  SCAN
-  CHECK_IN
-  CLAIM
+  EVENT_CREATED
+  SOLD
+  RESOLD
+  SCANNED
+  INVALIDATED
+  CHECKED_IN
+  CLAIMED
 }
 
 enum TopUpEventType {
@@ -22,6 +22,7 @@ type Protocol @entity {
   currentSpentFuel: BigDecimal!
   collectedSpentFuel: BigDecimal!
   totalTicketValue: BigDecimal!
+  eventCount: BigInt!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -39,6 +40,7 @@ type ProtocolDay @entity {
   currentSpentFuel: BigDecimal!
   collectedSpentFuel: BigDecimal!
   totalTicketValue: BigDecimal!
+  eventCount: BigInt!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -59,6 +61,8 @@ type Integrator @entity {
   isBillingEnabled: Boolean!
   isConfigured: Boolean!
   name: String!
+  eventCount: BigInt!
+  topUpCount: BigInt!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -82,6 +86,8 @@ type IntegratorDay @entity {
   reservedFuel: BigDecimal!
   spentFuel: BigDecimal!
   price: BigDecimal!
+  eventCount: BigInt!
+  topUpCount: BigInt!
   mintCount: BigInt!
   invalidateCount: BigInt!
   resaleCount: BigInt!
@@ -100,6 +106,8 @@ type Event @entity {
   id: ID!
   eventIndex: BigInt!
   createTx: Bytes!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
   integrator: Integrator!
   relayer: Relayer!
   usageEvents: [UsageEvent!]! @derivedFrom(field: "event")
@@ -126,6 +134,8 @@ type Ticket @entity {
   id: ID!
   tokenId: BigInt!
   createTx: Bytes!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
   usageEvents: [UsageEvent!]! @derivedFrom(field: "ticket")
   event: Event!
   integrator: Integrator!

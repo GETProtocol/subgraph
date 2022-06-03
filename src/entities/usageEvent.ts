@@ -56,6 +56,8 @@ export function createUsageEvent(
     usageEvent.eventAddress = Bytes.fromByteArray(ByteArray.fromHexString(event.id));
     usageEvent.latitude = event.latitude;
     usageEvent.longitude = event.longitude;
+    usageEvent.integrator = event.integrator;
+    usageEvent.integratorIndex = event.integrator;
   }
 
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {

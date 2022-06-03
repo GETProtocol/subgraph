@@ -4,11 +4,10 @@ import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, RELAYER_MAPPING, TICKETEER_MAPPING } fr
 import { getRelayer } from "./relayer";
 
 export function getIntegrator(integratorIndex: string): Integrator {
-  let id = integratorIndex == "" ? "0" : integratorIndex;
-  let integrator = Integrator.load(id);
+  let integrator = Integrator.load(integratorIndex);
 
   if (integrator == null) {
-    integrator = new Integrator(id);
+    integrator = new Integrator(integratorIndex);
     integrator.averageReservedPerTicket = BIG_DECIMAL_ZERO;
     integrator.availableFuel = BIG_DECIMAL_ZERO;
     integrator.reservedFuel = BIG_DECIMAL_ZERO;
@@ -19,6 +18,8 @@ export function getIntegrator(integratorIndex: string): Integrator {
     integrator.isBillingEnabled = true;
     integrator.isConfigured = true;
     integrator.name = "";
+    integrator.eventCount = BIG_INT_ZERO;
+    integrator.topUpCount = BIG_INT_ZERO;
     integrator.mintCount = BIG_INT_ZERO;
     integrator.invalidateCount = BIG_INT_ZERO;
     integrator.resaleCount = BIG_INT_ZERO;

@@ -2,34 +2,34 @@
   "chainName": "polygon",
   "network": "matic",
   "graft": {
-    "base": "Qmd3czvdsCydhWUB87VHAS5FsEeRpQuUBSCCxwzgSk8aMm",
+    "base": "QmbHkkLBCYTx3UkSjLxUQKYTBwiw73cJptGPe11hWwd6Qx",
     "block": 28544600
   },
   "relayers": [
-    ["0x4afdae9cca053e3d456a9cb697081bf083a3340b", "1", "GET White-Label"],
-    ["0x383f07ecce503801f636ad455106e270748bde05", "1", "GET White-Label"],
-    ["0x4a8adfba7dca35239b5ecabfd946eebba85325f2", "3", "XTIXS"],
-    ["0xb9f77e8fe9aef5df3a4c3c465b9d88423e41f41a", "4", "YourTicketProvider"]
+    ["0x4afdae9cca053e3d456a9cb697081bf083a3340b", "1", "GET Shared Partners v1"],
+    ["0x383f07ecce503801f636ad455106e270748bde05", "1", "GET Shared Partners v1"],
+    ["0x4a8adfba7dca35239b5ecabfd946eebba85325f2", "2", "XTIXS v1"],
+    ["0xb9f77e8fe9aef5df3a4c3c465b9d88423e41f41a", "3", "YourTicketProvider v1"]
   ],
   "ticketeers": [
     ["dummy", "0"],
     ["demo", "0"],
     ["", "1"],
-    ["guts", "2"],
-    ["xtixs", "3"],
-    ["yourticketprovider", "4"],
-    ["wicket", "5"],
-    ["tectix", "6"],
-    ["djebber", "7"],
-    ["jeike", "8"],
-    ["jeike ticketing", "8"],
-    ["defy", "9"],
-    ["defy tickets", "9"],
-    ["relic", "10"],
-    ["relic tickets", "10"],
-    ["ontapp", "11"],
-    ["ontapp tickets", "11"],
-    ["neonox", "12"]
+    ["xtixs", "2"],
+    ["yourticketprovider", "3"],
+    ["guts", "4"],
+    ["wicket", "7"],
+    ["tectix", "8"],
+    ["djebber", "9"],
+    ["jeike", "10"],
+    ["jeike ticketing", "10"],
+    ["defy", "11"],
+    ["defy tickets", "11"],
+    ["relic", "12"],
+    ["relic tickets", "12"],
+    ["ontapp", "13"],
+    ["ontapp tickets", "13"],
+    ["neonox", "14"]
   ],
   "v1": {
     "BaseGET": {
@@ -64,8 +64,8 @@
       "startBlock": 20363107
     },
     "GETProtocolConfigurationV2": {
-      "address": "0xbce1b23c7544422f1E2208d29A6A3AA9fAbAB250",
-      "startBlock": 20363107
+      "address": "0xdDBD230d225FB0468D2Fd5fc905eA92a703ed4be",
+      "startBlock": 20363092
     }
   },
   "v2": {
