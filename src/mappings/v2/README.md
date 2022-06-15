@@ -36,3 +36,7 @@ We now have a Price Oracle on-chain for non-custodial top-ups. This is now expos
 ### 5. currentSpentFuel, currentReservedFuel
 
 The 'current' values on Protocol and Integrator entities represent the real-time state of the system. `currentReservedFuel` being the amount of fuel held within the system awaiting release upon a check-in ticket action. `currentSpentFuel` is the amount of fuel ready to be collected by the SpentFuelRecipients. To avoid confusion these current values only track the V2 economics contract and do not include any amounts awaiting collection on the V1 contract. Over time as V1 events end and tickets are checked-in this should reduce to 0 on V1.
+
+### 6. <fuel>Protocol
+
+For more accurate accounting between protocol-level fees and SaaS/complete-platform fees we introduce new `<fuel>Protocol` variables alongside their equivalent 'totals'. The protocol values will always be a subset of the total and distinguishes protocol-level revenue to be allocated to the future-DAO. Therefore `currentSpentFuel` would represent the total spent fuel available for collection, and `currentSpentFuelProtocol` represents the slice of that revenue collectable by the protocol.

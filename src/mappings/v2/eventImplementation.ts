@@ -5,7 +5,7 @@ import {
   EventDataSet,
   EventDataUpdated,
   Invalidated,
-  PrimaryMint,
+  PrimarySale,
   Scanned,
   SecondarySale,
   Transfer,
@@ -62,7 +62,7 @@ export function handleEventDataUpdated(e: EventDataUpdated): void {
 
 // -- Ticket Lifecycle Methods
 
-export function handlePrimaryMint(e: PrimaryMint): void {
+export function handlePrimarySale(e: PrimarySale): void {
   // We don't/can't emit the reserved fuel to each ticket without balooning gas usage so the subgraph only tracks an
   // esitmated reading of this by taking the total GET used and dividing that by the number of tickets in the batch.
   // To get a more accurate reading here in the subgraph we would need to fetch the integrator's min/max fee and their
@@ -71,6 +71,8 @@ export function handlePrimaryMint(e: PrimaryMint): void {
   let countBigInt = BigInt.fromI32(count);
   let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelPerTicket = reservedFuel.div(countBigInt.toBigDecimal());
+  let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
+  let reservedFuelPerTicketProtocol = reservedFuelProtocol.div(countBigInt.toBigDecimal());
   let eventInstance = getEvent(e.address);
 
   let cumulativeTicketValue = BIG_DECIMAL_ZERO;
@@ -85,20 +87,31 @@ export function handlePrimaryMint(e: PrimaryMint): void {
     ticket.integrator = eventInstance.integrator;
     ticket.basePrice = ticketAction.basePrice.divDecimal(BIG_DECIMAL_1E3);
     ticket.reservedFuel = reservedFuelPerTicket;
+    ticket.reservedFuelProtocol = reservedFuelPerTicketProtocol;
     ticket.save();
 
     cumulativeTicketValue = cumulativeTicketValue.plus(ticket.basePrice);
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "SOLD", ticketAction.orderTime, ticket.basePrice, reservedFuelPerTicket);
+    createUsageEvent(
+      e,
+      i,
+      eventInstance,
+      ticketAction.tokenId,
+      "SOLD",
+      ticketAction.orderTime,
+      ticket.basePrice,
+      reservedFuelPerTicket,
+      reservedFuelPerTicketProtocol
+    );
   }
 
   protocol.updateTotalTicketValue(cumulativeTicketValue);
   protocolDay.updateTotalTicketValue(e, cumulativeTicketValue);
 
-  protocol.updatePrimaryMint(countBigInt, reservedFuel);
-  protocolDay.updatePrimaryMint(e, countBigInt, reservedFuel);
-  integrator.updatePrimaryMint(eventInstance.integrator, countBigInt, reservedFuel);
-  integratorDay.updatePrimaryMint(eventInstance.integrator, e, countBigInt, reservedFuel);
-  event.updatePrimaryMint(e.address, countBigInt, reservedFuel);
+  protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol);
+  protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
+  integrator.updatePrimarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
+  integratorDay.updatePrimarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
+  event.updatePrimarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
 }
 
 export function handleSecondarySale(e: SecondarySale): void {
@@ -106,6 +119,8 @@ export function handleSecondarySale(e: SecondarySale): void {
   let countBigInt = BigInt.fromI32(count);
   let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelPerTicket = reservedFuel.div(countBigInt.toBigDecimal());
+  let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
+  let reservedFuelPerTicketProtocol = reservedFuelProtocol.div(countBigInt.toBigDecimal());
   let eventInstance = getEvent(e.address);
 
   let cumulativeTicketValue = BIG_DECIMAL_ZERO;
@@ -113,28 +128,31 @@ export function handleSecondarySale(e: SecondarySale): void {
     let ticketAction = e.params.ticketActions[i];
     let ticket = getTicket(eventInstance.eventIndex, ticketAction.tokenId);
     ticket.reservedFuel = ticket.reservedFuel.plus(reservedFuelPerTicket);
+    ticket.reservedFuelProtocol = ticket.reservedFuelProtocol.plus(reservedFuelPerTicketProtocol);
     ticket.save();
 
     cumulativeTicketValue = cumulativeTicketValue.plus(ticket.basePrice);
     createUsageEvent(
       e,
+      i,
       eventInstance,
       ticketAction.tokenId,
       "RESOLD",
       ticketAction.orderTime,
       ticketAction.basePrice.divDecimal(BIG_DECIMAL_1E3),
-      reservedFuelPerTicket
+      reservedFuelPerTicket,
+      reservedFuelPerTicketProtocol
     );
   }
 
   protocol.updateTotalTicketValue(cumulativeTicketValue);
   protocolDay.updateTotalTicketValue(e, cumulativeTicketValue);
 
-  protocol.updateSecondarySale(countBigInt, reservedFuel);
-  protocolDay.updateSecondarySale(e, countBigInt, reservedFuel);
-  integrator.updateSecondarySale(eventInstance.integrator, countBigInt, reservedFuel);
-  integratorDay.updateSecondarySale(eventInstance.integrator, e, countBigInt, reservedFuel);
-  event.updateSecondarySale(e.address, countBigInt, reservedFuel);
+  protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol);
+  protocolDay.updateSecondarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
+  integrator.updateSecondarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
+  integratorDay.updateSecondarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
+  event.updateSecondarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
 }
 
 export function handleScanned(e: Scanned): void {
@@ -149,7 +167,7 @@ export function handleScanned(e: Scanned): void {
     ticket.isScanned = true;
     ticket.save();
 
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "SCANNED", ticketAction.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+    createUsageEvent(e, i, eventInstance, ticketAction.tokenId, "SCANNED", ticketAction.orderTime);
   }
 
   protocol.updateScanned(countBigInt);
@@ -163,6 +181,7 @@ export function handleCheckedIn(e: CheckedIn): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let spentFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
+  let spentFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
   let eventInstance = getEvent(e.address);
 
   for (let i = 0; i < count; ++i) {
@@ -172,13 +191,23 @@ export function handleCheckedIn(e: CheckedIn): void {
     ticket.isCheckedIn = true;
     ticket.save();
 
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "CHECKED_IN", ticketAction.orderTime, BIG_DECIMAL_ZERO, spentFuel);
+    createUsageEvent(
+      e,
+      i,
+      eventInstance,
+      ticketAction.tokenId,
+      "CHECKED_IN",
+      ticketAction.orderTime,
+      BIG_DECIMAL_ZERO,
+      spentFuel,
+      spentFuelProtocol
+    );
   }
 
-  protocol.updateCheckedIn(countBigInt, spentFuel);
-  protocolDay.updateCheckedIn(e, countBigInt, spentFuel);
-  integrator.updateCheckedIn(eventInstance.integrator, countBigInt, spentFuel);
-  integratorDay.updateCheckedIn(eventInstance.integrator, e, countBigInt, spentFuel);
+  protocol.updateCheckedIn(countBigInt, spentFuel, spentFuelProtocol);
+  protocolDay.updateCheckedIn(e, countBigInt, spentFuel, spentFuelProtocol);
+  integrator.updateCheckedIn(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
+  integratorDay.updateCheckedIn(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol);
   event.updateCheckedIn(e.address, countBigInt);
 }
 
@@ -186,6 +215,7 @@ export function handleInvalidated(e: Invalidated): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let spentFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
+  let spentFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
   let eventInstance = getEvent(e.address);
 
   for (let i = 0; i < count; ++i) {
@@ -195,13 +225,23 @@ export function handleInvalidated(e: Invalidated): void {
     ticket.isInvalidated = true;
     ticket.save();
 
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "INVALIDATED", ticketAction.orderTime, BIG_DECIMAL_ZERO, spentFuel);
+    createUsageEvent(
+      e,
+      i,
+      eventInstance,
+      ticketAction.tokenId,
+      "INVALIDATED",
+      ticketAction.orderTime,
+      BIG_DECIMAL_ZERO,
+      spentFuel,
+      spentFuelProtocol
+    );
   }
 
-  protocol.updateInvalidated(countBigInt, spentFuel);
-  protocolDay.updateInvalidated(e, countBigInt, spentFuel);
-  integrator.updateInvalidated(eventInstance.integrator, countBigInt, spentFuel);
-  integratorDay.updateInvalidated(eventInstance.integrator, e, countBigInt, spentFuel);
+  protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol);
+  protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol);
+  integrator.updateInvalidated(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
+  integratorDay.updateInvalidated(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol);
   event.updateInvalidated(e.address, countBigInt);
 }
 
@@ -217,7 +257,7 @@ export function handleClaimed(e: Claimed): void {
     ticket.isClaimed = true;
     ticket.save();
 
-    createUsageEvent(e, eventInstance, ticketAction.tokenId, "CLAIMED", ticketAction.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_1E18);
+    createUsageEvent(e, i, eventInstance, ticketAction.tokenId, "CLAIMED", ticketAction.orderTime);
   }
 
   protocol.updateClaimed(countBigInt);

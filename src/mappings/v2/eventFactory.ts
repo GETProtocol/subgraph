@@ -34,5 +34,5 @@ export function handleEventCreated(e: EventCreated): void {
   protocolDay.eventCount = protocolDay.eventCount.plus(BIG_INT_ONE);
   protocolDay.save();
 
-  createUsageEvent(e, event, BIG_INT_ZERO, "EVENT_CREATED", e.block.timestamp, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, 0, event, BIG_INT_ZERO, "EVENT_CREATED", e.block.timestamp, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

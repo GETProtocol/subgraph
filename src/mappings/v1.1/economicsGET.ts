@@ -6,15 +6,7 @@ import {
   RelayerToppedUpBuffer,
   SiloBalanceCorrected,
 } from "../../../generated/EconomicsGETV1_1/EconomicsGETV1_1";
-import {
-  BIG_DECIMAL_1E18,
-  BIG_DECIMAL_1E3,
-  BIG_DECIMAL_ZERO,
-  BIG_INT_ONE,
-  BIG_INT_ZERO,
-  BYTES_EMPTY,
-  RELAYER_MAPPING,
-} from "../../constants";
+import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE, BYTES_EMPTY, RELAYER_MAPPING } from "../../constants";
 import {
   getIntegratorByRelayerAddress,
   getIntegratorDayByIndexAndEvent,
@@ -51,18 +43,30 @@ export function handleDepotSwiped(e: DepotSwiped): void {
   if (amount.equals(BIG_DECIMAL_ZERO)) amount = protocol.currentSpentFuel;
 
   protocol.collectedSpentFuel = protocol.collectedSpentFuel.plus(amount);
+  protocol.collectedSpentFuelProtocol = protocol.collectedSpentFuelProtocol.plus(amount);
   protocolDay.collectedSpentFuel = protocolDay.collectedSpentFuel.plus(amount);
+  protocolDay.collectedSpentFuelProtocol = protocolDay.collectedSpentFuelProtocol.plus(amount);
   spentFuelRecipient.collectedSpentFuel = spentFuelRecipient.collectedSpentFuel.plus(amount);
 
   protocol.save();
   protocolDay.save();
   spentFuelRecipient.save();
 
-  createSpentFuelCollectedEvent(e, spentFuelRecipient, e.params.feeCollectorAddress, amount, amount, BIG_INT_ZERO);
+  createSpentFuelCollectedEvent(e, spentFuelRecipient, e.params.feeCollectorAddress, amount, amount);
 }
 
 export function handleRelayerToppedUpBuffer(e: RelayerToppedUpBuffer): void {
   let relayerAddress = e.params.relayerAddress;
+
+  let protocol = getProtocol();
+  let protocolDay = getProtocolDay(e);
+
+  protocol.topUpCount = protocol.topUpCount.plus(BIG_INT_ONE);
+  protocolDay.topUpCount = protocolDay.topUpCount.plus(BIG_INT_ONE);
+
+  protocol.save();
+  protocolDay.save();
+
   let integrator = getIntegratorByRelayerAddress(relayerAddress);
   let integratorDay = getIntegratorDayByIndexAndEvent(integrator.id, e);
 
@@ -77,7 +81,7 @@ export function handleRelayerToppedUpBuffer(e: RelayerToppedUpBuffer): void {
   integratorDay.save();
 
   let price = e.params.priceGETTopUp.divDecimal(BIG_DECIMAL_1E3);
-  createTopUpEvent(e, integrator.id, "NON_CUSTODIAL", amount, price, BYTES_EMPTY);
+  createTopUpEvent(e, integrator.id, amount, BIG_DECIMAL_ZERO, price, BYTES_EMPTY);
 }
 
 export function handleAveragePriceUpdated(e: AveragePriceUpdated): void {

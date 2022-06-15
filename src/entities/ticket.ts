@@ -17,6 +17,7 @@ export function getTicket(eventIndex: BigInt, tokenId: BigInt): Ticket {
     ticket.relayer = "";
     ticket.basePrice = BIG_DECIMAL_ZERO;
     ticket.reservedFuel = BIG_DECIMAL_ZERO;
+    ticket.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     ticket.isScanned = false;
     ticket.isCheckedIn = false;
     ticket.isInvalidated = false;

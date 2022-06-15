@@ -1,0 +1,487 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "previousAdmin",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newAdmin",
+        "type": "address"
+      }
+    ],
+    "name": "AdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "beacon",
+        "type": "address"
+      }
+    ],
+    "name": "BeaconUpgraded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "total",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "destination",
+        "type": "address"
+      }
+    ],
+    "name": "Distribute",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "destination",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "percentage",
+            "type": "uint24"
+          },
+          {
+            "internalType": "string",
+            "name": "label",
+            "type": "string"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IFuelDistributor.Destination[]",
+        "name": "old",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "destination",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "percentage",
+            "type": "uint24"
+          },
+          {
+            "internalType": "string",
+            "name": "label",
+            "type": "string"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IFuelDistributor.Destination[]",
+        "name": "updated",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "UpdateDestinationsProtocol",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "destination",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "percentage",
+            "type": "uint24"
+          },
+          {
+            "internalType": "string",
+            "name": "label",
+            "type": "string"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IFuelDistributor.Destination[]",
+        "name": "old",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "destination",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "percentage",
+            "type": "uint24"
+          },
+          {
+            "internalType": "string",
+            "name": "label",
+            "type": "string"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IFuelDistributor.Destination[]",
+        "name": "updated",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "UpdateDestinationsRemainder",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "implementation",
+        "type": "address"
+      }
+    ],
+    "name": "Upgraded",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_registry",
+        "type": "address"
+      }
+    ],
+    "name": "__AuthModifiers_init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_registry",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "destination",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "percentage",
+            "type": "uint24"
+          },
+          {
+            "internalType": "string",
+            "name": "label",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct IFuelDistributor.Destination[]",
+        "name": "_destinationsProtocol",
+        "type": "tuple[]"
+      },
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "destination",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "percentage",
+            "type": "uint24"
+          },
+          {
+            "internalType": "string",
+            "name": "label",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct IFuelDistributor.Destination[]",
+        "name": "_destinationsRemainder",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "__FuelDistributor_init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collect",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "destinationsProtocol",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "destination",
+        "type": "address"
+      },
+      {
+        "internalType": "uint24",
+        "name": "percentage",
+        "type": "uint24"
+      },
+      {
+        "internalType": "string",
+        "name": "label",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "destinationsRemainder",
+    "outputs": [
+      {
+        "internalType": "address payable",
+        "name": "destination",
+        "type": "address"
+      },
+      {
+        "internalType": "uint24",
+        "name": "percentage",
+        "type": "uint24"
+      },
+      {
+        "internalType": "string",
+        "name": "label",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proxiableUUID",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "registry",
+    "outputs": [
+      {
+        "internalType": "contract IRegistry",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "destination",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "percentage",
+            "type": "uint24"
+          },
+          {
+            "internalType": "string",
+            "name": "label",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct IFuelDistributor.Destination[]",
+        "name": "_destinationsProtocol",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setDestinationsProtocol",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address payable",
+            "name": "destination",
+            "type": "address"
+          },
+          {
+            "internalType": "uint24",
+            "name": "percentage",
+            "type": "uint24"
+          },
+          {
+            "internalType": "string",
+            "name": "label",
+            "type": "string"
+          }
+        ],
+        "internalType": "struct IFuelDistributor.Destination[]",
+        "name": "_destinationsRemainder",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setDestinationsRemainder",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      }
+    ],
+    "name": "upgradeTo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "upgradeToAndCall",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  }
+]

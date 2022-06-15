@@ -17,5 +17,6 @@ module.exports = {
     // The following are incompatible with AssemblyScript
     "prefer-const": "off",
     "@typescript-eslint/no-unnecessary-type-assertion": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
   },
 };

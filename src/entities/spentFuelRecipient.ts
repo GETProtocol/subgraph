@@ -7,6 +7,7 @@ export function getSpentFuelRecipient(address: Address): SpentFuelRecipient {
 
   if (spentFuelRecipient == null) {
     spentFuelRecipient = new SpentFuelRecipient(address.toHexString());
+    spentFuelRecipient.source = "";
     spentFuelRecipient.label = "";
     spentFuelRecipient.percentage = BIG_DECIMAL_ZERO;
     spentFuelRecipient.collectedSpentFuel = BIG_DECIMAL_ZERO;

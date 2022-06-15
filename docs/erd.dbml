@@ -15,24 +15,35 @@ Enum TopUpEventType {
   CUSTODIAL
 }
 
+Enum SpentFuelSource {
+  PROTOCOL
+  REMAINDER
+}
+
 // Entities
 
 Table Protocol {
   id id
   averageReservedPerTicket bigdecimal
   reservedFuel bigdecimal
+  reservedFuelProtocol bigdecimal
   currentReservedFuel bigdecimal
+  currentReservedFuelProtocol bigdecimal
   spentFuel bigdecimal
+  spentFuelProtocol bigdecimal
   currentSpentFuel bigdecimal
+  currentSpentFuelProtocol bigdecimal
   collectedSpentFuel bigdecimal
+  collectedSpentFuelProtocol bigdecimal
   totalTicketValue bigdecimal
+  topUpCount bigint
   eventCount bigint
-  mintCount bigint
-  invalidateCount bigint
-  resaleCount bigint
-  scanCount bigint
-  checkInCount bigint
-  claimCount bigint
+  soldCount bigint
+  invalidatedCount bigint
+  resoldCount bigint
+  scannedCount bigint
+  checkedInCount bigint
+  claimedCount bigint
 }
 
 Table ProtocolDay {
@@ -40,17 +51,22 @@ Table ProtocolDay {
   day int
   averageReservedPerTicket bigdecimal
   reservedFuel bigdecimal
+  reservedFuelProtocol bigdecimal
   spentFuel bigdecimal
+  spentFuelProtocol bigdecimal
   currentSpentFuel bigdecimal
+  currentSpentFuelProtocol bigdecimal
   collectedSpentFuel bigdecimal
+  collectedSpentFuelProtocol bigdecimal
   totalTicketValue bigdecimal
+  topUpCount bigint
   eventCount bigint
-  mintCount bigint
-  invalidateCount bigint
-  resaleCount bigint
-  scanCount bigint
-  checkInCount bigint
-  claimCount bigint
+  soldCount bigint
+  invalidatedCount bigint
+  resoldCount bigint
+  scannedCount bigint
+  checkedInCount bigint
+  claimedCount bigint
 }
 
 
@@ -59,21 +75,25 @@ Table Integrator {
   averageReservedPerTicket bigdecimal
   availableFuel bigdecimal
   reservedFuel bigdecimal
+  reservedFuelProtocol bigdecimal
   currentReservedFuel bigdecimal
+  currentReservedFuelProtocol bigdecimal
   spentFuel bigdecimal
+  spentFuelProtocol bigdecimal
   price bigdecimal
   activeTicketCount bigint
   isBillingEnabled boolean
   isConfigured boolean
+  salesTaxRate bigdecimal
   name string
   eventCount bigint
   topUpCount bigint
-  mintCount bigint
-  invalidateCount bigint
-  resaleCount bigint
-  scanCount bigint
-  checkInCount bigint
-  claimCount bigint
+  soldCount bigint
+  invalidatedCount bigint
+  resoldCount bigint
+  scannedCount bigint
+  checkedInCount bigint
+  claimedCount bigint
   relayers Relayer[] [ref: > Relayer.integrator]
   events Event[] [ref: > Event.integrator]
   tickets Ticket[] [ref: > Ticket.integrator]
@@ -89,16 +109,18 @@ Table IntegratorDay {
   averageReservedPerTicket bigdecimal
   availableFuel bigdecimal
   reservedFuel bigdecimal
+  reservedFuelProtocol bigdecimal
   spentFuel bigdecimal
+  spentFuelProtocol bigdecimal
   price bigdecimal
   eventCount bigint
   topUpCount bigint
-  mintCount bigint
-  invalidateCount bigint
-  resaleCount bigint
-  scanCount bigint
-  checkInCount bigint
-  claimCount bigint
+  soldCount bigint
+  invalidatedCount bigint
+  resoldCount bigint
+  scannedCount bigint
+  checkedInCount bigint
+  claimedCount bigint
 }
 
 Table Relayer {
@@ -118,13 +140,14 @@ Table Event {
   usageEvents UsageEvent[] [ref: > UsageEvent.event]
   tickets Ticket[] [ref: > Ticket.event]
   reservedFuel bigdecimal
+  reservedFuelProtocol bigdecimal
   averageReservedPerTicket bigdecimal
-  mintCount bigint
-  resaleCount bigint
-  scanCount bigint
-  checkInCount bigint
-  invalidateCount bigint
-  claimCount bigint
+  soldCount bigint
+  resoldCount bigint
+  scannedCount bigint
+  checkedInCount bigint
+  invalidatedCount bigint
+  claimedCount bigint
   name string
   shopUrl string
   imageUrl string
@@ -148,6 +171,7 @@ Table Ticket {
   owner bytes
   basePrice bigdecimal
   reservedFuel bigdecimal
+  reservedFuelProtocol bigdecimal
   isScanned boolean
   isCheckedIn boolean
   isInvalidated boolean
@@ -174,13 +198,17 @@ Table SpentFuelRecipient {
 Table TopUpEvent {
   id id
   txHash bytes
+  invoiceNumber bigint
   blockNumber bigint
   blockTimestamp bigint
   day int
   integrator Integrator
   integratorIndex string
   type TopUpEventType
-  amount bigdecimal
+  total bigdecimal
+  totalUsd bigdecimal
+  salesTaxRate bigdecimal
+  saledTax bigdecimal
   price bigdecimal
   externalId bytes
 }
@@ -199,6 +227,7 @@ Table UsageEvent {
   price bigdecimal
   type UsageEventType
   getUsed bigdecimal
+  getUsedProtocol bigdecimal
   nftId string
   event Event
   eventIndex bigint
@@ -221,5 +250,4 @@ Table SpentFuelCollectedEvent {
   recipientPercentage bigdecimal
   amount bigdecimal
   totalAmountCollected bigdecimal
-  totalTicketsCollected bigint
 }

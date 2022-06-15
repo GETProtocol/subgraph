@@ -6,6 +6,7 @@ import { getPriceOracle } from "../../entities/priceOracle";
 
 export function handleUpdateFeeCollector(e: UpdateFeeCollector): void {
   let spentFuelRecipient = getSpentFuelRecipient(e.params._new);
+  spentFuelRecipient.source = "PROTOCOL";
   spentFuelRecipient.label = "DAO";
   spentFuelRecipient.percentage = BigDecimal.fromString("100");
   spentFuelRecipient.save();

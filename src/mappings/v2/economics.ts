@@ -1,4 +1,4 @@
-import { BigDecimal } from "@graphprotocol/graph-ts";
+import { BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import {
   AccountBalanceCorrected,
   DisableIntegratorBilling,
@@ -9,11 +9,10 @@ import {
   RelayerAdded,
   RelayerRemoved,
   SpentFuelCollected,
-  UpdateSpentFuelDestinations,
 } from "../../../generated/EconomicsV2/EconomicsV2";
 import { BIG_DECIMAL_1E18, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
-import { getIntegrator, getIntegratorDayByIndexAndEvent, getRelayer, getSpentFuelRecipient } from "../../entities";
-import { createSpentFuelCollectedEvent } from "../../entities/spentFuelCollectedEvent";
+import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
+import { createTopUpEvent } from "../../entities/topUpEvent";
 
 export function handleIntegratorConfigured(e: IntegratorConfigured): void {
   let integrator = getIntegrator(e.params.integratorIndex.toString());
@@ -21,6 +20,7 @@ export function handleIntegratorConfigured(e: IntegratorConfigured): void {
   relayer.integrator = integrator.id;
   relayer.isEnabled = true;
   integrator.name = e.params.name;
+  integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   relayer.save();
   integrator.save();
 }
@@ -59,16 +59,27 @@ export function handleDisableIntegratorBilling(e: DisableIntegratorBilling): voi
 
 export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   let integratorIndex = e.params.integratorIndex.toString();
-  let amount = e.params.amount.divDecimal(BIG_DECIMAL_1E18);
-  let price = e.params.newAveragePrice.divDecimal(BIG_DECIMAL_1E18);
+  let total = e.params.total.divDecimal(BIG_DECIMAL_1E18);
+  let salesTax = e.params.salesTax.divDecimal(BIG_DECIMAL_1E18);
+  let price = e.params.price.divDecimal(BIG_DECIMAL_1E18);
+  let newAveragePrice = e.params.newAveragePrice.divDecimal(BIG_DECIMAL_1E18);
+
+  let protocol = getProtocol();
+  let protocolDay = getProtocolDay(e);
+
+  protocol.topUpCount = protocol.topUpCount.plus(BIG_INT_ONE);
+  protocolDay.topUpCount = protocolDay.topUpCount.plus(BIG_INT_ONE);
+
+  protocol.save();
+  protocolDay.save();
 
   let integrator = getIntegrator(integratorIndex);
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
 
-  integrator.availableFuel = integrator.availableFuel.plus(amount);
+  integrator.availableFuel = integrator.availableFuel.plus(total);
   integratorDay.availableFuel = integrator.availableFuel;
 
-  integrator.price = price;
+  integrator.price = newAveragePrice;
   integratorDay.price = integrator.price;
 
   integrator.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
@@ -76,55 +87,53 @@ export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
 
   integrator.save();
   integratorDay.save();
-}
 
-export function handleUpdateSpentFuelDestinations(e: UpdateSpentFuelDestinations): void {
-  for (let i = 0; i < e.params.old.length; ++i) {
-    let old = e.params.old[i];
-    let spentFuelRecipient = getSpentFuelRecipient(old.destination);
-    spentFuelRecipient.percentage = BIG_DECIMAL_ZERO;
-    spentFuelRecipient.isEnabled = false;
-    spentFuelRecipient.save();
-  }
-
-  for (let i = 0; i < e.params.updated.length; ++i) {
-    let updated = e.params.updated[i];
-    let spentFuelRecipient = getSpentFuelRecipient(updated.destination);
-    spentFuelRecipient.label = updated.label;
-    spentFuelRecipient.percentage = BigDecimal.fromString(updated.percentage.toString()).div(
-      BigDecimal.fromString("10000") // 1e4, 1_000_000 becomes 100%
-    );
-    spentFuelRecipient.isEnabled = true;
-    spentFuelRecipient.save();
-  }
-}
-
-export function handleSpentFuelCollected(e: SpentFuelCollected): void {
-  let spentFuelRecipient = getSpentFuelRecipient(e.params.destination.destination);
-  let amount = e.params.amount.divDecimal(BIG_DECIMAL_1E18);
-  spentFuelRecipient.collectedSpentFuel = spentFuelRecipient.collectedSpentFuel.plus(amount);
-  spentFuelRecipient.save();
-
-  createSpentFuelCollectedEvent(
-    e,
-    spentFuelRecipient,
-    e.params.destination.destination,
-    amount,
-    e.params.spentFuel.divDecimal(BIG_DECIMAL_1E18),
-    e.params.spentFuelTicketCount
-  );
+  createTopUpEvent(e, integratorIndex, total, salesTax, price);
 }
 
 export function handleAccountBalanceCorrected(e: AccountBalanceCorrected): void {
   let integratorIndex = e.params.integratorIndex.toString();
 
+  let protocol = getProtocol();
+  let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(integratorIndex);
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
 
-  let difference = e.params.newAvailableFuel.minus(e.params.oldAvailableFuel);
-  integrator.availableFuel = integrator.availableFuel.plus(difference.divDecimal(BIG_DECIMAL_1E18));
-  integratorDay.availableFuel = integratorDay.availableFuel.minus(difference.divDecimal(BIG_DECIMAL_1E18));
+  let diffAvail = e.params.newAvailableFuel.minus(e.params.oldAvailableFuel);
+  integrator.availableFuel = integrator.availableFuel.plus(diffAvail.divDecimal(BIG_DECIMAL_1E18));
+  integratorDay.availableFuel = integratorDay.availableFuel.plus(diffAvail.divDecimal(BIG_DECIMAL_1E18));
+
+  let diffReserved = e.params.newReservedBalance.minus(e.params.oldReservedBalance);
+  integrator.reservedFuel = integrator.reservedFuel.plus(diffReserved.divDecimal(BIG_DECIMAL_1E18));
+  integratorDay.reservedFuel = integratorDay.reservedFuel.plus(diffReserved.divDecimal(BIG_DECIMAL_1E18));
+  protocol.reservedFuel = protocol.reservedFuel.plus(diffReserved.divDecimal(BIG_DECIMAL_1E18));
+  protocolDay.reservedFuel = protocolDay.reservedFuel.plus(diffReserved.divDecimal(BIG_DECIMAL_1E18));
+
+  let diffReservedProtocol = e.params.newReservedBalanceProtocol.minus(e.params.oldReservedBalanceProtocol);
+  integrator.reservedFuelProtocol = integrator.reservedFuelProtocol.plus(diffReservedProtocol.divDecimal(BIG_DECIMAL_1E18));
+  integratorDay.reservedFuelProtocol = integratorDay.reservedFuelProtocol.plus(diffReservedProtocol.divDecimal(BIG_DECIMAL_1E18));
+  protocol.reservedFuelProtocol = protocol.reservedFuelProtocol.plus(diffReserved.divDecimal(BIG_DECIMAL_1E18));
+  protocolDay.reservedFuelProtocol = protocolDay.reservedFuelProtocol.plus(diffReserved.divDecimal(BIG_DECIMAL_1E18));
 
   integrator.save();
   integratorDay.save();
+}
+
+export function handleSpentFuelCollected(e: SpentFuelCollected): void {
+  let protocol = getProtocol();
+  let protocolDay = getProtocolDay(e);
+  let spentFuel = e.params.spentFuel;
+
+  protocol.currentSpentFuel = BIG_DECIMAL_ZERO;
+  protocol.currentSpentFuelProtocol = BIG_DECIMAL_ZERO;
+  protocol.collectedSpentFuel = protocol.collectedSpentFuel.plus(spentFuel.total.divDecimal(BIG_DECIMAL_1E18));
+  protocol.collectedSpentFuelProtocol = protocol.collectedSpentFuelProtocol.plus(spentFuel.protocol.divDecimal(BIG_DECIMAL_1E18));
+
+  protocolDay.currentSpentFuel = BIG_DECIMAL_ZERO;
+  protocolDay.currentSpentFuelProtocol = BIG_DECIMAL_ZERO;
+  protocolDay.collectedSpentFuel = protocolDay.collectedSpentFuel.plus(spentFuel.total.divDecimal(BIG_DECIMAL_1E18));
+  protocolDay.collectedSpentFuelProtocol = protocolDay.collectedSpentFuelProtocol.plus(spentFuel.protocol.divDecimal(BIG_DECIMAL_1E18));
+
+  protocol.save();
+  protocolDay.save();
 }

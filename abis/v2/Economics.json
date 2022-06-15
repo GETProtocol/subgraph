@@ -28,7 +28,25 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "oldReservedBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "newReservedBalance",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oldReservedBalanceProtocol",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newReservedBalanceProtocol",
         "type": "uint256"
       }
     ],
@@ -74,6 +92,12 @@
         "internalType": "uint256",
         "name": "fuel",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelProtocol",
+        "type": "uint256"
       }
     ],
     "name": "BasicTaxCharged",
@@ -90,6 +114,44 @@
       }
     ],
     "name": "BeaconUpgraded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "integeratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
+      }
+    ],
+    "name": "BillingStatusUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
+      }
+    ],
+    "name": "ConfigurationStatusUpdated",
     "type": "event"
   },
   {
@@ -138,6 +200,12 @@
         "internalType": "uint256",
         "name": "fuel",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelProtocol",
+        "type": "uint256"
       }
     ],
     "name": "FuelReservedPrimary",
@@ -163,9 +231,28 @@
         "internalType": "uint256",
         "name": "fuel",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelProtocol",
+        "type": "uint256"
       }
     ],
     "name": "FuelReservedSecondary",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "IntegratorActivated",
     "type": "event"
   },
   {
@@ -220,6 +307,11 @@
             "internalType": "uint24",
             "name": "secondaryRate",
             "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
           }
         ],
         "indexed": false,
@@ -256,7 +348,7 @@
       {
         "indexed": true,
         "internalType": "uint256",
-        "name": "amount",
+        "name": "total",
         "type": "uint256"
       },
       {
@@ -269,6 +361,12 @@
         "indexed": true,
         "internalType": "uint256",
         "name": "newAveragePrice",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "salesTax",
         "type": "uint256"
       }
     ],
@@ -336,45 +434,46 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "address",
+        "name": "salesTaxFuelDesintation",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "salesTaxFuel",
+        "type": "uint256"
+      }
+    ],
+    "name": "SalesTaxFuelCollected",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "components": [
           {
-            "internalType": "address payable",
-            "name": "destination",
-            "type": "address"
+            "internalType": "uint256",
+            "name": "total",
+            "type": "uint256"
           },
           {
-            "internalType": "uint24",
-            "name": "percentage",
-            "type": "uint24"
+            "internalType": "uint256",
+            "name": "protocol",
+            "type": "uint256"
           },
           {
-            "internalType": "string",
-            "name": "label",
-            "type": "string"
+            "internalType": "uint32",
+            "name": "ticketCount",
+            "type": "uint32"
           }
         ],
         "indexed": false,
-        "internalType": "struct IEconomics.SpentFuelDestination",
-        "name": "destination",
-        "type": "tuple"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
+        "internalType": "struct IEconomics.SpentFuel",
         "name": "spentFuel",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint32",
-        "name": "spentFuelTicketCount",
-        "type": "uint32"
+        "type": "tuple"
       }
     ],
     "name": "SpentFuelCollected",
@@ -399,6 +498,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "fuel",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelProtocol",
         "type": "uint256"
       }
     ],
@@ -464,6 +569,11 @@
             "internalType": "uint24",
             "name": "secondaryRate",
             "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
           }
         ],
         "indexed": false,
@@ -499,18 +609,56 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "old",
-        "type": "uint256"
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "UpdateIntegratorName",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "updated",
+        "name": "price",
         "type": "uint256"
       }
     ],
-    "name": "UpdateSpentFuel",
+    "name": "UpdateIntegratorPrice",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "activeTicketCount",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateIntegratorTicketCount",
     "type": "event"
   },
   {
@@ -519,51 +667,91 @@
       {
         "components": [
           {
-            "internalType": "address payable",
-            "name": "destination",
-            "type": "address"
-          },
-          {
             "internalType": "uint24",
-            "name": "percentage",
+            "name": "minFeePrimary",
             "type": "uint24"
           },
           {
-            "internalType": "string",
-            "name": "label",
-            "type": "string"
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
           }
         ],
         "indexed": false,
-        "internalType": "struct IEconomics.SpentFuelDestination[]",
-        "name": "old",
-        "type": "tuple[]"
-      },
+        "internalType": "struct IEconomics.DynamicRates",
+        "name": "protocolRates",
+        "type": "tuple"
+      }
+    ],
+    "name": "UpdateProtocolRates",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "salesTaxFuelDestination",
+        "type": "address"
+      }
+    ],
+    "name": "UpdateSalesTaxFuelDestination",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
       {
         "components": [
           {
-            "internalType": "address payable",
-            "name": "destination",
-            "type": "address"
+            "internalType": "uint256",
+            "name": "total",
+            "type": "uint256"
           },
           {
-            "internalType": "uint24",
-            "name": "percentage",
-            "type": "uint24"
+            "internalType": "uint256",
+            "name": "protocol",
+            "type": "uint256"
           },
           {
-            "internalType": "string",
-            "name": "label",
-            "type": "string"
+            "internalType": "uint32",
+            "name": "ticketCount",
+            "type": "uint32"
           }
         ],
         "indexed": false,
-        "internalType": "struct IEconomics.SpentFuelDestination[]",
-        "name": "updated",
-        "type": "tuple[]"
+        "internalType": "struct IEconomics.SpentFuel",
+        "name": "spentFuel",
+        "type": "tuple"
       }
     ],
-    "name": "UpdateSpentFuelDestinations",
+    "name": "UpdateSpentFuel",
     "type": "event"
   },
   {
@@ -605,6 +793,11 @@
         "type": "address"
       },
       {
+        "internalType": "address",
+        "name": "_salesTaxFuelDestination",
+        "type": "address"
+      },
+      {
         "internalType": "uint24",
         "name": "_basicTaxRate",
         "type": "uint24"
@@ -612,27 +805,60 @@
       {
         "components": [
           {
-            "internalType": "address payable",
-            "name": "destination",
-            "type": "address"
-          },
-          {
             "internalType": "uint24",
-            "name": "percentage",
+            "name": "minFeePrimary",
             "type": "uint24"
           },
           {
-            "internalType": "string",
-            "name": "label",
-            "type": "string"
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
           }
         ],
-        "internalType": "struct IEconomics.SpentFuelDestination[]",
-        "name": "_spentFuelDestinations",
-        "type": "tuple[]"
+        "internalType": "struct IEconomics.DynamicRates",
+        "name": "_protocolRates",
+        "type": "tuple"
       }
     ],
     "name": "__Economics_init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "activateIntegrator",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -670,8 +896,26 @@
   },
   {
     "inputs": [],
-    "name": "collectSpentFuel",
+    "name": "collectSalesTaxFuel",
     "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collectSpentFuel",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -818,6 +1062,11 @@
       },
       {
         "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
         "name": "availableFuel",
         "type": "uint256"
       },
@@ -828,7 +1077,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "price",
+        "name": "reservedFuelProtocol",
         "type": "uint256"
       },
       {
@@ -879,6 +1128,11 @@
         "internalType": "uint24",
         "name": "secondaryRate",
         "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "salesTaxRate",
+        "type": "uint24"
       }
     ],
     "stateMutability": "view",
@@ -892,6 +1146,49 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "protocolRates",
+    "outputs": [
+      {
+        "internalType": "uint24",
+        "name": "minFeePrimary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "maxFeePrimary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "primaryRate",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "minFeeSecondary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "maxFeeSecondary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "secondaryRate",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "salesTaxRate",
+        "type": "uint24"
       }
     ],
     "stateMutability": "view",
@@ -995,6 +1292,11 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -1046,9 +1348,40 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "salesTaxFuel",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "salesTaxFuelDestination",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1060,6 +1393,97 @@
       }
     ],
     "name": "setBasicTaxRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bool",
+        "name": "_status",
+        "type": "bool"
+      }
+    ],
+    "name": "setBillingStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bool",
+        "name": "_status",
+        "type": "bool"
+      }
+    ],
+    "name": "setConfigurationStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint24",
+            "name": "minFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
+          }
+        ],
+        "internalType": "struct IEconomics.DynamicRates",
+        "name": "_dynamicRates",
+        "type": "tuple"
+      }
+    ],
+    "name": "setDynamicRates",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1080,12 +1504,53 @@
   {
     "inputs": [
       {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      }
+    ],
+    "name": "setIntegratorName",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
         "internalType": "uint256",
-        "name": "_spentFuel",
+        "name": "_price",
         "type": "uint256"
       }
     ],
-    "name": "setSpentFuel",
+    "name": "setIntegratorPrice",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_activeTicketCount",
+        "type": "uint32"
+      }
+    ],
+    "name": "setIntegratorTicketCount",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1095,27 +1560,90 @@
       {
         "components": [
           {
-            "internalType": "address payable",
-            "name": "destination",
-            "type": "address"
-          },
-          {
             "internalType": "uint24",
-            "name": "percentage",
+            "name": "minFeePrimary",
             "type": "uint24"
           },
           {
-            "internalType": "string",
-            "name": "label",
-            "type": "string"
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
           }
         ],
-        "internalType": "struct IEconomics.SpentFuelDestination[]",
-        "name": "_spentFuelDestinations",
-        "type": "tuple[]"
+        "internalType": "struct IEconomics.DynamicRates",
+        "name": "_protocolRates",
+        "type": "tuple"
       }
     ],
-    "name": "setSpentFuelDestinations",
+    "name": "setProtocolRates",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_salesTaxFuelDestination",
+        "type": "address"
+      }
+    ],
+    "name": "setSalesTaxFuelDestination",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "total",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "protocol",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint32",
+            "name": "ticketCount",
+            "type": "uint32"
+          }
+        ],
+        "internalType": "struct IEconomics.SpentFuel",
+        "name": "_spentFuel",
+        "type": "tuple"
+      }
+    ],
+    "name": "setSpentFuel",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1163,6 +1691,11 @@
             "internalType": "uint24",
             "name": "secondaryRate",
             "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
           }
         ],
         "internalType": "struct IEconomics.DynamicRates",
@@ -1194,6 +1727,11 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -1218,6 +1756,11 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -1229,49 +1772,17 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "total",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
+      },
       {
         "internalType": "uint256",
-        "name": "",
+        "name": "protocol",
         "type": "uint256"
-      }
-    ],
-    "name": "spentFuelDestinations",
-    "outputs": [
-      {
-        "internalType": "address payable",
-        "name": "destination",
-        "type": "address"
       },
-      {
-        "internalType": "uint24",
-        "name": "percentage",
-        "type": "uint24"
-      },
-      {
-        "internalType": "string",
-        "name": "label",
-        "type": "string"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "spentFuelTicketCount",
-    "outputs": [
       {
         "internalType": "uint32",
-        "name": "",
+        "name": "ticketCount",
         "type": "uint32"
       }
     ],
@@ -1292,7 +1803,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "_amount",
+        "name": "_total",
         "type": "uint256"
       },
       {
@@ -1328,56 +1839,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint32",
-        "name": "_integratorIndex",
-        "type": "uint32"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint24",
-            "name": "minFeePrimary",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "maxFeePrimary",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "primaryRate",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "minFeeSecondary",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "maxFeeSecondary",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "secondaryRate",
-            "type": "uint24"
-          }
-        ],
-        "internalType": "struct IEconomics.DynamicRates",
-        "name": "_dynamicRates",
-        "type": "tuple"
-      }
-    ],
-    "name": "updateDynamicRates",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "address",
         "name": "newImplementation",
         "type": "address"
@@ -1404,44 +1865,6 @@
     "name": "upgradeToAndCall",
     "outputs": [],
     "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint32",
-        "name": "_integratorIndex",
-        "type": "uint32"
-      }
-    ],
-    "name": "viewIntegratorAvailableFuel",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint32",
-        "name": "_integratorIndex",
-        "type": "uint32"
-      }
-    ],
-    "name": "viewIntegratorAveragePrice",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

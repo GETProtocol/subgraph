@@ -3,20 +3,24 @@
   "network": "mumbai",
   "v2": {
     "Economics": {
-      "address": "0xAd422f057E42d6e6d2cf9cC3F0cDD49D00da3ea2",
-      "startBlock": 26379589
+      "address": "0xCD50e54A3Ee1374d8c805b128a06C91475e1720F",
+      "startBlock": 26742636
     },
     "EventFactory": {
-      "address": "0x3F2d95B15AEfD0ce7cf2683dc3AAFc6c8e9E6C12",
-      "startBlock": 26379604
+      "address": "0xA7d8cAd5775cfC1388ab4054A945652f314FAf94",
+      "startBlock": 26742663
+    },
+    "FuelDistributor": {
+      "address": "0x6cf85152357f497388240a064cf06dC74E29433b",
+      "startBlock": 26742649
     },
     "PriceOracle": {
-      "address": "0x42abD130666Af1a4451E46F67367E66e11F019a2",
-      "startBlock": 26379618
+      "address": "0xDAe1dA894D5eB5863f6FEACFA4e35cb768458353",
+      "startBlock": 26742675
     },
     "TopUp": {
-      "address": "0xd77164BE7CD44a3F3C31450Ca6ff6F7195460281",
-      "startBlock": 26379627
+      "address": "0xCfD6DbE035413811C3F8aC9e65d4fF647E00C384",
+      "startBlock": 26742682
     }
   }
 }

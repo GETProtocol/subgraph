@@ -2,8 +2,8 @@
   "chainName": "polygon",
   "network": "matic",
   "graft": {
-    "base": "QmbHkkLBCYTx3UkSjLxUQKYTBwiw73cJptGPe11hWwd6Qx",
-    "block": 28544600
+    "base": "QmQz7QPfZt5cCFKGZs1KTuP9tfhG7ZFWVar6zPvajN3J6p",
+    "block": 29585037
   },
   "relayers": [
     ["0x4afdae9cca053e3d456a9cb697081bf083a3340b", "1", "GET Shared Partners v1"],
@@ -70,20 +70,24 @@
   },
   "v2": {
     "Economics": {
-      "address": "0xd0e26e295976edE7364a0fef53d3Fd4153E96341",
-      "startBlock": 28544600
+      "address": "0xe93EF19446c4e80207add5fA2CD3E0116e8959F4",
+      "startBlock": 29585037
     },
     "EventFactory": {
-      "address": "0x9Ff56acD3996D3fd98d3757ECD5c0E824B97029e",
-      "startBlock": 28544618
+      "address": "0xAC1ffEEA39e3db60599BdF6697988Aa5f0eD26F4",
+      "startBlock": 29585079
+    },
+    "FuelDistributor": {
+      "address": "0xBa241CD4F7C0E2419Fe25FB0a5b50D122C1A0C1b",
+      "startBlock": 29585055
     },
     "PriceOracle": {
-      "address": "0xD1F8aF61e6899F84e403db2c79f4615918114De1",
-      "startBlock": 28544635
+      "address": "0xBF705239C90211bff2E4CF513c01209CdA228aF9",
+      "startBlock": 29585100
     },
     "TopUp": {
-      "address": "0xD1F8aF61e6899F84e403db2c79f4615918114De1",
-      "startBlock": 28544635
+      "address": "0x748df336E5d1c6387E3FAD5dEC86FB9B1d4c3Eda",
+      "startBlock": 29585112
     }
   }
 }

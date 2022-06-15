@@ -268,7 +268,7 @@ dataSources:
         - name: EconomicsV2
           file: ./abis/v2/Economics.json
       eventHandlers:
-        - event: IntegratorConfigured(uint32,string,address,(uint24,uint24,uint24,uint24,uint24,uint24))
+        - event: IntegratorConfigured(uint32,string,address,(uint24,uint24,uint24,uint24,uint24,uint24,uint24))
           handler: handleIntegratorConfigured
         - event: IntegratorDisabled(uint32)
           handler: handleIntegratorDisabled
@@ -280,13 +280,11 @@ dataSources:
           handler: handleEnableIntegratorBilling
         - event: DisableIntegratorBilling(uint32)
           handler: handleDisableIntegratorBilling
-        - event: IntegratorToppedUp(indexed uint32,indexed uint256,uint256,indexed uint256)
+        - event: IntegratorToppedUp(indexed uint32,indexed uint256,uint256,indexed uint256,uint256)
           handler: handleIntegratorToppedUp
-        - event: UpdateSpentFuelDestinations((address,uint24,string)[],(address,uint24,string)[])
-          handler: handleUpdateSpentFuelDestinations
-        - event: SpentFuelCollected((address,uint24,string),uint256,uint256,uint32)
+        - event: SpentFuelCollected((uint256,uint256,uint32))
           handler: handleSpentFuelCollected
-        - event: AccountBalanceCorrected(uint32,uint256,uint256,uint256)
+        - event: AccountBalanceCorrected(uint32,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleAccountBalanceCorrected
       file: ./src/mappings/v2/economics.ts
 
@@ -314,6 +312,33 @@ dataSources:
       file: ./src/mappings/v2/eventFactory.ts
 
 {{ /v2.EventFactory }}
+{{ #v2.FuelDistributor }}
+  - kind: ethereum/contract
+    name: FuelDistributorV2
+    network: {{ network }}
+    source:
+      address: "{{ v2.FuelDistributor.address }}"
+      abi: FuelDistributorV2
+      startBlock: {{ v2.FuelDistributor.startBlock }}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Event
+      abis:
+        - name: FuelDistributorV2
+          file: ./abis/v2/FuelDistributor.json
+      eventHandlers:
+        - event: Distribute(uint256,uint256,address)
+          handler: handleDistribute
+        - event: UpdateDestinationsProtocol((address,uint24,string)[],(address,uint24,string)[])
+          handler: handleUpdateDestinationsProtocol
+        - event: UpdateDestinationsRemainder((address,uint24,string)[],(address,uint24,string)[])
+          handler: handleUpdateDestinationsRemainder
+      file: ./src/mappings/v2/fuelDistributor.ts
+
+{{ /v2.FuelDistributor }}
 {{ #v2.PriceOracle }}
   - kind: ethereum/contract
     name: PriceOracleV2 
@@ -386,17 +411,17 @@ templates:
         - name: EventImplementation
           file: ./abis/v2/EventImplementation.json
       eventHandlers:
-        - event: PrimaryMint((uint256,bytes32,address,uint64,uint40)[],uint256)
-          handler: handlePrimaryMint
-        - event: SecondarySale((uint256,bytes32,address,uint64,uint40)[],uint256)
+        - event: PrimarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
+          handler: handlePrimarySale
+        - event: SecondarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
           handler: handleSecondarySale
-        - event: Scanned((uint256,bytes32,address,uint64,uint40)[],uint256)
+        - event: Scanned((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
           handler: handleScanned
-        - event: CheckedIn((uint256,bytes32,address,uint64,uint40)[],uint256)
+        - event: CheckedIn((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
           handler: handleCheckedIn
-        - event: Claimed((uint256,bytes32,address,uint64,uint40)[],uint256)
+        - event: Claimed((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
           handler: handleClaimed
-        - event: Invalidated((uint256,bytes32,address,uint64,uint40)[],uint256)
+        - event: Invalidated((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
           handler: handleInvalidated
         - event: EventDataSet((uint32,uint64,uint64,int32,int32,string,string,string,string))
           handler: handleEventDataSet

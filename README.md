@@ -83,6 +83,10 @@ No GET is created within this system, so we can define some rules:
 
 Additionally the `averageReservedPerTicket` provides the average amount of GET that has been required per-ticket. This reserved amount remains in the system until the ticket is either checked-in or invalidated but gives an accurate measure of the token-revenue per NFT-ticket minted. For example, `ProtocolDay.averageReservedPerTicket` will show the average GET/ticket across all integrators aggregated by day.
 
+### Protocol Fuel
+
+The fields listed above track the total fuel consumption for each ticket, regardless of it's destination after being spent. To allow us to more accurately track 'protocol revenue' vs. 'complete product revenue', new fields for `reservedFuelProtocol` and `spentFuelProtocol` have been added. Protocol fuel is considered to be the base-cost of the protocol and the minimum charge to mint a ticket NFT without including any of the additional event & ticket management software tooling. Protocol fuel will always be a subset of the total fuel consumption.
+
 ## Examples
 
 ### All-Time Interaction Counts
@@ -90,12 +94,12 @@ Additionally the `averageReservedPerTicket` provides the average amount of GET t
 ```graphql
 {
   protocol(id: "1") {
-    mintCount
-    invalidateCount
-    resaleCount
-    scanCount
-    checkInCount
-    claimCount
+    soldCount
+    resoldCount
+    scannedCount
+    checkedInCount
+    invalidatedCount
+    claimedCount
   }
 }
 ```
@@ -107,6 +111,7 @@ Additionally the `averageReservedPerTicket` provides the average amount of GET t
   protocolDays(orderBy: day, orderDirection: desc, first: 7) {
     day
     reservedFuel
+    reservedFuelProtocol
     spentFuel
     averageReservedPerTicket
   }
@@ -161,7 +166,8 @@ Additionally the `averageReservedPerTicket` provides the average amount of GET t
 {
   topUpEvents(orderBy: blockTimestamp, orderDirection: desc, first: 5) {
     integratorIndex
-    amount
+    total
+    totalUsd
     price
   }
 }
@@ -205,7 +211,7 @@ Additionally the `averageReservedPerTicket` provides the average amount of GET t
 
 ## Entity Relationship Diagram
 
-![GET Protocol Subgraph Entity Relationship Diagram](/docs/erd.png)
+![GET Protocol Subgraph Entity Relationship Diagram](/docs/erd.jpg)
 
 ## Setup
 

@@ -15,16 +15,18 @@ function getIntegratorDay(integratorIndex: string, day: i32): IntegratorDay {
     integratorDay.averageReservedPerTicket = BIG_DECIMAL_ZERO;
     integratorDay.availableFuel = integrator.availableFuel;
     integratorDay.reservedFuel = BIG_DECIMAL_ZERO;
+    integratorDay.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     integratorDay.spentFuel = BIG_DECIMAL_ZERO;
+    integratorDay.spentFuelProtocol = BIG_DECIMAL_ZERO;
     integratorDay.price = integrator.price;
     integratorDay.eventCount = BIG_INT_ZERO;
     integratorDay.topUpCount = BIG_INT_ZERO;
-    integratorDay.mintCount = BIG_INT_ZERO;
-    integratorDay.invalidateCount = BIG_INT_ZERO;
-    integratorDay.resaleCount = BIG_INT_ZERO;
-    integratorDay.scanCount = BIG_INT_ZERO;
-    integratorDay.checkInCount = BIG_INT_ZERO;
-    integratorDay.claimCount = BIG_INT_ZERO;
+    integratorDay.soldCount = BIG_INT_ZERO;
+    integratorDay.invalidatedCount = BIG_INT_ZERO;
+    integratorDay.resoldCount = BIG_INT_ZERO;
+    integratorDay.scannedCount = BIG_INT_ZERO;
+    integratorDay.checkedInCount = BIG_INT_ZERO;
+    integratorDay.claimedCount = BIG_INT_ZERO;
   }
 
   return integratorDay as IntegratorDay;
@@ -35,48 +37,76 @@ export function getIntegratorDayByIndexAndEvent(integratorIndex: string, e: ethe
   return getIntegratorDay(integratorIndex, day) as IntegratorDay;
 }
 
-export function updatePrimaryMint(integratorIndex: string, e: ethereum.Event, count: BigInt, reservedFuel: BigDecimal): void {
+export function updatePrimarySale(
+  integratorIndex: string,
+  e: ethereum.Event,
+  count: BigInt,
+  reservedFuel: BigDecimal,
+  reservedFuelProtocol: BigDecimal
+): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
   let integrator = getIntegrator(integratorIndex);
-  integratorDay.mintCount = integratorDay.mintCount.plus(count);
+  integratorDay.soldCount = integratorDay.soldCount.plus(count);
   integratorDay.reservedFuel = integratorDay.reservedFuel.plus(reservedFuel);
-  integratorDay.averageReservedPerTicket = integratorDay.reservedFuel.div(integratorDay.mintCount.toBigDecimal());
+  integratorDay.reservedFuelProtocol = integratorDay.reservedFuelProtocol.plus(reservedFuelProtocol);
+  integratorDay.averageReservedPerTicket = integratorDay.reservedFuel.div(integratorDay.soldCount.toBigDecimal());
   integratorDay.availableFuel = integrator.availableFuel;
   integratorDay.save();
 }
 
-export function updateSecondarySale(integratorIndex: string, e: ethereum.Event, count: BigInt, reservedFuel: BigDecimal): void {
+export function updateSecondarySale(
+  integratorIndex: string,
+  e: ethereum.Event,
+  count: BigInt,
+  reservedFuel: BigDecimal,
+  reservedFuelProtocol: BigDecimal
+): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
   let integrator = getIntegrator(integratorIndex);
-  integratorDay.resaleCount = integratorDay.resaleCount.plus(count);
+  integratorDay.resoldCount = integratorDay.resoldCount.plus(count);
   integratorDay.reservedFuel = integratorDay.reservedFuel.plus(reservedFuel);
-  integratorDay.averageReservedPerTicket = integratorDay.reservedFuel.div(integratorDay.mintCount.toBigDecimal());
+  integratorDay.reservedFuelProtocol = integratorDay.reservedFuelProtocol.plus(reservedFuelProtocol);
+  integratorDay.averageReservedPerTicket = integratorDay.reservedFuel.div(integratorDay.soldCount.toBigDecimal());
   integratorDay.availableFuel = integrator.availableFuel;
   integratorDay.save();
 }
 
 export function updateScanned(integratorIndex: string, e: ethereum.Event, count: BigInt): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
-  integratorDay.scanCount = integratorDay.scanCount.plus(count);
+  integratorDay.scannedCount = integratorDay.scannedCount.plus(count);
   integratorDay.save();
 }
 
-export function updateCheckedIn(integratorIndex: string, e: ethereum.Event, count: BigInt, spentFuel: BigDecimal): void {
+export function updateCheckedIn(
+  integratorIndex: string,
+  e: ethereum.Event,
+  count: BigInt,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal
+): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
-  integratorDay.checkInCount = integratorDay.checkInCount.plus(count);
+  integratorDay.checkedInCount = integratorDay.checkedInCount.plus(count);
   integratorDay.spentFuel = integratorDay.spentFuel.plus(spentFuel);
+  integratorDay.spentFuelProtocol = integratorDay.spentFuelProtocol.plus(spentFuelProtocol);
   integratorDay.save();
 }
 
-export function updateInvalidated(integratorIndex: string, e: ethereum.Event, count: BigInt, spentFuel: BigDecimal): void {
+export function updateInvalidated(
+  integratorIndex: string,
+  e: ethereum.Event,
+  count: BigInt,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal
+): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
-  integratorDay.invalidateCount = integratorDay.invalidateCount.plus(count);
+  integratorDay.invalidatedCount = integratorDay.invalidatedCount.plus(count);
   integratorDay.spentFuel = integratorDay.spentFuel.plus(spentFuel);
+  integratorDay.spentFuelProtocol = integratorDay.spentFuelProtocol.plus(spentFuelProtocol);
   integratorDay.save();
 }
 
 export function updateClaimed(integratorIndex: string, e: ethereum.Event, count: BigInt): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
-  integratorDay.claimCount = integratorDay.claimCount.plus(count);
+  integratorDay.claimedCount = integratorDay.claimedCount.plus(count);
   integratorDay.save();
 }

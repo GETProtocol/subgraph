@@ -60,11 +60,11 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
   protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
 
-  protocol.mintCount = protocol.mintCount.plus(BIG_INT_ONE);
-  protocolDay.mintCount = protocolDay.mintCount.plus(BIG_INT_ONE);
-  integrator.mintCount = integrator.mintCount.plus(BIG_INT_ONE);
-  integratorDay.mintCount = integratorDay.mintCount.plus(BIG_INT_ONE);
-  event.mintCount = event.mintCount.plus(BIG_INT_ONE);
+  protocol.soldCount = protocol.soldCount.plus(BIG_INT_ONE);
+  protocolDay.soldCount = protocolDay.soldCount.plus(BIG_INT_ONE);
+  integrator.soldCount = integrator.soldCount.plus(BIG_INT_ONE);
+  integratorDay.soldCount = integratorDay.soldCount.plus(BIG_INT_ONE);
+  event.soldCount = event.soldCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
@@ -73,7 +73,7 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   event.save();
   ticket.save();
 
-  createUsageEvent(e, event, nftIndex, "SOLD", e.params.orderTime, ticket.basePrice, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, 0, event, nftIndex, "SOLD", e.params.orderTime, ticket.basePrice, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketInvalidated(e: ticketInvalidated): void {
@@ -85,11 +85,11 @@ export function handleTicketInvalidated(e: ticketInvalidated): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
-  protocol.invalidateCount = protocol.invalidateCount.plus(BIG_INT_ONE);
-  protocolDay.invalidateCount = protocolDay.invalidateCount.plus(BIG_INT_ONE);
-  integrator.invalidateCount = integrator.invalidateCount.plus(BIG_INT_ONE);
-  integratorDay.invalidateCount = integratorDay.invalidateCount.plus(BIG_INT_ONE);
-  event.invalidateCount = event.invalidateCount.plus(BIG_INT_ONE);
+  protocol.invalidatedCount = protocol.invalidatedCount.plus(BIG_INT_ONE);
+  protocolDay.invalidatedCount = protocolDay.invalidatedCount.plus(BIG_INT_ONE);
+  integrator.invalidatedCount = integrator.invalidatedCount.plus(BIG_INT_ONE);
+  integratorDay.invalidatedCount = integratorDay.invalidatedCount.plus(BIG_INT_ONE);
+  event.invalidatedCount = event.invalidatedCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
@@ -97,7 +97,7 @@ export function handleTicketInvalidated(e: ticketInvalidated): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "INVALIDATED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, 0, event, nftIndex, "INVALIDATED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }
 
 export function handleSecondarySale(e: secondarySale): void {
@@ -115,11 +115,11 @@ export function handleSecondarySale(e: secondarySale): void {
   protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
   protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
 
-  protocol.resaleCount = protocol.resaleCount.plus(BIG_INT_ONE);
-  protocolDay.resaleCount = protocolDay.resaleCount.plus(BIG_INT_ONE);
-  integrator.resaleCount = integrator.resaleCount.plus(BIG_INT_ONE);
-  integratorDay.resaleCount = integratorDay.resaleCount.plus(BIG_INT_ONE);
-  event.resaleCount = event.resaleCount.plus(BIG_INT_ONE);
+  protocol.resoldCount = protocol.resoldCount.plus(BIG_INT_ONE);
+  protocolDay.resoldCount = protocolDay.resoldCount.plus(BIG_INT_ONE);
+  integrator.resoldCount = integrator.resoldCount.plus(BIG_INT_ONE);
+  integratorDay.resoldCount = integratorDay.resoldCount.plus(BIG_INT_ONE);
+  event.resoldCount = event.resoldCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
@@ -128,7 +128,7 @@ export function handleSecondarySale(e: secondarySale): void {
   event.save();
   ticket.save();
 
-  createUsageEvent(e, event, nftIndex, "RESOLD", e.params.orderTime, price, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, 0, event, nftIndex, "RESOLD", e.params.orderTime, price, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketScanned(e: ticketScanned): void {
@@ -140,11 +140,11 @@ export function handleTicketScanned(e: ticketScanned): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
-  protocol.scanCount = protocol.scanCount.plus(BIG_INT_ONE);
-  protocolDay.scanCount = protocolDay.scanCount.plus(BIG_INT_ONE);
-  integrator.scanCount = integrator.scanCount.plus(BIG_INT_ONE);
-  integratorDay.scanCount = integratorDay.scanCount.plus(BIG_INT_ONE);
-  event.scanCount = event.scanCount.plus(BIG_INT_ONE);
+  protocol.scannedCount = protocol.scannedCount.plus(BIG_INT_ONE);
+  protocolDay.scannedCount = protocolDay.scannedCount.plus(BIG_INT_ONE);
+  integrator.scannedCount = integrator.scannedCount.plus(BIG_INT_ONE);
+  integratorDay.scannedCount = integratorDay.scannedCount.plus(BIG_INT_ONE);
+  event.scannedCount = event.scannedCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
@@ -152,7 +152,7 @@ export function handleTicketScanned(e: ticketScanned): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "SCANNED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, 0, event, nftIndex, "SCANNED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }
 
 export function handleNftClaimed(e: nftClaimed): void {
@@ -164,11 +164,11 @@ export function handleNftClaimed(e: nftClaimed): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
-  protocol.claimCount = protocol.claimCount.plus(BIG_INT_ONE);
-  protocolDay.claimCount = protocolDay.claimCount.plus(BIG_INT_ONE);
-  integrator.claimCount = integrator.claimCount.plus(BIG_INT_ONE);
-  integratorDay.claimCount = integratorDay.claimCount.plus(BIG_INT_ONE);
-  event.claimCount = event.claimCount.plus(BIG_INT_ONE);
+  protocol.claimedCount = protocol.claimedCount.plus(BIG_INT_ONE);
+  protocolDay.claimedCount = protocolDay.claimedCount.plus(BIG_INT_ONE);
+  integrator.claimedCount = integrator.claimedCount.plus(BIG_INT_ONE);
+  integratorDay.claimedCount = integratorDay.claimedCount.plus(BIG_INT_ONE);
+  event.claimedCount = event.claimedCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
@@ -176,5 +176,5 @@ export function handleNftClaimed(e: nftClaimed): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "CLAIMED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, 0, event, nftIndex, "CLAIMED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

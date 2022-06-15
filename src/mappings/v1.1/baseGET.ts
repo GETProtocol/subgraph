@@ -95,11 +95,11 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
   protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
   protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
 
-  protocol.mintCount = protocol.mintCount.plus(BIG_INT_ONE);
-  protocolDay.mintCount = protocolDay.mintCount.plus(BIG_INT_ONE);
-  integrator.mintCount = integrator.mintCount.plus(BIG_INT_ONE);
-  integratorDay.mintCount = integratorDay.mintCount.plus(BIG_INT_ONE);
-  event.mintCount = event.mintCount.plus(BIG_INT_ONE);
+  protocol.soldCount = protocol.soldCount.plus(BIG_INT_ONE);
+  protocolDay.soldCount = protocolDay.soldCount.plus(BIG_INT_ONE);
+  integrator.soldCount = integrator.soldCount.plus(BIG_INT_ONE);
+  integratorDay.soldCount = integratorDay.soldCount.plus(BIG_INT_ONE);
+  event.soldCount = event.soldCount.plus(BIG_INT_ONE);
 
   integrator.save();
   integratorDay.save();
@@ -110,27 +110,32 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
     let getUsed = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
 
     protocol.reservedFuel = protocol.reservedFuel.plus(getUsed);
+    protocol.reservedFuelProtocol = protocol.reservedFuelProtocol.plus(getUsed);
     protocolDay.reservedFuel = protocolDay.reservedFuel.plus(getUsed);
+    protocolDay.reservedFuelProtocol = protocolDay.reservedFuelProtocol.plus(getUsed);
     billingIntegrator.reservedFuel = billingIntegrator.reservedFuel.plus(getUsed);
+    billingIntegrator.reservedFuelProtocol = billingIntegrator.reservedFuelProtocol.plus(getUsed);
     billingIntegratorDay.reservedFuel = billingIntegratorDay.reservedFuel.plus(getUsed);
+    billingIntegratorDay.reservedFuelProtocol = billingIntegratorDay.reservedFuelProtocol.plus(getUsed);
     event.reservedFuel = event.reservedFuel.plus(getUsed);
+    event.reservedFuelProtocol = event.reservedFuelProtocol.plus(getUsed);
     ticket.reservedFuel = ticket.reservedFuel.plus(getUsed);
+    ticket.reservedFuelProtocol = ticket.reservedFuelProtocol.plus(getUsed);
 
     billingIntegrator.availableFuel = billingIntegrator.availableFuel.minus(getUsed);
     billingIntegratorDay.availableFuel = billingIntegrator.availableFuel;
 
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.plus(getUsed);
+    billingIntegrator.currentReservedFuelProtocol = billingIntegrator.currentReservedFuelProtocol.plus(getUsed);
 
-    protocol.averageReservedPerTicket = protocol.reservedFuel.div(protocol.mintCount.toBigDecimal());
-    protocolDay.averageReservedPerTicket = protocolDay.reservedFuel.div(protocolDay.mintCount.toBigDecimal());
-    billingIntegrator.averageReservedPerTicket = billingIntegrator.reservedFuel.div(integrator.mintCount.toBigDecimal());
-    billingIntegratorDay.averageReservedPerTicket = billingIntegratorDay.reservedFuel.div(integratorDay.mintCount.toBigDecimal());
-    event.averageReservedPerTicket = event.reservedFuel.div(event.mintCount.toBigDecimal());
+    protocol.averageReservedPerTicket = protocol.reservedFuel.div(protocol.soldCount.toBigDecimal());
+    protocolDay.averageReservedPerTicket = protocolDay.reservedFuel.div(protocolDay.soldCount.toBigDecimal());
+    event.averageReservedPerTicket = event.reservedFuel.div(event.soldCount.toBigDecimal());
 
     billingIntegrator.save();
     billingIntegratorDay.save();
 
-    createUsageEvent(e, event, nftIndex, "SOLD", e.params.orderTime, ticket.basePrice, getUsed);
+    createUsageEvent(e, 0, event, nftIndex, "SOLD", e.params.orderTime, ticket.basePrice, getUsed, getUsed);
   }
 
   protocol.save();
@@ -148,11 +153,11 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
-  protocol.invalidateCount = protocol.invalidateCount.plus(BIG_INT_ONE);
-  protocolDay.invalidateCount = protocolDay.invalidateCount.plus(BIG_INT_ONE);
-  integrator.invalidateCount = integrator.invalidateCount.plus(BIG_INT_ONE);
-  integratorDay.invalidateCount = integratorDay.invalidateCount.plus(BIG_INT_ONE);
-  event.invalidateCount = event.invalidateCount.plus(BIG_INT_ONE);
+  protocol.invalidatedCount = protocol.invalidatedCount.plus(BIG_INT_ONE);
+  protocolDay.invalidatedCount = protocolDay.invalidatedCount.plus(BIG_INT_ONE);
+  integrator.invalidatedCount = integrator.invalidatedCount.plus(BIG_INT_ONE);
+  integratorDay.invalidatedCount = integratorDay.invalidatedCount.plus(BIG_INT_ONE);
+  event.invalidatedCount = event.invalidatedCount.plus(BIG_INT_ONE);
 
   integrator.save();
   integratorDay.save();
@@ -167,16 +172,21 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
     let getUsed = ticket.reservedFuel;
 
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
+    protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
     protocolDay.spentFuel = protocolDay.spentFuel.plus(getUsed);
+    protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(getUsed);
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
+    billingIntegrator.spentFuelProtocol = billingIntegrator.spentFuelProtocol.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
+    billingIntegratorDay.spentFuelProtocol = billingIntegratorDay.spentFuelProtocol.plus(getUsed);
 
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.minus(getUsed);
+    billingIntegrator.currentReservedFuelProtocol = billingIntegrator.currentReservedFuelProtocol.minus(getUsed);
 
     billingIntegrator.save();
     billingIntegratorDay.save();
 
-    createUsageEvent(e, event, nftIndex, "INVALIDATED", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
+    createUsageEvent(e, 0, event, nftIndex, "INVALIDATED", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed, getUsed);
   }
 
   protocol.save();
@@ -202,11 +212,11 @@ export function handleSecondarySale(e: SecondarySale): void {
   protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
   protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
 
-  protocol.resaleCount = protocol.resaleCount.plus(BIG_INT_ONE);
-  protocolDay.resaleCount = protocolDay.resaleCount.plus(BIG_INT_ONE);
-  integrator.resaleCount = integratorDay.resaleCount.plus(BIG_INT_ONE);
-  integratorDay.resaleCount = integratorDay.resaleCount.plus(BIG_INT_ONE);
-  event.resaleCount = event.resaleCount.plus(BIG_INT_ONE);
+  protocol.resoldCount = protocol.resoldCount.plus(BIG_INT_ONE);
+  protocolDay.resoldCount = protocolDay.resoldCount.plus(BIG_INT_ONE);
+  integrator.resoldCount = integratorDay.resoldCount.plus(BIG_INT_ONE);
+  integratorDay.resoldCount = integratorDay.resoldCount.plus(BIG_INT_ONE);
+  event.resoldCount = event.resoldCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
@@ -214,7 +224,7 @@ export function handleSecondarySale(e: SecondarySale): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "RESOLD", e.params.orderTime, price, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, 0, event, nftIndex, "RESOLD", e.params.orderTime, price, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }
 
 export function handleTicketScanned(e: TicketScanned): void {
@@ -226,11 +236,11 @@ export function handleTicketScanned(e: TicketScanned): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
-  protocol.scanCount = protocol.scanCount.plus(BIG_INT_ONE);
-  protocolDay.scanCount = protocolDay.scanCount.plus(BIG_INT_ONE);
-  integrator.scanCount = integrator.scanCount.plus(BIG_INT_ONE);
-  integratorDay.scanCount = integratorDay.scanCount.plus(BIG_INT_ONE);
-  event.scanCount = event.scanCount.plus(BIG_INT_ONE);
+  protocol.scannedCount = protocol.scannedCount.plus(BIG_INT_ONE);
+  protocolDay.scannedCount = protocolDay.scannedCount.plus(BIG_INT_ONE);
+  integrator.scannedCount = integrator.scannedCount.plus(BIG_INT_ONE);
+  integratorDay.scannedCount = integratorDay.scannedCount.plus(BIG_INT_ONE);
+  event.scannedCount = event.scannedCount.plus(BIG_INT_ONE);
 
   integrator.save();
   integratorDay.save();
@@ -243,16 +253,21 @@ export function handleTicketScanned(e: TicketScanned): void {
     let getUsed = ticket.reservedFuel;
 
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
+    protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
     protocolDay.spentFuel = protocolDay.spentFuel.plus(getUsed);
+    protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(getUsed);
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
+    billingIntegrator.spentFuelProtocol = billingIntegrator.spentFuelProtocol.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
+    billingIntegratorDay.spentFuelProtocol = billingIntegratorDay.spentFuelProtocol.plus(getUsed);
 
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.minus(getUsed);
+    billingIntegrator.currentReservedFuelProtocol = billingIntegrator.currentReservedFuelProtocol.minus(getUsed);
 
     billingIntegrator.save();
     billingIntegratorDay.save();
 
-    createUsageEvent(e, event, nftIndex, "SCANNED", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
+    createUsageEvent(e, 0, event, nftIndex, "SCANNED", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed, getUsed);
   }
 
   protocol.save();
@@ -268,11 +283,11 @@ export function handleCheckedIn(e: CheckedIn): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
-  protocol.checkInCount = protocol.checkInCount.plus(BIG_INT_ONE);
-  protocolDay.checkInCount = protocolDay.checkInCount.plus(BIG_INT_ONE);
-  integrator.checkInCount = integrator.checkInCount.plus(BIG_INT_ONE);
-  integratorDay.checkInCount = integratorDay.checkInCount.plus(BIG_INT_ONE);
-  event.checkInCount = event.checkInCount.plus(BIG_INT_ONE);
+  protocol.checkedInCount = protocol.checkedInCount.plus(BIG_INT_ONE);
+  protocolDay.checkedInCount = protocolDay.checkedInCount.plus(BIG_INT_ONE);
+  integrator.checkedInCount = integrator.checkedInCount.plus(BIG_INT_ONE);
+  integratorDay.checkedInCount = integratorDay.checkedInCount.plus(BIG_INT_ONE);
+  event.checkedInCount = event.checkedInCount.plus(BIG_INT_ONE);
 
   integrator.save();
   integratorDay.save();
@@ -285,16 +300,21 @@ export function handleCheckedIn(e: CheckedIn): void {
     let getUsed = ticket.reservedFuel;
 
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
+    protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
     protocolDay.spentFuel = protocolDay.spentFuel.plus(getUsed);
+    protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(getUsed);
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
+    billingIntegrator.spentFuelProtocol = billingIntegrator.spentFuelProtocol.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
+    billingIntegratorDay.spentFuelProtocol = billingIntegratorDay.spentFuelProtocol.plus(getUsed);
 
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.minus(getUsed);
+    billingIntegrator.currentReservedFuelProtocol = billingIntegrator.currentReservedFuelProtocol.minus(getUsed);
 
     billingIntegrator.save();
     billingIntegratorDay.save();
 
-    createUsageEvent(e, event, nftIndex, "CHECKED_IN", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed);
+    createUsageEvent(e, 0, event, nftIndex, "CHECKED_IN", e.params.orderTime, BIG_DECIMAL_ZERO, getUsed, getUsed);
   }
 
   protocol.save();
@@ -310,11 +330,11 @@ export function handleNftClaimed(e: NftClaimed): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
-  protocol.claimCount = protocol.claimCount.plus(BIG_INT_ONE);
-  protocolDay.claimCount = protocolDay.claimCount.plus(BIG_INT_ONE);
-  integrator.claimCount = integrator.claimCount.plus(BIG_INT_ONE);
-  integratorDay.claimCount = integratorDay.claimCount.plus(BIG_INT_ONE);
-  event.claimCount = event.claimCount.plus(BIG_INT_ONE);
+  protocol.claimedCount = protocol.claimedCount.plus(BIG_INT_ONE);
+  protocolDay.claimedCount = protocolDay.claimedCount.plus(BIG_INT_ONE);
+  integrator.claimedCount = integrator.claimedCount.plus(BIG_INT_ONE);
+  integratorDay.claimedCount = integratorDay.claimedCount.plus(BIG_INT_ONE);
+  event.claimedCount = event.claimedCount.plus(BIG_INT_ONE);
 
   protocol.save();
   protocolDay.save();
@@ -322,5 +342,5 @@ export function handleNftClaimed(e: NftClaimed): void {
   integratorDay.save();
   event.save();
 
-  createUsageEvent(e, event, nftIndex, "CLAIMED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, 0, event, nftIndex, "CLAIMED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

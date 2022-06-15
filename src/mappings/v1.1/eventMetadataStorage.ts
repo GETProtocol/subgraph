@@ -63,5 +63,5 @@ export function handleNewEventRegistered(e: NewEventRegistered): void {
   event.endTime = endTime;
   event.save();
 
-  createUsageEvent(e, event, BIG_INT_ZERO, "EVENT_CREATED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
+  createUsageEvent(e, 0, event, BIG_INT_ZERO, "EVENT_CREATED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

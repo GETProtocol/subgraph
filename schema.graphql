@@ -13,22 +13,33 @@ enum TopUpEventType {
   CUSTODIAL
 }
 
+enum SpentFuelSource {
+  PROTOCOL
+  REMAINDER
+}
+
 type Protocol @entity {
   id: ID!
   averageReservedPerTicket: BigDecimal!
   reservedFuel: BigDecimal!
+  reservedFuelProtocol: BigDecimal!
   currentReservedFuel: BigDecimal!
+  currentReservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!
+  spentFuelProtocol: BigDecimal!
   currentSpentFuel: BigDecimal!
+  currentSpentFuelProtocol: BigDecimal!
   collectedSpentFuel: BigDecimal!
+  collectedSpentFuelProtocol: BigDecimal!
   totalTicketValue: BigDecimal!
+  topUpCount: BigInt!
   eventCount: BigInt!
-  mintCount: BigInt!
-  invalidateCount: BigInt!
-  resaleCount: BigInt!
-  scanCount: BigInt!
-  checkInCount: BigInt!
-  claimCount: BigInt!
+  soldCount: BigInt!
+  invalidatedCount: BigInt!
+  resoldCount: BigInt!
+  scannedCount: BigInt!
+  checkedInCount: BigInt!
+  claimedCount: BigInt!
 }
 
 type ProtocolDay @entity {
@@ -36,17 +47,22 @@ type ProtocolDay @entity {
   day: Int!
   averageReservedPerTicket: BigDecimal!
   reservedFuel: BigDecimal!
+  reservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!
+  spentFuelProtocol: BigDecimal!
   currentSpentFuel: BigDecimal!
+  currentSpentFuelProtocol: BigDecimal!
   collectedSpentFuel: BigDecimal!
+  collectedSpentFuelProtocol: BigDecimal!
   totalTicketValue: BigDecimal!
+  topUpCount: BigInt!
   eventCount: BigInt!
-  mintCount: BigInt!
-  invalidateCount: BigInt!
-  resaleCount: BigInt!
-  scanCount: BigInt!
-  checkInCount: BigInt!
-  claimCount: BigInt!
+  soldCount: BigInt!
+  invalidatedCount: BigInt!
+  resoldCount: BigInt!
+  scannedCount: BigInt!
+  checkedInCount: BigInt!
+  claimedCount: BigInt!
 }
 
 type Integrator @entity {
@@ -54,21 +70,25 @@ type Integrator @entity {
   averageReservedPerTicket: BigDecimal!
   availableFuel: BigDecimal!
   reservedFuel: BigDecimal!
+  reservedFuelProtocol: BigDecimal!
   currentReservedFuel: BigDecimal!
+  currentReservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!
+  spentFuelProtocol: BigDecimal!
   price: BigDecimal!
   activeTicketCount: Int!
   isBillingEnabled: Boolean!
   isConfigured: Boolean!
+  salesTaxRate: BigDecimal!
   name: String!
   eventCount: BigInt!
   topUpCount: BigInt!
-  mintCount: BigInt!
-  invalidateCount: BigInt!
-  resaleCount: BigInt!
-  scanCount: BigInt!
-  checkInCount: BigInt!
-  claimCount: BigInt!
+  soldCount: BigInt!
+  invalidatedCount: BigInt!
+  resoldCount: BigInt!
+  scannedCount: BigInt!
+  checkedInCount: BigInt!
+  claimedCount: BigInt!
   relayers: [Relayer!]! @derivedFrom(field: "integrator")
   events: [Event!]! @derivedFrom(field: "integrator")
   tickets: [Ticket!]! @derivedFrom(field: "integrator")
@@ -84,16 +104,18 @@ type IntegratorDay @entity {
   averageReservedPerTicket: BigDecimal!
   availableFuel: BigDecimal!
   reservedFuel: BigDecimal!
+  reservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!
+  spentFuelProtocol: BigDecimal!
   price: BigDecimal!
   eventCount: BigInt!
   topUpCount: BigInt!
-  mintCount: BigInt!
-  invalidateCount: BigInt!
-  resaleCount: BigInt!
-  scanCount: BigInt!
-  checkInCount: BigInt!
-  claimCount: BigInt!
+  soldCount: BigInt!
+  invalidatedCount: BigInt!
+  resoldCount: BigInt!
+  scannedCount: BigInt!
+  checkedInCount: BigInt!
+  claimedCount: BigInt!
 }
 
 type Relayer @entity {
@@ -113,13 +135,14 @@ type Event @entity {
   usageEvents: [UsageEvent!]! @derivedFrom(field: "event")
   tickets: [Ticket!]! @derivedFrom(field: "event")
   reservedFuel: BigDecimal!
+  reservedFuelProtocol: BigDecimal!
   averageReservedPerTicket: BigDecimal!
-  mintCount: BigInt!
-  resaleCount: BigInt!
-  scanCount: BigInt!
-  checkInCount: BigInt!
-  invalidateCount: BigInt!
-  claimCount: BigInt!
+  soldCount: BigInt!
+  resoldCount: BigInt!
+  scannedCount: BigInt!
+  checkedInCount: BigInt!
+  invalidatedCount: BigInt!
+  claimedCount: BigInt!
   name: String!
   shopUrl: String!
   imageUrl: String!
@@ -143,6 +166,7 @@ type Ticket @entity {
   owner: Bytes!
   basePrice: BigDecimal!
   reservedFuel: BigDecimal!
+  reservedFuelProtocol: BigDecimal!
   isScanned: Boolean!
   isCheckedIn: Boolean!
   isInvalidated: Boolean!
@@ -159,6 +183,7 @@ type PriceOracle @entity {
 
 type SpentFuelRecipient @entity {
   id: ID!
+  source: SpentFuelSource!
   collectedSpentFuel: BigDecimal!
   label: String!
   percentage: BigDecimal!
@@ -167,15 +192,19 @@ type SpentFuelRecipient @entity {
 }
 
 type TopUpEvent @entity {
-  id: ID! # Composite PK: txHash-logIndex
+  id: ID! # Composite PK: txHash
   txHash: Bytes!
+  invoiceNumber: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   day: Int!
   integrator: Integrator!
   integratorIndex: String!
   type: TopUpEventType!
-  amount: BigDecimal!
+  total: BigDecimal!
+  totalUsd: BigDecimal!
+  salesTaxRate: BigDecimal!
+  salesTax: BigDecimal!
   price: BigDecimal!
   externalId: Bytes!
 }
@@ -194,6 +223,7 @@ type UsageEvent @entity {
   price: BigDecimal!
   type: UsageEventType!
   getUsed: BigDecimal!
+  getUsedProtocol: BigDecimal!
   nftId: String!
   event: Event!
   eventIndex: BigInt!
@@ -216,5 +246,4 @@ type SpentFuelCollectedEvent @entity {
   recipientPercentage: BigDecimal!
   amount: BigDecimal!
   totalAmountCollected: BigDecimal!
-  totalTicketsCollected: BigInt!
 }

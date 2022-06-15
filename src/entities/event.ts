@@ -15,13 +15,14 @@ export function getEvent(eventAddress: Address): Event {
     event.integrator = "";
     event.relayer = "";
     event.reservedFuel = BIG_DECIMAL_ZERO;
+    event.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     event.averageReservedPerTicket = BIG_DECIMAL_ZERO;
-    event.mintCount = BIG_INT_ZERO;
-    event.resaleCount = BIG_INT_ZERO;
-    event.scanCount = BIG_INT_ZERO;
-    event.checkInCount = BIG_INT_ZERO;
-    event.invalidateCount = BIG_INT_ZERO;
-    event.claimCount = BIG_INT_ZERO;
+    event.soldCount = BIG_INT_ZERO;
+    event.resoldCount = BIG_INT_ZERO;
+    event.scannedCount = BIG_INT_ZERO;
+    event.checkedInCount = BIG_INT_ZERO;
+    event.invalidatedCount = BIG_INT_ZERO;
+    event.claimedCount = BIG_INT_ZERO;
     event.name = "";
     event.shopUrl = "";
     event.imageUrl = "";
@@ -48,42 +49,49 @@ export function getEventWithFallbackIntegrator(eventAddress: Address, relayerAdd
   return event;
 }
 
-export function updatePrimaryMint(eventAddress: Address, count: BigInt, reservedFuel: BigDecimal): void {
+export function updatePrimarySale(eventAddress: Address, count: BigInt, reservedFuel: BigDecimal, reservedFuelProtocol: BigDecimal): void {
   let event = getEvent(eventAddress);
-  event.mintCount = event.mintCount.plus(count);
+  event.soldCount = event.soldCount.plus(count);
   event.reservedFuel = event.reservedFuel.plus(reservedFuel);
-  event.averageReservedPerTicket = event.reservedFuel.div(event.mintCount.toBigDecimal());
+  event.reservedFuelProtocol = event.reservedFuelProtocol.plus(reservedFuelProtocol);
+  event.averageReservedPerTicket = event.reservedFuel.div(event.soldCount.toBigDecimal());
   event.save();
 }
 
-export function updateSecondarySale(eventAddress: Address, count: BigInt, reservedFuel: BigDecimal): void {
+export function updateSecondarySale(
+  eventAddress: Address,
+  count: BigInt,
+  reservedFuel: BigDecimal,
+  reservedFuelProtocol: BigDecimal
+): void {
   let event = getEvent(eventAddress);
-  event.resaleCount = event.resaleCount.plus(count);
+  event.resoldCount = event.resoldCount.plus(count);
   event.reservedFuel = event.reservedFuel.plus(reservedFuel);
-  event.averageReservedPerTicket = event.reservedFuel.div(event.mintCount.toBigDecimal());
+  event.reservedFuelProtocol = event.reservedFuelProtocol.plus(reservedFuelProtocol);
+  event.averageReservedPerTicket = event.reservedFuel.div(event.soldCount.toBigDecimal());
   event.save();
 }
 
 export function updateScanned(eventAddress: Address, count: BigInt): void {
   let event = getEvent(eventAddress);
-  event.scanCount = event.scanCount.plus(count);
+  event.scannedCount = event.scannedCount.plus(count);
   event.save();
 }
 
 export function updateCheckedIn(eventAddress: Address, count: BigInt): void {
   let event = getEvent(eventAddress);
-  event.checkInCount = event.checkInCount.plus(count);
+  event.checkedInCount = event.checkedInCount.plus(count);
   event.save();
 }
 
 export function updateInvalidated(eventAddress: Address, count: BigInt): void {
   let event = getEvent(eventAddress);
-  event.invalidateCount = event.invalidateCount.plus(count);
+  event.invalidatedCount = event.invalidatedCount.plus(count);
   event.save();
 }
 
 export function updateClaimed(eventAddress: Address, count: BigInt): void {
   let event = getEvent(eventAddress);
-  event.claimCount = event.claimCount.plus(count);
+  event.claimedCount = event.claimedCount.plus(count);
   event.save();
 }

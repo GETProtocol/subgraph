@@ -54,20 +54,24 @@
   },
   "v2": {
     "Economics": {
-      "address": "0xbBe1fF3efE3F28c1579CAd55f0a3AaeE31D015F4",
-      "startBlock": 26380115
+      "address": "0x790A9FfAA3255f457F64d98Db69a3931cc56F104",
+      "startBlock": 26743654
     },
     "EventFactory": {
-      "address": "0xC224A1DDF12334fac7Da89231140Ed2137eD43Ea",
-      "startBlock": 26380130
+      "address": "0xc05B78A2914dC6B45ca2A707A488eCF4c0f55Ae6",
+      "startBlock": 26743675
+    },
+    "FuelDistributor": {
+      "address": "0x13E25c123c8cc4e4219fa8791741420df27E4a94",
+      "startBlock": 26743663
     },
     "PriceOracle": {
-      "address": "0xb4459F0D1D6A7E33A1D274D375E677f58C6Dc380",
-      "startBlock": 26380144
+      "address": "0xD015e881f36f88763e15AEbccF920f520e7ac2b7",
+      "startBlock": 26743691
     },
     "TopUp": {
-      "address": "0x71B6d2A92Fb04670959bf48A256af477bd530fa8",
-      "startBlock": 26380151
+      "address": "0xf33Ad9cCEA2190d4116e52E5F0bbe031971033A4",
+      "startBlock": 26743700
     }
   }
 }

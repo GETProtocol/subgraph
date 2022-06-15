@@ -1,6 +1,6 @@
-import { Address, BigDecimal, BigInt, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal, ethereum } from "@graphprotocol/graph-ts";
 import { SpentFuelCollectedEvent, SpentFuelRecipient } from "../../generated/schema";
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY } from "../constants";
+import { BIG_DECIMAL_ZERO, BYTES_EMPTY } from "../constants";
 
 export function getSpentFuelCollectedEvent(e: ethereum.Event): SpentFuelCollectedEvent {
   let timestamp = e.block.timestamp;
@@ -18,7 +18,6 @@ export function getSpentFuelCollectedEvent(e: ethereum.Event): SpentFuelCollecte
   spentFuelCollectedEvent.recipientPercentage = BIG_DECIMAL_ZERO;
   spentFuelCollectedEvent.amount = BIG_DECIMAL_ZERO;
   spentFuelCollectedEvent.totalAmountCollected = BIG_DECIMAL_ZERO;
-  spentFuelCollectedEvent.totalTicketsCollected = BIG_INT_ZERO;
 
   return spentFuelCollectedEvent as SpentFuelCollectedEvent;
 }
@@ -28,8 +27,7 @@ export function createSpentFuelCollectedEvent(
   recipient: SpentFuelRecipient,
   recipientAddress: Address,
   amount: BigDecimal,
-  totalAmountCollected: BigDecimal,
-  totalTicketsCollected: BigInt
+  totalAmountCollected: BigDecimal
 ): SpentFuelCollectedEvent {
   let spentFuelCollectedEvent = getSpentFuelCollectedEvent(e);
 
@@ -39,7 +37,6 @@ export function createSpentFuelCollectedEvent(
   spentFuelCollectedEvent.recipientPercentage = recipient.percentage;
   spentFuelCollectedEvent.amount = amount;
   spentFuelCollectedEvent.totalAmountCollected = totalAmountCollected;
-  spentFuelCollectedEvent.totalTicketsCollected = totalTicketsCollected;
 
   spentFuelCollectedEvent.save();
   return spentFuelCollectedEvent as SpentFuelCollectedEvent;

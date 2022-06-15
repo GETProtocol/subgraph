@@ -95,6 +95,12 @@
         "internalType": "uint256",
         "name": "getUsed",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "getUsedProtocol",
+        "type": "uint256"
       }
     ],
     "name": "CheckedIn",
@@ -140,6 +146,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "getUsed",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "getUsedProtocol",
         "type": "uint256"
       }
     ],
@@ -307,6 +319,12 @@
         "internalType": "uint256",
         "name": "getUsed",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "getUsedProtocol",
+        "type": "uint256"
       }
     ],
     "name": "Invalidated",
@@ -353,9 +371,15 @@
         "internalType": "uint256",
         "name": "getUsed",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "getUsedProtocol",
+        "type": "uint256"
       }
     ],
-    "name": "PrimaryMint",
+    "name": "PrimarySale",
     "type": "event"
   },
   {
@@ -398,6 +422,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "getUsed",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "getUsedProtocol",
         "type": "uint256"
       }
     ],
@@ -444,6 +474,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "getUsed",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "getUsedProtocol",
         "type": "uint256"
       }
     ],
