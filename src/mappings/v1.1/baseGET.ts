@@ -153,6 +153,8 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
+  ticket.isInvalidated = true;
+
   protocol.invalidatedCount = protocol.invalidatedCount.plus(BIG_INT_ONE);
   protocolDay.invalidatedCount = protocolDay.invalidatedCount.plus(BIG_INT_ONE);
   integrator.invalidatedCount = integrator.invalidatedCount.plus(BIG_INT_ONE);
@@ -236,6 +238,8 @@ export function handleTicketScanned(e: TicketScanned): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
+  ticket.isScanned = true;
+
   protocol.scannedCount = protocol.scannedCount.plus(BIG_INT_ONE);
   protocolDay.scannedCount = protocolDay.scannedCount.plus(BIG_INT_ONE);
   integrator.scannedCount = integrator.scannedCount.plus(BIG_INT_ONE);
@@ -283,6 +287,8 @@ export function handleCheckedIn(e: CheckedIn): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
+  ticket.isCheckedIn = true;
+
   protocol.checkedInCount = protocol.checkedInCount.plus(BIG_INT_ONE);
   protocolDay.checkedInCount = protocolDay.checkedInCount.plus(BIG_INT_ONE);
   integrator.checkedInCount = integrator.checkedInCount.plus(BIG_INT_ONE);
@@ -329,6 +335,8 @@ export function handleNftClaimed(e: NftClaimed): void {
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
+
+  ticket.isClaimed = true;
 
   protocol.claimedCount = protocol.claimedCount.plus(BIG_INT_ONE);
   protocolDay.claimedCount = protocolDay.claimedCount.plus(BIG_INT_ONE);
