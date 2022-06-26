@@ -1,0 +1,26 @@
+{
+  "chainName": "mumbai",
+  "network": "mumbai",
+  "v2": {
+    "Economics": {
+      "address": "0xCD50e54A3Ee1374d8c805b128a06C91475e1720F",
+      "startBlock": 26742636
+    },
+    "EventFactory": {
+      "address": "0xA7d8cAd5775cfC1388ab4054A945652f314FAf94",
+      "startBlock": 26742663
+    },
+    "FuelDistributor": {
+      "address": "0x6cf85152357f497388240a064cf06dC74E29433b",
+      "startBlock": 26742649
+    },
+    "PriceOracle": {
+      "address": "0xDAe1dA894D5eB5863f6FEACFA4e35cb768458353",
+      "startBlock": 26742675
+    },
+    "TopUp": {
+      "address": "0xCfD6DbE035413811C3F8aC9e65d4fF647E00C384",
+      "startBlock": 26742682
+    }
+  }
+}

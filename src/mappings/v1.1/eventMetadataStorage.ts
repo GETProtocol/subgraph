@@ -1,10 +1,10 @@
 import { BigDecimal } from "@graphprotocol/graph-ts";
 import {
-  EventMetadataStorageV1 as EventMetadataStorageContract,
-  newEventRegistered,
-} from "../../../generated/EventMetadataStorageV1/EventMetadataStorageV1";
+  EventMetadataStorageV1_1 as EventMetadataStorageContract,
+  NewEventRegistered,
+} from "../../../generated/EventMetadataStorageV1_1/EventMetadataStorageV1_1";
 import { Event } from "../../../generated/schema";
-import { BIG_DECIMAL_ZERO, BIG_INT_ONE, BIG_INT_ZERO, EVENT_METADATA_STORAGE_ADDRESS_V1 } from "../../constants";
+import { BIG_DECIMAL_ZERO, BIG_INT_ONE, BIG_INT_ZERO, EVENT_METADATA_STORAGE_ADDRESS_V1_1 } from "../../constants";
 import {
   getEvent,
   createUsageEvent,
@@ -14,9 +14,9 @@ import {
   getProtocolDay,
 } from "../../entities";
 
-export function handleNewEventRegistered(e: newEventRegistered): void {
+export function handleNewEventRegistered(e: NewEventRegistered): void {
   let address = e.params.eventAddress;
-  let eventMetadataStorageContract = EventMetadataStorageContract.bind(EVENT_METADATA_STORAGE_ADDRESS_V1);
+  let eventMetadataStorageContract = EventMetadataStorageContract.bind(EVENT_METADATA_STORAGE_ADDRESS_V1_1);
   let eventData = eventMetadataStorageContract.getEventData(address);
 
   let latitude = BigDecimal.fromString(eventData.value5[0].toString());

@@ -1,0 +1,250 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "indexed": true, "internalType": "uint64", "name": "amountPacked", "type": "uint64" }
+    ],
+    "name": "BackpackFilled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "receivedByAddress", "type": "address" },
+      { "indexed": false, "internalType": "uint64", "name": "amountPulled", "type": "uint64" }
+    ],
+    "name": "allFuelPulled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" }],
+    "name": "configChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "newBouncerSet", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "newFuelSet", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "newDepotSet", "type": "address" },
+      { "indexed": false, "internalType": "address", "name": "newERC721", "type": "address" }
+    ],
+    "name": "coreAddressesEdit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint64", "name": "feeToTreasury", "type": "uint64" },
+      { "indexed": false, "internalType": "uint64", "name": "remainingBalance", "type": "uint64" }
+    ],
+    "name": "feeToBurn",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint64", "name": "feeToTreasury", "type": "uint64" },
+      { "indexed": false, "internalType": "uint64", "name": "remainingBalance", "type": "uint64" }
+    ],
+    "name": "feeToTreasury",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "uint64", "name": "newFreeEventRate", "type": "uint64" }],
+    "name": "freeEventSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "address", "name": "fuelTokenAddress", "type": "address" }],
+    "name": "fuelTokenSynced",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [{ "indexed": false, "internalType": "uint64", "name": "newGETUSDPrice", "type": "uint64" }],
+    "name": "priceGETChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "indexed": false, "internalType": "uint64", "name": "amountToppedUp", "type": "uint64" },
+      { "indexed": false, "internalType": "uint64", "name": "newBalanceRelayer", "type": "uint64" }
+    ],
+    "name": "relayerToppedUp",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "ticketeerRelayer", "type": "address" },
+      { "indexed": true, "internalType": "uint64", "name": "chargedFee", "type": "uint64" }
+    ],
+    "name": "ticketeerCharged",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "FUELTOKEN",
+    "outputs": [{ "internalType": "contract IERC20", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "GET_BOUNCER",
+    "outputs": [{ "internalType": "contract IGETAccessControl", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "address_bouncer", "type": "address" },
+      { "internalType": "address", "name": "depot_address", "type": "address" },
+      { "internalType": "address", "name": "erc721_address", "type": "address" },
+      { "internalType": "uint64", "name": "price_getusd", "type": "uint64" }
+    ],
+    "name": "_initialize_economics",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "relayerAddress", "type": "address" }],
+    "name": "balanceOfRelayer",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "balancerOfCaller",
+    "outputs": [{ "internalType": "uint64", "name": "", "type": "uint64" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "baseTicketPrice", "type": "uint256" },
+      { "internalType": "uint256", "name": "percetageCut", "type": "uint256" }
+    ],
+    "name": "calcBackpackGET",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "relayerAddress", "type": "address" }],
+    "name": "checkIfRelayer",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "contractName",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "contractVersion",
+    "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newBouncerAddress", "type": "address" },
+      { "internalType": "address", "name": "newDepotAddress", "type": "address" },
+      { "internalType": "address", "name": "newERC721Address", "type": "address" }
+    ],
+    "name": "editCoreAddresses",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "nftIndex", "type": "uint256" },
+      { "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "internalType": "uint256", "name": "basePrice", "type": "uint256" }
+    ],
+    "name": "fuelBackpackTicket",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getGETPrice",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "depotAddress", "type": "address" },
+      { "internalType": "uint256", "name": "approvalAmount", "type": "uint256" }
+    ],
+    "name": "setContractAllowance",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "internalType": "string", "name": "newTicketeerName", "type": "string" },
+      { "internalType": "address", "name": "masterWallet", "type": "address" },
+      { "internalType": "uint256", "name": "newBaseRate", "type": "uint256" }
+    ],
+    "name": "setEconomicsConfig",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint64", "name": "newFreeEventRate", "type": "uint64" }],
+    "name": "setFreeEventRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint64", "name": "newGETPrice", "type": "uint64" }],
+    "name": "setPriceGETUSD",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  { "inputs": [], "name": "syncFuelToken", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "relayerAddress", "type": "address" },
+      { "internalType": "uint256", "name": "amountTopped", "type": "uint256" }
+    ],
+    "name": "topUpGet",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" },
+      { "internalType": "address", "name": "_toAddress", "type": "address" },
+      { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+    ],
+    "name": "withdrawFuel",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "chainName": "polygon",
+  "network": "matic",
+  "v2": {
+    "Economics": {
+      "address": "0xe7F784799479fcFAF4A2d83E1880Df774e56A9bd",
+      "startBlock": 29584141
+    },
+    "EventFactory": {
+      "address": "0x000A6DE9AD7C6F3FF696BE05A3CFD81851B092a6",
+      "startBlock": 29584191
+    },
+    "FuelDistributor": {
+      "address": "0x8554b961a1dB335042899a6d139E8331053d597c",
+      "startBlock": 29584163
+    },
+    "PriceOracle": {
+      "address": "0xC60cD1c09f66FedC2ACbb6c83E416c454728BD36",
+      "startBlock": 29584213
+    },
+    "TopUp": {
+      "address": "0xBCa06f1537A4d92b9E17D3a1B02A5dAE04CDdb7A",
+      "startBlock": 29584230
+    }
+  }
+}
