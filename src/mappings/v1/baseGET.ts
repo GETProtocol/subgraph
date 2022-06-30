@@ -57,8 +57,8 @@ export function handlePrimarySaleMint(e: primarySaleMint): void {
   ticket.relayer = relayer.id;
   ticket.basePrice = formatPrice(e.params.primaryPrice, event.currency);
 
-  protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
-  protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
+  protocol.totalSalesVolume = protocol.totalSalesVolume.plus(ticket.basePrice);
+  protocolDay.totalSalesVolume = protocolDay.totalSalesVolume.plus(ticket.basePrice);
 
   protocol.soldCount = protocol.soldCount.plus(BIG_INT_ONE);
   protocolDay.soldCount = protocolDay.soldCount.plus(BIG_INT_ONE);
@@ -85,18 +85,20 @@ export function handleTicketInvalidated(e: ticketInvalidated): void {
   let integrator = getIntegrator(event.integrator);
   let integratorDay = getIntegratorDayByIndexAndEvent(event.integrator, e);
 
+  ticket.isInvalidated = true;
+
   protocol.invalidatedCount = protocol.invalidatedCount.plus(BIG_INT_ONE);
   protocolDay.invalidatedCount = protocolDay.invalidatedCount.plus(BIG_INT_ONE);
   integrator.invalidatedCount = integrator.invalidatedCount.plus(BIG_INT_ONE);
   integratorDay.invalidatedCount = integratorDay.invalidatedCount.plus(BIG_INT_ONE);
   event.invalidatedCount = event.invalidatedCount.plus(BIG_INT_ONE);
-  ticket.isInvalidated = true;
 
   protocol.save();
   protocolDay.save();
   integrator.save();
   integratorDay.save();
   event.save();
+  ticket.save();
 
   createUsageEvent(e, 0, event, nftIndex, "INVALIDATED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }
@@ -113,8 +115,8 @@ export function handleSecondarySale(e: secondarySale): void {
 
   ticket.owner = e.params.destinationAddress;
 
-  protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
-  protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
+  protocol.totalSalesVolume = protocol.totalSalesVolume.plus(ticket.basePrice);
+  protocolDay.totalSalesVolume = protocolDay.totalSalesVolume.plus(ticket.basePrice);
 
   protocol.resoldCount = protocol.resoldCount.plus(BIG_INT_ONE);
   protocolDay.resoldCount = protocolDay.resoldCount.plus(BIG_INT_ONE);
@@ -154,6 +156,7 @@ export function handleTicketScanned(e: ticketScanned): void {
   integrator.save();
   integratorDay.save();
   event.save();
+  ticket.save();
 
   createUsageEvent(e, 0, event, nftIndex, "SCANNED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }
@@ -180,6 +183,7 @@ export function handleNftClaimed(e: nftClaimed): void {
   integrator.save();
   integratorDay.save();
   event.save();
+  ticket.save();
 
   createUsageEvent(e, 0, event, nftIndex, "CLAIMED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

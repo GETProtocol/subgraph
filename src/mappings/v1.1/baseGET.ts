@@ -92,8 +92,8 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
     ticket.basePrice = primaryPrice.divDecimal(BIG_DECIMAL_1E3);
   }
 
-  protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
-  protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
+  protocol.totalSalesVolume = protocol.totalSalesVolume.plus(ticket.basePrice);
+  protocolDay.totalSalesVolume = protocolDay.totalSalesVolume.plus(ticket.basePrice);
 
   protocol.soldCount = protocol.soldCount.plus(BIG_INT_ONE);
   protocolDay.soldCount = protocolDay.soldCount.plus(BIG_INT_ONE);
@@ -211,8 +211,8 @@ export function handleSecondarySale(e: SecondarySale): void {
     price = e.params.resalePrice.divDecimal(BIG_DECIMAL_1E3);
   }
 
-  protocol.totalTicketValue = protocol.totalTicketValue.plus(ticket.basePrice);
-  protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(ticket.basePrice);
+  protocol.totalSalesVolume = protocol.totalSalesVolume.plus(ticket.basePrice);
+  protocolDay.totalSalesVolume = protocolDay.totalSalesVolume.plus(ticket.basePrice);
 
   protocol.resoldCount = protocol.resoldCount.plus(BIG_INT_ONE);
   protocolDay.resoldCount = protocolDay.resoldCount.plus(BIG_INT_ONE);
@@ -349,6 +349,7 @@ export function handleNftClaimed(e: NftClaimed): void {
   integrator.save();
   integratorDay.save();
   event.save();
+  ticket.save();
 
   createUsageEvent(e, 0, event, nftIndex, "CLAIMED", e.params.orderTime, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO, BIG_DECIMAL_ZERO);
 }

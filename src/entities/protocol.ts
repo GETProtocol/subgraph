@@ -19,7 +19,7 @@ export function getProtocol(): Protocol {
     protocol.currentSpentFuelProtocol = BIG_DECIMAL_ZERO;
     protocol.collectedSpentFuel = BIG_DECIMAL_ZERO;
     protocol.collectedSpentFuelProtocol = BIG_DECIMAL_ZERO;
-    protocol.totalTicketValue = BIG_DECIMAL_ZERO;
+    protocol.totalSalesVolume = BIG_DECIMAL_ZERO;
     protocol.topUpCount = BIG_INT_ZERO;
     protocol.eventCount = BIG_INT_ZERO;
     protocol.soldCount = BIG_INT_ZERO;
@@ -87,8 +87,8 @@ export function updateClaimed(count: BigInt): void {
   protocol.save();
 }
 
-export function updateTotalTicketValue(price: BigDecimal): void {
+export function updatetotalSalesVolume(price: BigDecimal): void {
   let protocol = getProtocol();
-  protocol.totalTicketValue = protocol.totalTicketValue.plus(price);
+  protocol.totalSalesVolume = protocol.totalSalesVolume.plus(price);
   protocol.save();
 }

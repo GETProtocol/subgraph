@@ -35,7 +35,7 @@ Table Protocol {
   currentSpentFuelProtocol bigdecimal
   collectedSpentFuel bigdecimal
   collectedSpentFuelProtocol bigdecimal
-  totalTicketValue bigdecimal
+  totalSalesVolume bigdecimal
   topUpCount bigint
   eventCount bigint
   soldCount bigint
@@ -58,7 +58,7 @@ Table ProtocolDay {
   currentSpentFuelProtocol bigdecimal
   collectedSpentFuel bigdecimal
   collectedSpentFuelProtocol bigdecimal
-  totalTicketValue bigdecimal
+  totalSalesVolume bigdecimal
   topUpCount bigint
   eventCount bigint
   soldCount bigint
