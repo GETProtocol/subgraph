@@ -104,8 +104,8 @@ export function handlePrimarySale(e: PrimarySale): void {
     );
   }
 
-  protocol.updateTotalTicketValue(cumulativeTicketValue);
-  protocolDay.updateTotalTicketValue(e, cumulativeTicketValue);
+  protocol.updatetotalSalesVolume(cumulativeTicketValue);
+  protocolDay.updatetotalSalesVolume(e, cumulativeTicketValue);
 
   protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol);
   protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
@@ -145,8 +145,8 @@ export function handleSecondarySale(e: SecondarySale): void {
     );
   }
 
-  protocol.updateTotalTicketValue(cumulativeTicketValue);
-  protocolDay.updateTotalTicketValue(e, cumulativeTicketValue);
+  protocol.updatetotalSalesVolume(cumulativeTicketValue);
+  protocolDay.updatetotalSalesVolume(e, cumulativeTicketValue);
 
   protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol);
   protocolDay.updateSecondarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);

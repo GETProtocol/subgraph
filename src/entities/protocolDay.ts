@@ -20,7 +20,7 @@ export function getProtocolDay(e: ethereum.Event): ProtocolDay {
     protocolDay.currentSpentFuelProtocol = BIG_DECIMAL_ZERO;
     protocolDay.collectedSpentFuel = BIG_DECIMAL_ZERO;
     protocolDay.collectedSpentFuelProtocol = BIG_DECIMAL_ZERO;
-    protocolDay.totalTicketValue = BIG_DECIMAL_ZERO;
+    protocolDay.totalSalesVolume = BIG_DECIMAL_ZERO;
     protocolDay.topUpCount = BIG_INT_ZERO;
     protocolDay.eventCount = BIG_INT_ZERO;
     protocolDay.soldCount = BIG_INT_ZERO;
@@ -86,8 +86,8 @@ export function updateClaimed(e: ethereum.Event, count: BigInt): void {
   protocolDay.save();
 }
 
-export function updateTotalTicketValue(e: ethereum.Event, price: BigDecimal): void {
+export function updatetotalSalesVolume(e: ethereum.Event, price: BigDecimal): void {
   let protocolDay = getProtocolDay(e);
-  protocolDay.totalTicketValue = protocolDay.totalTicketValue.plus(price);
+  protocolDay.totalSalesVolume = protocolDay.totalSalesVolume.plus(price);
   protocolDay.save();
 }

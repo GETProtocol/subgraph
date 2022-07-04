@@ -31,7 +31,7 @@ type Protocol @entity {
   currentSpentFuelProtocol: BigDecimal!
   collectedSpentFuel: BigDecimal!
   collectedSpentFuelProtocol: BigDecimal!
-  totalTicketValue: BigDecimal!
+  totalSalesVolume: BigDecimal!
   topUpCount: BigInt!
   eventCount: BigInt!
   soldCount: BigInt!
@@ -54,7 +54,7 @@ type ProtocolDay @entity {
   currentSpentFuelProtocol: BigDecimal!
   collectedSpentFuel: BigDecimal!
   collectedSpentFuelProtocol: BigDecimal!
-  totalTicketValue: BigDecimal!
+  totalSalesVolume: BigDecimal!
   topUpCount: BigInt!
   eventCount: BigInt!
   soldCount: BigInt!
