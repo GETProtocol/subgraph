@@ -68,6 +68,7 @@ export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   let integratorIndex = e.params.integratorIndex.toString();
   let total = e.params.total.divDecimal(BIG_DECIMAL_1E18);
   let salesTax = e.params.salesTax.divDecimal(BIG_DECIMAL_1E18);
+  let topUpAmount = total.minus(salesTax);
   let price = e.params.price.divDecimal(BIG_DECIMAL_1E18);
   let newAveragePrice = e.params.newAveragePrice.divDecimal(BIG_DECIMAL_1E18);
 
@@ -83,7 +84,7 @@ export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   let integrator = getIntegrator(integratorIndex);
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
 
-  integrator.availableFuel = integrator.availableFuel.plus(total);
+  integrator.availableFuel = integrator.availableFuel.plus(topUpAmount);
   integratorDay.availableFuel = integrator.availableFuel;
 
   integrator.price = newAveragePrice;
