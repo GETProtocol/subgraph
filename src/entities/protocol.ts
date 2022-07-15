@@ -87,7 +87,7 @@ export function updateClaimed(count: BigInt): void {
   protocol.save();
 }
 
-export function updatetotalSalesVolume(price: BigDecimal): void {
+export function updateTotalSalesVolume(price: BigDecimal): void {
   let protocol = getProtocol();
   protocol.totalSalesVolume = protocol.totalSalesVolume.plus(price);
   protocol.save();

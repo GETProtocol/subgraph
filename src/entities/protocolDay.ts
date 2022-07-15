@@ -86,7 +86,7 @@ export function updateClaimed(e: ethereum.Event, count: BigInt): void {
   protocolDay.save();
 }
 
-export function updatetotalSalesVolume(e: ethereum.Event, price: BigDecimal): void {
+export function updateTotalSalesVolume(e: ethereum.Event, price: BigDecimal): void {
   let protocolDay = getProtocolDay(e);
   protocolDay.totalSalesVolume = protocolDay.totalSalesVolume.plus(price);
   protocolDay.save();

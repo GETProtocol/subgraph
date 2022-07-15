@@ -139,6 +139,7 @@ Table Event {
   relayer Relayer
   usageEvents UsageEvent[] [ref: > UsageEvent.event]
   tickets Ticket[] [ref: > Ticket.event]
+  accountDeductionUsd bigdecimal
   reservedFuel bigdecimal
   reservedFuelProtocol bigdecimal
   averageReservedPerTicket bigdecimal

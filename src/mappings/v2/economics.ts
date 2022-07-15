@@ -9,6 +9,7 @@ import {
   RelayerAdded,
   RelayerRemoved,
   SpentFuelCollected,
+  UpdateDynamicRates,
 } from "../../../generated/EconomicsV2/EconomicsV2";
 import { BIG_DECIMAL_1E18, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
@@ -22,6 +23,12 @@ export function handleIntegratorConfigured(e: IntegratorConfigured): void {
   integrator.name = e.params.name;
   integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   relayer.save();
+  integrator.save();
+}
+
+export function handleUpdateDynamicRates(e: UpdateDynamicRates): void {
+  let integrator = getIntegrator(e.params.integratorIndex.toString());
+  integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   integrator.save();
 }
 
