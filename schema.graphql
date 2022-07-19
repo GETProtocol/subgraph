@@ -134,6 +134,7 @@ type Event @entity {
   relayer: Relayer!
   usageEvents: [UsageEvent!]! @derivedFrom(field: "event")
   tickets: [Ticket!]! @derivedFrom(field: "event")
+  accountDeductionUsd: BigDecimal!
   reservedFuel: BigDecimal!
   reservedFuelProtocol: BigDecimal!
   averageReservedPerTicket: BigDecimal!

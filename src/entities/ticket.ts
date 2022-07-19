@@ -1,6 +1,6 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { Ticket } from "../../generated/schema";
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY, CHAIN_NAME } from "../constants";
+import { ADDRESS_ZERO, BIG_DECIMAL_ZERO, BIG_INT_ZERO, BYTES_EMPTY, CHAIN_NAME } from "../constants";
 
 export function getTicket(eventIndex: BigInt, tokenId: BigInt): Ticket {
   let nftId = `${CHAIN_NAME}-${eventIndex.toString()}-${tokenId.toString()}`;
@@ -13,6 +13,7 @@ export function getTicket(eventIndex: BigInt, tokenId: BigInt): Ticket {
     ticket.blockNumber = BIG_INT_ZERO;
     ticket.blockTimestamp = BIG_INT_ZERO;
     ticket.event = "";
+    ticket.owner = ADDRESS_ZERO;
     ticket.integrator = "";
     ticket.relayer = "";
     ticket.basePrice = BIG_DECIMAL_ZERO;

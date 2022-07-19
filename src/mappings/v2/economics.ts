@@ -9,6 +9,8 @@ import {
   RelayerAdded,
   RelayerRemoved,
   SpentFuelCollected,
+  UpdateDynamicRates,
+  UpdateIntegratorName,
 } from "../../../generated/EconomicsV2/EconomicsV2";
 import { BIG_DECIMAL_1E18, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
@@ -22,6 +24,18 @@ export function handleIntegratorConfigured(e: IntegratorConfigured): void {
   integrator.name = e.params.name;
   integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   relayer.save();
+  integrator.save();
+}
+
+export function handleUpdateIntegratorName(e: UpdateIntegratorName): void {
+  let integrator = getIntegrator(e.params.integratorIndex.toString());
+  integrator.name = e.params.name;
+  integrator.save();
+}
+
+export function handleUpdateDynamicRates(e: UpdateDynamicRates): void {
+  let integrator = getIntegrator(e.params.integratorIndex.toString());
+  integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   integrator.save();
 }
 
@@ -61,6 +75,7 @@ export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   let integratorIndex = e.params.integratorIndex.toString();
   let total = e.params.total.divDecimal(BIG_DECIMAL_1E18);
   let salesTax = e.params.salesTax.divDecimal(BIG_DECIMAL_1E18);
+  let topUpAmount = total.minus(salesTax);
   let price = e.params.price.divDecimal(BIG_DECIMAL_1E18);
   let newAveragePrice = e.params.newAveragePrice.divDecimal(BIG_DECIMAL_1E18);
 
@@ -76,7 +91,7 @@ export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   let integrator = getIntegrator(integratorIndex);
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
 
-  integrator.availableFuel = integrator.availableFuel.plus(total);
+  integrator.availableFuel = integrator.availableFuel.plus(topUpAmount);
   integratorDay.availableFuel = integrator.availableFuel;
 
   integrator.price = newAveragePrice;

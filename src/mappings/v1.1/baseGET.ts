@@ -122,6 +122,8 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
     ticket.reservedFuel = ticket.reservedFuel.plus(getUsed);
     ticket.reservedFuelProtocol = ticket.reservedFuelProtocol.plus(getUsed);
 
+    event.accountDeductionUsd = event.accountDeductionUsd.plus(getUsed.times(billingIntegrator.price));
+
     billingIntegrator.availableFuel = billingIntegrator.availableFuel.minus(getUsed);
     billingIntegratorDay.availableFuel = billingIntegrator.availableFuel;
 

@@ -14,6 +14,7 @@ export function getEvent(eventAddress: Address): Event {
     event.blockTimestamp = BIG_INT_ZERO;
     event.integrator = "";
     event.relayer = "";
+    event.accountDeductionUsd = BIG_DECIMAL_ZERO;
     event.reservedFuel = BIG_DECIMAL_ZERO;
     event.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     event.averageReservedPerTicket = BIG_DECIMAL_ZERO;

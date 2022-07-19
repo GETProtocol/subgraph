@@ -74,6 +74,7 @@ export function handlePrimarySale(e: PrimarySale): void {
   let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelPerTicketProtocol = reservedFuelProtocol.div(countBigInt.toBigDecimal());
   let eventInstance = getEvent(e.address);
+  let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
   let cumulativeTicketValue = BIG_DECIMAL_ZERO;
   for (let i = 0; i < count; ++i) {
@@ -104,8 +105,11 @@ export function handlePrimarySale(e: PrimarySale): void {
     );
   }
 
-  protocol.updatetotalSalesVolume(cumulativeTicketValue);
-  protocolDay.updatetotalSalesVolume(e, cumulativeTicketValue);
+  eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
+  eventInstance.save();
+
+  protocol.updateTotalSalesVolume(cumulativeTicketValue);
+  protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
   protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol);
   protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
@@ -122,6 +126,7 @@ export function handleSecondarySale(e: SecondarySale): void {
   let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelPerTicketProtocol = reservedFuelProtocol.div(countBigInt.toBigDecimal());
   let eventInstance = getEvent(e.address);
+  let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
   let cumulativeTicketValue = BIG_DECIMAL_ZERO;
   for (let i = 0; i < count; ++i) {
@@ -145,8 +150,11 @@ export function handleSecondarySale(e: SecondarySale): void {
     );
   }
 
-  protocol.updatetotalSalesVolume(cumulativeTicketValue);
-  protocolDay.updatetotalSalesVolume(e, cumulativeTicketValue);
+  eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
+  eventInstance.save();
+
+  protocol.updateTotalSalesVolume(cumulativeTicketValue);
+  protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
   protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol);
   protocolDay.updateSecondarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
