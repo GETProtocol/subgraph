@@ -270,6 +270,8 @@ dataSources:
       eventHandlers:
         - event: IntegratorConfigured(uint32,string,address,(uint24,uint24,uint24,uint24,uint24,uint24,uint24))
           handler: handleIntegratorConfigured
+        - event: UpdateIntegratorName(uint32,string)
+          handler: handleUpdateIntegratorName
         - event: UpdateDynamicRates(uint32,(uint24,uint24,uint24,uint24,uint24,uint24,uint24))
           handler: handleUpdateDynamicRates
         - event: IntegratorDisabled(uint32)
