@@ -66,8 +66,10 @@ export function updateSecondarySale(
   integratorDay.resoldCount = integratorDay.resoldCount.plus(count);
   integratorDay.reservedFuel = integratorDay.reservedFuel.plus(reservedFuel);
   integratorDay.reservedFuelProtocol = integratorDay.reservedFuelProtocol.plus(reservedFuelProtocol);
-  integratorDay.averageReservedPerTicket = integratorDay.reservedFuel.div(integratorDay.soldCount.toBigDecimal());
   integratorDay.availableFuel = integrator.availableFuel;
+  if (integratorDay.soldCount.gt(BIG_INT_ZERO)) {
+    integratorDay.averageReservedPerTicket = integratorDay.reservedFuel.div(integratorDay.soldCount.toBigDecimal());
+  }
   integratorDay.save();
 }
 

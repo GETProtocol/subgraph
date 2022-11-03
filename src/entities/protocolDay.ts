@@ -48,7 +48,9 @@ export function updateSecondarySale(e: ethereum.Event, count: BigInt, reservedFu
   protocolDay.resoldCount = protocolDay.resoldCount.plus(count);
   protocolDay.reservedFuel = protocolDay.reservedFuel.plus(reservedFuel);
   protocolDay.reservedFuelProtocol = protocolDay.reservedFuelProtocol.plus(reservedFuelProtocol);
-  protocolDay.averageReservedPerTicket = protocolDay.reservedFuel.div(protocolDay.soldCount.toBigDecimal());
+  if (protocolDay.soldCount.gt(BIG_INT_ZERO)) {
+    protocolDay.averageReservedPerTicket = protocolDay.reservedFuel.div(protocolDay.soldCount.toBigDecimal());
+  }
   protocolDay.save();
 }
 
