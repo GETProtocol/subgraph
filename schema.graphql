@@ -40,6 +40,7 @@ type Protocol @entity {
   scannedCount: BigInt!
   checkedInCount: BigInt!
   claimedCount: BigInt!
+  minFeePrimary: BigDecimal!
 }
 
 type ProtocolDay @entity {
@@ -79,6 +80,12 @@ type Integrator @entity {
   activeTicketCount: Int!
   isBillingEnabled: Boolean!
   isConfigured: Boolean!
+  minFeePrimary: BigDecimal!
+  maxFeePrimary: BigDecimal!
+  primaryRate: BigDecimal!
+  minFeeSecondary: BigDecimal!
+  maxFeeSecondary: BigDecimal!
+  secondaryRate: BigDecimal!
   salesTaxRate: BigDecimal!
   name: String!
   eventCount: BigInt!

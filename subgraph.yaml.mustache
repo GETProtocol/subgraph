@@ -290,6 +290,8 @@ dataSources:
           handler: handleSpentFuelCollected
         - event: AccountBalanceCorrected(uint32,uint256,uint256,uint256,uint256,uint256,uint256)
           handler: handleAccountBalanceCorrected
+        - event: UpdateProtocolRates((uint24,uint24,uint24,uint24,uint24,uint24,uint24))
+          handler: handleUpdateProtocolRates
       file: ./src/mappings/v2/economics.ts
 
 {{ /v2.Economics }}

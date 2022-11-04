@@ -11,8 +11,9 @@ import {
   SpentFuelCollected,
   UpdateDynamicRates,
   UpdateIntegratorName,
+  UpdateProtocolRates,
 } from "../../../generated/EconomicsV2/EconomicsV2";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
+import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
 import { createTopUpEvent } from "../../entities/topUpEvent";
 
@@ -22,6 +23,12 @@ export function handleIntegratorConfigured(e: IntegratorConfigured): void {
   relayer.integrator = integrator.id;
   relayer.isEnabled = true;
   integrator.name = e.params.name;
+  integrator.minFeePrimary = BigInt.fromI32(e.params.dynamicRates.minFeePrimary).divDecimal(BIG_DECIMAL_1E3);
+  integrator.maxFeePrimary = BigInt.fromI32(e.params.dynamicRates.maxFeePrimary).divDecimal(BIG_DECIMAL_1E3);
+  integrator.primaryRate = BigInt.fromI32(e.params.dynamicRates.primaryRate).divDecimal(BigDecimal.fromString("10000"));
+  integrator.minFeeSecondary = BigInt.fromI32(e.params.dynamicRates.minFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
+  integrator.maxFeeSecondary = BigInt.fromI32(e.params.dynamicRates.maxFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
+  integrator.secondaryRate = BigInt.fromI32(e.params.dynamicRates.secondaryRate).divDecimal(BigDecimal.fromString("10000"));
   integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   relayer.save();
   integrator.save();
@@ -35,8 +42,20 @@ export function handleUpdateIntegratorName(e: UpdateIntegratorName): void {
 
 export function handleUpdateDynamicRates(e: UpdateDynamicRates): void {
   let integrator = getIntegrator(e.params.integratorIndex.toString());
+  integrator.minFeePrimary = BigInt.fromI32(e.params.dynamicRates.minFeePrimary).divDecimal(BIG_DECIMAL_1E3);
+  integrator.maxFeePrimary = BigInt.fromI32(e.params.dynamicRates.maxFeePrimary).divDecimal(BIG_DECIMAL_1E3);
+  integrator.primaryRate = BigInt.fromI32(e.params.dynamicRates.primaryRate).divDecimal(BigDecimal.fromString("10000"));
+  integrator.minFeeSecondary = BigInt.fromI32(e.params.dynamicRates.minFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
+  integrator.maxFeeSecondary = BigInt.fromI32(e.params.dynamicRates.maxFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
+  integrator.secondaryRate = BigInt.fromI32(e.params.dynamicRates.secondaryRate).divDecimal(BigDecimal.fromString("10000"));
   integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   integrator.save();
+}
+
+export function handleUpdateProtocolRates(e: UpdateProtocolRates): void {
+  let protocol = getProtocol();
+  protocol.minFeePrimary = BigInt.fromI32(e.params.protocolRates.minFeePrimary).divDecimal(BIG_DECIMAL_1E3);
+  protocol.save();
 }
 
 export function handleIntegratorDisabled(e: IntegratorDisabled): void {
