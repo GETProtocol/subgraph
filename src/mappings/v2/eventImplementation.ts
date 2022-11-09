@@ -11,7 +11,14 @@ import {
   Transfer,
 } from "../../../generated/templates/EventImplementation/EventImplementation";
 import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO } from "../../constants";
-import { createUsageEvent, getEvent, getTicket } from "../../entities";
+import {
+  calculateReservedFuelPrimary,
+  calculateReservedFuelProtocol,
+  calculateReservedFuelSecondary,
+  createUsageEvent,
+  getEvent,
+  getTicket,
+} from "../../entities";
 import * as protocol from "../../entities/protocol";
 import * as protocolDay from "../../entities/protocolDay";
 import * as integrator from "../../entities/integrator";
@@ -70,9 +77,7 @@ export function handlePrimarySale(e: PrimarySale): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
-  let reservedFuelPerTicket = reservedFuel.div(countBigInt.toBigDecimal());
   let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
-  let reservedFuelPerTicketProtocol = reservedFuelProtocol.div(countBigInt.toBigDecimal());
   let eventInstance = getEvent(e.address);
   let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
@@ -87,8 +92,8 @@ export function handlePrimarySale(e: PrimarySale): void {
     ticket.relayer = e.transaction.from.toHexString();
     ticket.integrator = eventInstance.integrator;
     ticket.basePrice = ticketAction.basePrice.divDecimal(BIG_DECIMAL_1E3);
-    ticket.reservedFuel = reservedFuelPerTicket;
-    ticket.reservedFuelProtocol = reservedFuelPerTicketProtocol;
+    ticket.reservedFuel = calculateReservedFuelPrimary(ticket, integratorInstance);
+    ticket.reservedFuelProtocol = calculateReservedFuelProtocol(ticket, integratorInstance);
     ticket.save();
 
     cumulativeTicketValue = cumulativeTicketValue.plus(ticket.basePrice);
@@ -100,8 +105,8 @@ export function handlePrimarySale(e: PrimarySale): void {
       "SOLD",
       ticketAction.orderTime,
       ticket.basePrice,
-      reservedFuelPerTicket,
-      reservedFuelPerTicketProtocol
+      ticket.reservedFuel,
+      ticket.reservedFuelProtocol
     );
   }
 
@@ -122,9 +127,7 @@ export function handleSecondarySale(e: SecondarySale): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
-  let reservedFuelPerTicket = reservedFuel.div(countBigInt.toBigDecimal());
   let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
-  let reservedFuelPerTicketProtocol = reservedFuelProtocol.div(countBigInt.toBigDecimal());
   let eventInstance = getEvent(e.address);
   let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
@@ -132,8 +135,8 @@ export function handleSecondarySale(e: SecondarySale): void {
   for (let i = 0; i < count; ++i) {
     let ticketAction = e.params.ticketActions[i];
     let ticket = getTicket(eventInstance.eventIndex, ticketAction.tokenId);
-    ticket.reservedFuel = ticket.reservedFuel.plus(reservedFuelPerTicket);
-    ticket.reservedFuelProtocol = ticket.reservedFuelProtocol.plus(reservedFuelPerTicketProtocol);
+    ticket.reservedFuel = ticket.reservedFuel.plus(calculateReservedFuelSecondary(ticket, integratorInstance));
+    ticket.reservedFuelProtocol = ticket.reservedFuelProtocol.plus(calculateReservedFuelProtocol(ticket, integratorInstance));
     ticket.save();
 
     cumulativeTicketValue = cumulativeTicketValue.plus(ticket.basePrice);
@@ -145,8 +148,8 @@ export function handleSecondarySale(e: SecondarySale): void {
       "RESOLD",
       ticketAction.orderTime,
       ticketAction.basePrice.divDecimal(BIG_DECIMAL_1E3),
-      reservedFuelPerTicket,
-      reservedFuelPerTicketProtocol
+      ticket.reservedFuel,
+      ticket.reservedFuelProtocol
     );
   }
 

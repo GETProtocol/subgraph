@@ -143,6 +143,49 @@
         "internalType": "uint256",
         "name": "price",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes32",
+        "name": "externalId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "ToppedUpCustodial0x",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "debitedAccount",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "availableFuel",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amountFuel",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
       }
     ],
     "name": "ToppedUpNonCustodial",
@@ -470,6 +513,39 @@
     "name": "topUpCustodial",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_externalId",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "_spender",
+        "type": "address"
+      },
+      {
+        "internalType": "address payable",
+        "name": "_swapTarget",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_swapCallData",
+        "type": "bytes"
+      }
+    ],
+    "name": "topUpCustodial0x",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {

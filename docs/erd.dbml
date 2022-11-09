@@ -44,6 +44,7 @@ Table Protocol {
   scannedCount bigint
   checkedInCount bigint
   claimedCount bigint
+  minFeePrimary bigdecimal
 }
 
 Table ProtocolDay {
@@ -84,6 +85,12 @@ Table Integrator {
   activeTicketCount bigint
   isBillingEnabled boolean
   isConfigured boolean
+  minFeePrimary bigdecimal
+  maxFeePrimary bigdecimal
+  primaryRate bigdecimal
+  minFeeSecondary bigdecimal
+  maxFeeSecondary bigdecimal
+  secondaryRate bigdecimal
   salesTaxRate bigdecimal
   name string
   eventCount bigint

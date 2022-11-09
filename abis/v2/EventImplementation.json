@@ -670,12 +670,12 @@
           }
         ],
         "internalType": "struct IEventImplementation.TicketAction[]",
-        "name": "ticketActions",
+        "name": "_ticketActions",
         "type": "tuple[]"
       },
       {
         "internalType": "uint8[]",
-        "name": "actionCounts",
+        "name": "_actionCounts",
         "type": "uint8[]"
       },
       {
@@ -692,7 +692,7 @@
           }
         ],
         "internalType": "struct IEventImplementation.BalanceUpdates[]",
-        "name": "balanceUpdates",
+        "name": "_balanceUpdates",
         "type": "tuple[]"
       }
     ],
@@ -872,7 +872,7 @@
         "type": "uint256"
       }
     ],
-    "name": "isClaimed",
+    "name": "isCustodial",
     "outputs": [
       {
         "internalType": "bool",
@@ -922,6 +922,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "isUnlocked",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "_status",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "name",
     "outputs": [
@@ -929,6 +948,19 @@
         "internalType": "string",
         "name": "",
         "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -957,17 +989,17 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "from",
+        "name": "_from",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "to",
+        "name": "_to",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "_tokenId",
         "type": "uint256"
       }
     ],
@@ -980,17 +1012,17 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "from",
+        "name": "_from",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "to",
+        "name": "_to",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "_tokenId",
         "type": "uint256"
       },
       {
@@ -1202,7 +1234,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "_tokenId",
         "type": "uint256"
       }
     ],
@@ -1221,17 +1253,17 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "from",
+        "name": "_from",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "to",
+        "name": "_to",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "_tokenId",
         "type": "uint256"
       }
     ],

@@ -28,6 +28,7 @@ export function getProtocol(): Protocol {
     protocol.scannedCount = BIG_INT_ZERO;
     protocol.checkedInCount = BIG_INT_ZERO;
     protocol.claimedCount = BIG_INT_ZERO;
+    protocol.minFeePrimary = BIG_DECIMAL_ZERO;
   }
 
   return protocol as Protocol;

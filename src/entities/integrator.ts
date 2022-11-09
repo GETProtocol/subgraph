@@ -20,6 +20,12 @@ export function getIntegrator(integratorIndex: string): Integrator {
     integrator.activeTicketCount = 0;
     integrator.isBillingEnabled = true;
     integrator.isConfigured = true;
+    integrator.minFeePrimary = BIG_DECIMAL_ZERO;
+    integrator.maxFeePrimary = BIG_DECIMAL_ZERO;
+    integrator.primaryRate = BIG_DECIMAL_ZERO;
+    integrator.minFeeSecondary = BIG_DECIMAL_ZERO;
+    integrator.maxFeeSecondary = BIG_DECIMAL_ZERO;
+    integrator.secondaryRate = BIG_DECIMAL_ZERO;
     integrator.salesTaxRate = BIG_DECIMAL_ZERO;
     integrator.name = "";
     integrator.eventCount = BIG_INT_ZERO;
