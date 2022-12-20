@@ -218,7 +218,7 @@ export function handleSecondarySale(e: SecondarySale): void {
 
   protocol.resoldCount = protocol.resoldCount.plus(BIG_INT_ONE);
   protocolDay.resoldCount = protocolDay.resoldCount.plus(BIG_INT_ONE);
-  integrator.resoldCount = integratorDay.resoldCount.plus(BIG_INT_ONE);
+  integrator.resoldCount = integrator.resoldCount.plus(BIG_INT_ONE);
   integratorDay.resoldCount = integratorDay.resoldCount.plus(BIG_INT_ONE);
   event.resoldCount = event.resoldCount.plus(BIG_INT_ONE);
 

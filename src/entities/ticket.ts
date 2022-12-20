@@ -51,6 +51,8 @@ function calculateReservedFuel(
   //     _fuel += (_fuelUsd * 1e18) / integrator.price;
   // }
 
+  if (price.equals(BIG_DECIMAL_ZERO)) return BIG_DECIMAL_ZERO;
+
   let fuelUsd = basePrice.times(rate).div(BigDecimal.fromString("100"));
 
   if (fuelUsd.lt(minFee)) {
@@ -86,5 +88,6 @@ export function calculateReservedFuelSecondary(ticket: Ticket, integrator: Integ
 // This may change to be ticket-specific in future.
 export function calculateReservedFuelProtocol(_ticket: Ticket, integrator: Integrator): BigDecimal {
   let protocol = getProtocol();
+  if (integrator.price.equals(BIG_DECIMAL_ZERO)) return BIG_DECIMAL_ZERO;
   return protocol.minFeePrimary.div(integrator.price);
 }
