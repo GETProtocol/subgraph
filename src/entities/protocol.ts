@@ -65,6 +65,8 @@ export function updateScanned(count: BigInt): void {
 export function updateCheckedIn(count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
   let protocol = getProtocol();
   protocol.checkedInCount = protocol.checkedInCount.plus(count);
+  protocol.currentSpentFuel = protocol.currentSpentFuel.plus(spentFuel);
+  protocol.currentSpentFuelProtocol = protocol.currentSpentFuelProtocol.plus(spentFuelProtocol);
   protocol.spentFuel = protocol.spentFuel.plus(spentFuel);
   protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(spentFuelProtocol);
   protocol.currentReservedFuel = protocol.currentReservedFuel.minus(spentFuel);
@@ -75,6 +77,8 @@ export function updateCheckedIn(count: BigInt, spentFuel: BigDecimal, spentFuelP
 export function updateInvalidated(count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
   let protocol = getProtocol();
   protocol.invalidatedCount = protocol.invalidatedCount.plus(count);
+  protocol.currentSpentFuel = protocol.currentSpentFuel.plus(spentFuel);
+  protocol.currentSpentFuelProtocol = protocol.currentSpentFuelProtocol.plus(spentFuelProtocol);
   protocol.spentFuel = protocol.spentFuel.plus(spentFuel);
   protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(spentFuelProtocol);
   protocol.currentReservedFuel = protocol.currentReservedFuel.minus(spentFuel);
