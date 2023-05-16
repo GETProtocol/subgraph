@@ -41,6 +41,8 @@ type Protocol @entity {
   checkedInCount: BigInt!
   claimedCount: BigInt!
   minFeePrimary: BigDecimal!
+  treasuryRevenue: BigDecimal!
+  holdersRevenue: BigDecimal!
 }
 
 type ProtocolDay @entity {
@@ -64,6 +66,8 @@ type ProtocolDay @entity {
   scannedCount: BigInt!
   checkedInCount: BigInt!
   claimedCount: BigInt!
+  treasuryRevenue: BigDecimal!
+  holdersRevenue: BigDecimal!
 }
 
 type Integrator @entity {

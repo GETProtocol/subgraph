@@ -116,8 +116,15 @@ export function handlePrimarySale(e: PrimarySale): void {
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
-  protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol);
-  protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
+  let treasuryRevenue = reservedFuelProtocol;
+  const day = protocolDay.getProtocolDay(e).day;
+  if (day >= 19394 && eventInstance.integrator != "4") {
+    const remainderReservedFuel = reservedFuel.minus(reservedFuel);
+    treasuryRevenue = treasuryRevenue.plus(remainderReservedFuel.times(BigDecimal.fromString("0.8")));
+  }
+
+  protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
+  protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
   integrator.updatePrimarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
   integratorDay.updatePrimarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
   event.updatePrimarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
@@ -159,8 +166,15 @@ export function handleSecondarySale(e: SecondarySale): void {
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
-  protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol);
-  protocolDay.updateSecondarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
+  let treasuryRevenue = reservedFuelProtocol;
+  const day = protocolDay.getProtocolDay(e).day;
+  if (day >= 19394 && eventInstance.integrator != "4") {
+    const remainderReservedFuel = reservedFuel.minus(reservedFuel);
+    treasuryRevenue = treasuryRevenue.plus(remainderReservedFuel.times(BigDecimal.fromString("0.8")));
+  }
+
+  protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
+  protocolDay.updateSecondarySale(e, countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
   integrator.updateSecondarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
   integratorDay.updateSecondarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
   event.updateSecondarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
@@ -215,8 +229,26 @@ export function handleCheckedIn(e: CheckedIn): void {
     );
   }
 
-  protocol.updateCheckedIn(countBigInt, spentFuel, spentFuelProtocol);
-  protocolDay.updateCheckedIn(e, countBigInt, spentFuel, spentFuelProtocol);
+  const day = protocolDay.getProtocolDay(e).day;
+  //day 19338 refers to 12th of December 2022
+  let holdersRevenue: BigDecimal;
+  // let treasuryRevenue: BigDecimal;
+
+  if (day >= 19338 && eventInstance.integrator == "4") {
+    holdersRevenue = spentFuel;
+    // treasuryRevenue = BigDecimal.zero();
+  }
+  // when staking rewards start to accumulate
+  else if (day >= 19394) {
+    holdersRevenue = spentFuel.times(BigDecimal.fromString("0.2"));
+    // treasuryRevenue = spentFuel.times(BigDecimal.fromString("0.8"));
+  } else {
+    holdersRevenue = BigDecimal.zero();
+    // treasuryRevenue = spentFuel;
+  }
+
+  protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
+  protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
   integrator.updateCheckedIn(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
   integratorDay.updateCheckedIn(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol);
   event.updateCheckedIn(e.address, countBigInt);
@@ -248,9 +280,26 @@ export function handleInvalidated(e: Invalidated): void {
       spentFuelProtocol
     );
   }
+  const day = protocolDay.getProtocolDay(e).day;
+  //day 19338 refers to 12th of December 2022
+  let holdersRevenue: BigDecimal;
+  // let treasuryRevenue: BigDecimal;
+  const remainder = spentFuel.minus(spentFuelProtocol);
+  if (day >= 19338 && eventInstance.integrator == "4") {
+    holdersRevenue = remainder;
+    // treasuryRevenue = BigDecimal.zero();
+  }
+  // when staking rewards start to accumulate
+  else if (day >= 19394) {
+    holdersRevenue = remainder.times(BigDecimal.fromString("0.2"));
+    // treasuryRevenue = remainder.times(BigDecimal.fromString("0.8"));
+  } else {
+    holdersRevenue = BigDecimal.zero();
+    // treasuryRevenue = remainder;
+  }
 
-  protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol);
-  protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol);
+  protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
+  protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
   integrator.updateInvalidated(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
   integratorDay.updateInvalidated(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol);
   event.updateInvalidated(e.address, countBigInt);

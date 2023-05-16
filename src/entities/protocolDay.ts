@@ -29,21 +29,36 @@ export function getProtocolDay(e: ethereum.Event): ProtocolDay {
     protocolDay.scannedCount = BIG_INT_ZERO;
     protocolDay.checkedInCount = BIG_INT_ZERO;
     protocolDay.claimedCount = BIG_INT_ZERO;
+    protocolDay.treasuryRevenue = BIG_DECIMAL_ZERO;
+    protocolDay.holdersRevenue = BIG_DECIMAL_ZERO;
   }
 
   return protocolDay as ProtocolDay;
 }
 
-export function updatePrimarySale(e: ethereum.Event, count: BigInt, reservedFuel: BigDecimal, reservedFuelProtocol: BigDecimal): void {
+export function updatePrimarySale(
+  e: ethereum.Event,
+  count: BigInt,
+  reservedFuel: BigDecimal,
+  reservedFuelProtocol: BigDecimal,
+  treasuryRevenue: BigDecimal
+): void {
   let protocolDay = getProtocolDay(e);
   protocolDay.soldCount = protocolDay.soldCount.plus(count);
   protocolDay.reservedFuel = protocolDay.reservedFuel.plus(reservedFuel);
   protocolDay.reservedFuelProtocol = protocolDay.reservedFuelProtocol.plus(reservedFuelProtocol);
   protocolDay.averageReservedPerTicket = protocolDay.reservedFuel.div(protocolDay.soldCount.toBigDecimal());
+  protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(treasuryRevenue);
   protocolDay.save();
 }
 
-export function updateSecondarySale(e: ethereum.Event, count: BigInt, reservedFuel: BigDecimal, reservedFuelProtocol: BigDecimal): void {
+export function updateSecondarySale(
+  e: ethereum.Event,
+  count: BigInt,
+  reservedFuel: BigDecimal,
+  reservedFuelProtocol: BigDecimal,
+  treasuryRevenue: BigDecimal
+): void {
   let protocolDay = getProtocolDay(e);
   protocolDay.resoldCount = protocolDay.resoldCount.plus(count);
   protocolDay.reservedFuel = protocolDay.reservedFuel.plus(reservedFuel);
@@ -51,6 +66,7 @@ export function updateSecondarySale(e: ethereum.Event, count: BigInt, reservedFu
   if (protocolDay.soldCount.gt(BIG_INT_ZERO)) {
     protocolDay.averageReservedPerTicket = protocolDay.reservedFuel.div(protocolDay.soldCount.toBigDecimal());
   }
+  protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(treasuryRevenue);
   protocolDay.save();
 }
 
@@ -64,6 +80,9 @@ export function updateCheckedIn(e: ethereum.Event, count: BigInt, spentFuel: Big
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
   protocolDay.checkedInCount = protocolDay.checkedInCount.plus(count);
+  //protocolDay.treasuryRevenue = protocolDay.treasuryRevenue + treasuryRevenue
+  // same for holdersRev
+
   protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
   protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(spentFuelProtocol);
   protocolDay.currentSpentFuel = protocol.currentSpentFuel;
@@ -71,12 +90,22 @@ export function updateCheckedIn(e: ethereum.Event, count: BigInt, spentFuel: Big
   protocolDay.save();
 }
 
-export function updateInvalidated(e: ethereum.Event, count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
+export function updateInvalidated(
+  e: ethereum.Event,
+  count: BigInt,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal,
+  holdersRevenue: BigDecimal
+  // treasuryRevenue: BigDecimal
+): void {
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
-  protocolDay.invalidatedCount = protocolDay.invalidatedCount.plus(count);
-  protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
+
+  protocolDay.holdersRevenue = protocolDay.holdersRevenue.plus(holdersRevenue);
+  // protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(treasuryRevenue);
   protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(spentFuelProtocol);
+  protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
+  protocolDay.invalidatedCount = protocolDay.invalidatedCount.plus(count);
   protocolDay.currentSpentFuel = protocol.currentSpentFuel;
   protocolDay.currentSpentFuelProtocol = protocol.currentSpentFuelProtocol;
   protocolDay.save();
