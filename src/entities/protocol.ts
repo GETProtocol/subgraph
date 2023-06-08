@@ -88,16 +88,9 @@ export function updateCheckedIn(count: BigInt, spentFuel: BigDecimal, spentFuelP
   protocol.save();
 }
 
-export function updateInvalidated(
-  count: BigInt,
-  spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal,
-  holdersRevenue: BigDecimal
-  // treasuryRevenue: BigDecimal
-): void {
+export function updateInvalidated(count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal, holdersRevenue: BigDecimal): void {
   let protocol = getProtocol();
   protocol.holdersRevenue = protocol.holdersRevenue.plus(holdersRevenue);
-  // protocol.treasuryRevenue = protocol.treasuryRevenue.plus(treasuryRevenue);
   protocol.invalidatedCount = protocol.invalidatedCount.plus(count);
   protocol.currentSpentFuel = protocol.currentSpentFuel.plus(spentFuel);
   protocol.currentSpentFuelProtocol = protocol.currentSpentFuelProtocol.plus(spentFuelProtocol);

@@ -80,9 +80,6 @@ export function updateCheckedIn(e: ethereum.Event, count: BigInt, spentFuel: Big
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
   protocolDay.checkedInCount = protocolDay.checkedInCount.plus(count);
-  //protocolDay.treasuryRevenue = protocolDay.treasuryRevenue + treasuryRevenue
-  // same for holdersRev
-
   protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
   protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(spentFuelProtocol);
   protocolDay.currentSpentFuel = protocol.currentSpentFuel;
@@ -96,13 +93,10 @@ export function updateInvalidated(
   spentFuel: BigDecimal,
   spentFuelProtocol: BigDecimal,
   holdersRevenue: BigDecimal
-  // treasuryRevenue: BigDecimal
 ): void {
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
-
   protocolDay.holdersRevenue = protocolDay.holdersRevenue.plus(holdersRevenue);
-  // protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(treasuryRevenue);
   protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(spentFuelProtocol);
   protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
   protocolDay.invalidatedCount = protocolDay.invalidatedCount.plus(count);
