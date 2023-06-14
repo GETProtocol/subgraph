@@ -76,9 +76,16 @@ export function updateScanned(e: ethereum.Event, count: BigInt): void {
   protocolDay.save();
 }
 
-export function updateCheckedIn(e: ethereum.Event, count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
+export function updateCheckedIn(
+  e: ethereum.Event,
+  count: BigInt,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal,
+  holdersRevenue: BigDecimal
+): void {
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
+  protocolDay.holdersRevenue = protocolDay.holdersRevenue.plus(holdersRevenue);
   protocolDay.checkedInCount = protocolDay.checkedInCount.plus(count);
   protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
   protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(spentFuelProtocol);

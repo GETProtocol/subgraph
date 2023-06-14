@@ -242,8 +242,8 @@ export function handleCheckedIn(e: CheckedIn): void {
     holdersRevenue = BigDecimal.zero();
   }
 
-  protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
-  protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
+  protocol.updateCheckedIn(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
+  protocolDay.updateCheckedIn(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
   integrator.updateCheckedIn(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
   integratorDay.updateCheckedIn(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol);
   event.updateCheckedIn(e.address, countBigInt);

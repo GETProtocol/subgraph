@@ -76,8 +76,9 @@ export function updateScanned(count: BigInt): void {
   protocol.save();
 }
 
-export function updateCheckedIn(count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
+export function updateCheckedIn(count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal, holdersRevenue: BigDecimal): void {
   let protocol = getProtocol();
+  protocol.holdersRevenue = protocol.holdersRevenue.plus(holdersRevenue);
   protocol.checkedInCount = protocol.checkedInCount.plus(count);
   protocol.currentSpentFuel = protocol.currentSpentFuel.plus(spentFuel);
   protocol.currentSpentFuelProtocol = protocol.currentSpentFuelProtocol.plus(spentFuelProtocol);
