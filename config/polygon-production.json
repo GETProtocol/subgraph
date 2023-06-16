@@ -2,7 +2,7 @@
   "chainName": "polygon",
   "network": "matic",
   "graft": {
-    "base": "QmUJkxTfn1CBTSdZQHCQR6KZnGjq4uPYo1fGk8DEUGjDRV",
+    "base": "QmdiCpJWZFHh8qyMv3fgTcpS6ye3BwrSe7k3DWnP7XDeM3",
     "block": 29585037
   },
   "relayers": [

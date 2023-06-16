@@ -242,6 +242,15 @@ Both playground and production deployments are handled within this repository us
 
 Prior to deploying an environment you must always ensure to have prepared the correct subgraph.yaml to prevent deploying to the wrong hosted graph.
 
+### Docker
+
+This repository comes with a `Dockerfile` to manage dependencies for build and release. To release this subgraph to TheGraph decentralized service you must first have a deploy key, and then:
+
+1. `docker build --build-arg DEPLOY_KEY=<KEY> -t subgraph .`
+2. `docker run -it subgraph release:<ENV> -l <VERSION>`
+
+Where ENV is the environment to release to, see package.json for options, and VERSION is the semver tag of the release version.
+
 ## Contributing
 
 Contributions are welcome, please feel free to let us know about any issues or create a PR. By contributing, you agree to release your modifications under the MIT license (see the file LICENSE).
