@@ -20,6 +20,7 @@ export function getIntegrator(integratorIndex: string): Integrator {
     integrator.activeTicketCount = 0;
     integrator.isBillingEnabled = true;
     integrator.isConfigured = true;
+    integrator.isOnCredit = false;
     integrator.minFeePrimary = BIG_DECIMAL_ZERO;
     integrator.maxFeePrimary = BIG_DECIMAL_ZERO;
     integrator.primaryRate = BIG_DECIMAL_ZERO;

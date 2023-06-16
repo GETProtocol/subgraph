@@ -11,12 +11,14 @@ import {
   Transfer,
 } from "../../../generated/templates/EventImplementation/EventImplementation";
 import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO } from "../../constants";
+import { GUTS_ON_CREDIT_BLOCK, GET_SAAS, STAKING, FUEL_BRIDGE_RECEIVER } from "../../constants/contracts";
 import {
   calculateReservedFuelPrimary,
   calculateReservedFuelProtocol,
   calculateReservedFuelSecondary,
   createUsageEvent,
   getEvent,
+  getSpentFuelRecipient,
   getTicket,
 } from "../../entities";
 import * as protocol from "../../entities/protocol";
@@ -116,11 +118,14 @@ export function handlePrimarySale(e: PrimarySale): void {
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
+  let treasurySpentFuelRecipient = getSpentFuelRecipient(GET_SAAS);
+  let percentageTreasury = treasurySpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
+
   let treasuryRevenue = reservedFuelProtocol;
   const day = protocolDay.getProtocolDay(e).day;
-  if (day >= 19394 && eventInstance.integrator != "4") {
+  if (!(day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) && !integratorInstance.isOnCredit) {
     const remainderReservedFuel = reservedFuel.minus(reservedFuelProtocol);
-    treasuryRevenue = treasuryRevenue.plus(remainderReservedFuel.times(BigDecimal.fromString("0.8")));
+    treasuryRevenue = treasuryRevenue.plus(remainderReservedFuel.times(percentageTreasury));
   }
 
   protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
@@ -168,9 +173,13 @@ export function handleSecondarySale(e: SecondarySale): void {
 
   let treasuryRevenue = reservedFuelProtocol;
   const day = protocolDay.getProtocolDay(e).day;
-  if (day >= 19394 && eventInstance.integrator != "4") {
+
+  let treasurySpentFuelRecipient = getSpentFuelRecipient(GET_SAAS);
+  let percentageTreasury = treasurySpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
+
+  if (!(day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) && !integratorInstance.isOnCredit) {
     const remainderReservedFuel = reservedFuel.minus(reservedFuelProtocol);
-    treasuryRevenue = treasuryRevenue.plus(remainderReservedFuel.times(BigDecimal.fromString("0.8")));
+    treasuryRevenue = treasuryRevenue.plus(remainderReservedFuel.times(percentageTreasury));
   }
 
   protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
@@ -208,6 +217,7 @@ export function handleCheckedIn(e: CheckedIn): void {
   let spentFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
   let spentFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
   let eventInstance = getEvent(e.address);
+  let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
   for (let i = 0; i < count; ++i) {
     let ticketAction = e.params.ticketActions[i];
@@ -229,15 +239,23 @@ export function handleCheckedIn(e: CheckedIn): void {
     );
   }
 
+  const remainder = spentFuel.minus(spentFuelProtocol);
+
+  let ethStakingSpentFuelRecipient = getSpentFuelRecipient(FUEL_BRIDGE_RECEIVER);
+  let percentageEthStaking = ethStakingSpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
+
+  let polyStakingSpentFuelRecipient = getSpentFuelRecipient(STAKING);
+  let percentagePolyStaking = polyStakingSpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
   const day = protocolDay.getProtocolDay(e).day;
-  //day 19338 refers to 12th of December 2022
   let holdersRevenue: BigDecimal;
-  if (day >= 19338 && eventInstance.integrator == "4") {
-    holdersRevenue = spentFuel;
-  }
-  // when staking rewards start to accumulate
-  else if (day >= 19394) {
-    holdersRevenue = spentFuel.times(BigDecimal.fromString("0.2"));
+
+  if (
+    (day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) ||
+    (e.block.number.ge(GUTS_ON_CREDIT_BLOCK) && integratorInstance.isOnCredit)
+  ) {
+    holdersRevenue = remainder;
+  } else if (e.block.number.ge(GUTS_ON_CREDIT_BLOCK) && !integratorInstance.isOnCredit) {
+    holdersRevenue = remainder.times(percentageEthStaking.plus(percentagePolyStaking));
   } else {
     holdersRevenue = BigDecimal.zero();
   }
@@ -255,6 +273,7 @@ export function handleInvalidated(e: Invalidated): void {
   let spentFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
   let spentFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
   let eventInstance = getEvent(e.address);
+  let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
   for (let i = 0; i < count; ++i) {
     let ticketAction = e.params.ticketActions[i];
@@ -275,16 +294,24 @@ export function handleInvalidated(e: Invalidated): void {
       spentFuelProtocol
     );
   }
-  const day = protocolDay.getProtocolDay(e).day;
-  //day 19338 refers to 12th of December 2022
-  let holdersRevenue: BigDecimal;
+
   const remainder = spentFuel.minus(spentFuelProtocol);
-  if (day >= 19338 && eventInstance.integrator == "4") {
+
+  let ethStakingSpentFuelRecipient = getSpentFuelRecipient(FUEL_BRIDGE_RECEIVER);
+  let percentageEthStaking = ethStakingSpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
+
+  let polyStakingSpentFuelRecipient = getSpentFuelRecipient(STAKING);
+  let percentagePolyStaking = polyStakingSpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
+  const day = protocolDay.getProtocolDay(e).day;
+  let holdersRevenue: BigDecimal;
+
+  if (
+    (day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) ||
+    (e.block.number.ge(GUTS_ON_CREDIT_BLOCK) && integratorInstance.isOnCredit)
+  ) {
     holdersRevenue = remainder;
-  }
-  // when staking rewards start to accumulate
-  else if (day >= 19394) {
-    holdersRevenue = remainder.times(BigDecimal.fromString("0.2"));
+  } else if (e.block.number.ge(GUTS_ON_CREDIT_BLOCK) && !integratorInstance.isOnCredit) {
+    holdersRevenue = remainder.times(percentageEthStaking.plus(percentagePolyStaking));
   } else {
     holdersRevenue = BigDecimal.zero();
   }

@@ -84,6 +84,7 @@ type Integrator @entity {
   activeTicketCount: Int!
   isBillingEnabled: Boolean!
   isConfigured: Boolean!
+  isOnCredit: Boolean!
   minFeePrimary: BigDecimal!
   maxFeePrimary: BigDecimal!
   primaryRate: BigDecimal!
