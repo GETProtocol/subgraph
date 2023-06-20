@@ -118,11 +118,12 @@ export function handlePrimarySale(e: PrimarySale): void {
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
+  let treasuryRevenue = reservedFuelProtocol;
+  const day = protocolDay.getProtocolDay(e).day;
+
   let treasurySpentFuelRecipient = getSpentFuelRecipient(GET_SAAS);
   let percentageTreasury = treasurySpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
 
-  let treasuryRevenue = reservedFuelProtocol;
-  const day = protocolDay.getProtocolDay(e).day;
   if (!(day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) && !integratorInstance.isOnCredit) {
     const remainderReservedFuel = reservedFuel.minus(reservedFuelProtocol);
     treasuryRevenue = treasuryRevenue.plus(remainderReservedFuel.times(percentageTreasury));
@@ -249,12 +250,9 @@ export function handleCheckedIn(e: CheckedIn): void {
   const day = protocolDay.getProtocolDay(e).day;
   let holdersRevenue: BigDecimal;
 
-  if (
-    (day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) ||
-    (e.block.number.ge(GUTS_ON_CREDIT_BLOCK) && integratorInstance.isOnCredit)
-  ) {
+  if ((day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) || integratorInstance.isOnCredit) {
     holdersRevenue = remainder;
-  } else if (e.block.number.ge(GUTS_ON_CREDIT_BLOCK) && !integratorInstance.isOnCredit) {
+  } else if (e.block.number.ge(GUTS_ON_CREDIT_BLOCK)) {
     holdersRevenue = remainder.times(percentageEthStaking.plus(percentagePolyStaking));
   } else {
     holdersRevenue = BigDecimal.zero();
@@ -305,12 +303,9 @@ export function handleInvalidated(e: Invalidated): void {
   const day = protocolDay.getProtocolDay(e).day;
   let holdersRevenue: BigDecimal;
 
-  if (
-    (day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) ||
-    (e.block.number.ge(GUTS_ON_CREDIT_BLOCK) && integratorInstance.isOnCredit)
-  ) {
+  if ((day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) || integratorInstance.isOnCredit) {
     holdersRevenue = remainder;
-  } else if (e.block.number.ge(GUTS_ON_CREDIT_BLOCK) && !integratorInstance.isOnCredit) {
+  } else if (e.block.number.ge(GUTS_ON_CREDIT_BLOCK)) {
     holdersRevenue = remainder.times(percentageEthStaking.plus(percentagePolyStaking));
   } else {
     holdersRevenue = BigDecimal.zero();
