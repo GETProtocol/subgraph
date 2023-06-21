@@ -11,7 +11,7 @@ import {
   Transfer,
 } from "../../../generated/templates/EventImplementation/EventImplementation";
 import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO } from "../../constants";
-import { GUTS_ON_CREDIT_BLOCK, GET_SAAS, STAKING, FUEL_BRIDGE_RECEIVER } from "../../constants/contracts";
+import { GUTS_ON_CREDIT_BLOCK, GET_SAAS, STAKING, STAKING_INIT_BLOCK, FUEL_BRIDGE_RECEIVER } from "../../constants/contracts";
 import {
   calculateReservedFuelPrimary,
   calculateReservedFuelProtocol,
@@ -252,7 +252,7 @@ export function handleCheckedIn(e: CheckedIn): void {
 
   if ((day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) || integratorInstance.isOnCredit) {
     holdersRevenue = remainder;
-  } else if (e.block.number.ge(GUTS_ON_CREDIT_BLOCK)) {
+  } else if (e.block.number.ge(STAKING_INIT_BLOCK)) {
     holdersRevenue = remainder.times(percentageEthStaking.plus(percentagePolyStaking));
   } else {
     holdersRevenue = BigDecimal.zero();
@@ -305,7 +305,7 @@ export function handleInvalidated(e: Invalidated): void {
 
   if ((day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) || integratorInstance.isOnCredit) {
     holdersRevenue = remainder;
-  } else if (e.block.number.ge(GUTS_ON_CREDIT_BLOCK)) {
+  } else if (e.block.number.ge(STAKING_INIT_BLOCK)) {
     holdersRevenue = remainder.times(percentageEthStaking.plus(percentagePolyStaking));
   } else {
     holdersRevenue = BigDecimal.zero();
