@@ -1,6 +1,6 @@
-import { Address } from "@graphprotocol/graph-ts";
+import { Address, BigDecimal } from "@graphprotocol/graph-ts";
 import { SpentFuelRecipient } from "../../generated/schema";
-import { BIG_DECIMAL_ZERO } from "../constants";
+import { BIG_DECIMAL_ZERO, BIG_DECIMAL_1E2 } from "../constants";
 
 export function getSpentFuelRecipient(address: Address): SpentFuelRecipient {
   let spentFuelRecipient = SpentFuelRecipient.load(address.toHexString());
@@ -15,4 +15,14 @@ export function getSpentFuelRecipient(address: Address): SpentFuelRecipient {
   }
 
   return spentFuelRecipient as SpentFuelRecipient;
+}
+
+export function getSpentFuelRecipientPercentage(address: Address): BigDecimal {
+  let spentFuelRecipient = SpentFuelRecipient.load(address.toHexString());
+
+  if (spentFuelRecipient == null || !spentFuelRecipient.isEnabled) {
+    return BIG_DECIMAL_ZERO;
+  }
+
+  return spentFuelRecipient.percentage.div(BIG_DECIMAL_1E2);
 }

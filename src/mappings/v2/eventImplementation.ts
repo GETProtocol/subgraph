@@ -10,15 +10,22 @@ import {
   SecondarySale,
   Transfer,
 } from "../../../generated/templates/EventImplementation/EventImplementation";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO } from "../../constants";
-import { GUTS_ON_CREDIT_BLOCK, GET_SAAS, STAKING, STAKING_INIT_BLOCK, FUEL_BRIDGE_RECEIVER } from "../../constants/contracts";
+import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ONE, BIG_DECIMAL_ZERO } from "../../constants";
+import {
+  GUTS_ON_CREDIT_BLOCK,
+  GET_SAAS,
+  GUTS_INTEGRATOR_ID,
+  GUTS_ON_CREDIT_DAY,
+  STAKING,
+  FUEL_BRIDGE_RECEIVER,
+} from "../../constants/contracts";
 import {
   calculateReservedFuelPrimary,
   calculateReservedFuelProtocol,
   calculateReservedFuelSecondary,
   createUsageEvent,
   getEvent,
-  getSpentFuelRecipient,
+  getSpentFuelRecipientPercentage,
   getTicket,
 } from "../../entities";
 import * as protocol from "../../entities/protocol";
@@ -118,19 +125,8 @@ export function handlePrimarySale(e: PrimarySale): void {
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
-  let treasuryRevenue = reservedFuelProtocol;
-  const day = protocolDay.getProtocolDay(e).day;
-
-  let treasurySpentFuelRecipient = getSpentFuelRecipient(GET_SAAS);
-  let percentageTreasury = treasurySpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
-
-  if (!(day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) && !integratorInstance.isOnCredit) {
-    const remainderReservedFuel = reservedFuel.minus(reservedFuelProtocol);
-    treasuryRevenue = treasuryRevenue.plus(remainderReservedFuel.times(percentageTreasury));
-  }
-
-  protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
-  protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
+  protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol);
+  protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
   integrator.updatePrimarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
   integratorDay.updatePrimarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
   event.updatePrimarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
@@ -172,19 +168,8 @@ export function handleSecondarySale(e: SecondarySale): void {
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
-  let treasuryRevenue = reservedFuelProtocol;
-  const day = protocolDay.getProtocolDay(e).day;
-
-  let treasurySpentFuelRecipient = getSpentFuelRecipient(GET_SAAS);
-  let percentageTreasury = treasurySpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
-
-  if (!(day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) && !integratorInstance.isOnCredit) {
-    const remainderReservedFuel = reservedFuel.minus(reservedFuelProtocol);
-    treasuryRevenue = treasuryRevenue.plus(remainderReservedFuel.times(percentageTreasury));
-  }
-
-  protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
-  protocolDay.updateSecondarySale(e, countBigInt, reservedFuel, reservedFuelProtocol, treasuryRevenue);
+  protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol);
+  protocolDay.updateSecondarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
   integrator.updateSecondarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
   integratorDay.updateSecondarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
   event.updateSecondarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
@@ -213,6 +198,11 @@ export function handleScanned(e: Scanned): void {
 }
 
 export function handleCheckedIn(e: CheckedIn): void {
+  let holdersRevenue: BigDecimal;
+  let treasuryRevenue: BigDecimal;
+  let percentageStaking = BIG_DECIMAL_ZERO;
+  let percentageTreasury = BIG_DECIMAL_ONE;
+
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let spentFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
@@ -242,30 +232,40 @@ export function handleCheckedIn(e: CheckedIn): void {
 
   const remainder = spentFuel.minus(spentFuelProtocol);
 
-  let ethStakingSpentFuelRecipient = getSpentFuelRecipient(FUEL_BRIDGE_RECEIVER);
-  let percentageEthStaking = ethStakingSpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
-
-  let polyStakingSpentFuelRecipient = getSpentFuelRecipient(STAKING);
-  let percentagePolyStaking = polyStakingSpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
   const day = protocolDay.getProtocolDay(e).day;
-  let holdersRevenue: BigDecimal;
 
-  if ((day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) || integratorInstance.isOnCredit) {
-    holdersRevenue = remainder;
-  } else if (e.block.number.ge(STAKING_INIT_BLOCK)) {
-    holdersRevenue = remainder.times(percentageEthStaking.plus(percentagePolyStaking));
+  //GUTS Tickets has turned into an onCredit integrator on day "GUTS_ON_CREDIT_DAY", without an on chain transaction.
+  //This means that all the revenue generated by GUTS Tickets will go to stakers, except for "spentFuelProtocol" from day "GUTS_ON_CREDIT_DAY".
+  //onCredit status of GUTS Tickets was set on chain on block number "GUTS_ON_CREDIT_BLOCK".
+  if (
+    (day >= GUTS_ON_CREDIT_DAY && eventInstance.integrator == GUTS_INTEGRATOR_ID && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) ||
+    integratorInstance.isOnCredit
+  ) {
+    percentageTreasury = BIG_DECIMAL_ZERO;
+    percentageStaking = BIG_DECIMAL_ONE;
   } else {
-    holdersRevenue = BigDecimal.zero();
+    let percentageEthStaking = getSpentFuelRecipientPercentage(FUEL_BRIDGE_RECEIVER);
+    let percentagePolyStaking = getSpentFuelRecipientPercentage(STAKING);
+
+    percentageTreasury = getSpentFuelRecipientPercentage(GET_SAAS);
+    percentageStaking = percentageEthStaking.plus(percentagePolyStaking);
   }
 
-  protocol.updateCheckedIn(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
-  protocolDay.updateCheckedIn(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
+  treasuryRevenue = remainder.times(percentageTreasury).plus(spentFuelProtocol);
+  holdersRevenue = remainder.times(percentageStaking);
+
+  protocol.updateCheckedIn(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+  protocolDay.updateCheckedIn(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   integrator.updateCheckedIn(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
   integratorDay.updateCheckedIn(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol);
   event.updateCheckedIn(e.address, countBigInt);
 }
 
 export function handleInvalidated(e: Invalidated): void {
+  let holdersRevenue: BigDecimal;
+  let treasuryRevenue: BigDecimal;
+  let percentageStaking = BIG_DECIMAL_ZERO;
+  let percentageTreasury = BIG_DECIMAL_ONE;
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let spentFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
@@ -295,24 +295,29 @@ export function handleInvalidated(e: Invalidated): void {
 
   const remainder = spentFuel.minus(spentFuelProtocol);
 
-  let ethStakingSpentFuelRecipient = getSpentFuelRecipient(FUEL_BRIDGE_RECEIVER);
-  let percentageEthStaking = ethStakingSpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
-
-  let polyStakingSpentFuelRecipient = getSpentFuelRecipient(STAKING);
-  let percentagePolyStaking = polyStakingSpentFuelRecipient.percentage.div(BigDecimal.fromString("100"));
   const day = protocolDay.getProtocolDay(e).day;
-  let holdersRevenue: BigDecimal;
 
-  if ((day >= 19338 && eventInstance.integrator == "4" && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) || integratorInstance.isOnCredit) {
-    holdersRevenue = remainder;
-  } else if (e.block.number.ge(STAKING_INIT_BLOCK)) {
-    holdersRevenue = remainder.times(percentageEthStaking.plus(percentagePolyStaking));
+  //GUTS Tickets has turned into an onCredit integrator on day "GUTS_ON_CREDIT_DAY", without an on chain transaction.
+  //This means that all the revenue generated by GUTS Tickets will go to stakers, except for "spentFuelProtocol" from day "GUTS_ON_CREDIT_DAY".
+  //onCredit status of GUTS Tickets was set on chain on block number "GUTS_ON_CREDIT_BLOCK".
+  if (
+    (day >= GUTS_ON_CREDIT_DAY && eventInstance.integrator == GUTS_INTEGRATOR_ID && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) ||
+    integratorInstance.isOnCredit
+  ) {
+    percentageTreasury = BIG_DECIMAL_ZERO;
+    percentageStaking = BIG_DECIMAL_ONE;
   } else {
-    holdersRevenue = BigDecimal.zero();
+    let percentageEthStaking = getSpentFuelRecipientPercentage(FUEL_BRIDGE_RECEIVER);
+    let percentagePolyStaking = getSpentFuelRecipientPercentage(STAKING);
+    percentageStaking = percentageEthStaking.plus(percentagePolyStaking);
+    percentageTreasury = getSpentFuelRecipientPercentage(GET_SAAS);
   }
 
-  protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
-  protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue);
+  treasuryRevenue = remainder.times(percentageTreasury).plus(spentFuelProtocol);
+  holdersRevenue = remainder.times(percentageStaking);
+
+  protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+  protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   integrator.updateInvalidated(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
   integratorDay.updateInvalidated(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol);
   event.updateInvalidated(e.address, countBigInt);
