@@ -175,16 +175,18 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
     // address. Because of this we can assume the getUsed to be the full reserved fuel for that ticket.
     let getUsed = ticket.reservedFuel;
 
-    protocol.treasuryRevenue = protocol.treasuryRevenue.plus(getUsed);
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
     protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
+    protocol.treasuryRevenue = protocol.treasuryRevenue.plus(getUsed);
     protocolDay.spentFuel = protocolDay.spentFuel.plus(getUsed);
     protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(getUsed);
     protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(getUsed);
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
     billingIntegrator.spentFuelProtocol = billingIntegrator.spentFuelProtocol.plus(getUsed);
+    billingIntegrator.treasuryRevenue = billingIntegrator.treasuryRevenue.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
     billingIntegratorDay.spentFuelProtocol = billingIntegratorDay.spentFuelProtocol.plus(getUsed);
+    billingIntegratorDay.treasuryRevenue = billingIntegratorDay.treasuryRevenue.plus(getUsed);
 
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.minus(getUsed);
     billingIntegrator.currentReservedFuelProtocol = billingIntegrator.currentReservedFuelProtocol.minus(getUsed);
@@ -260,16 +262,18 @@ export function handleTicketScanned(e: TicketScanned): void {
     let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
     let getUsed = ticket.reservedFuel;
 
-    protocol.treasuryRevenue = protocol.treasuryRevenue.plus(getUsed);
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
     protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
+    protocol.treasuryRevenue = protocol.treasuryRevenue.plus(getUsed);
     protocolDay.spentFuel = protocolDay.spentFuel.plus(getUsed);
     protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(getUsed);
     protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(getUsed);
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
     billingIntegrator.spentFuelProtocol = billingIntegrator.spentFuelProtocol.plus(getUsed);
+    billingIntegrator.treasuryRevenue = billingIntegrator.treasuryRevenue.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
     billingIntegratorDay.spentFuelProtocol = billingIntegratorDay.spentFuelProtocol.plus(getUsed);
+    billingIntegratorDay.treasuryRevenue = billingIntegratorDay.treasuryRevenue.plus(getUsed);
 
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.minus(getUsed);
     billingIntegrator.currentReservedFuelProtocol = billingIntegrator.currentReservedFuelProtocol.minus(getUsed);
@@ -311,16 +315,18 @@ export function handleCheckedIn(e: CheckedIn): void {
     let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
     let getUsed = ticket.reservedFuel;
 
-    protocol.treasuryRevenue = protocol.treasuryRevenue.plus(getUsed);
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
     protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
+    protocol.treasuryRevenue = protocol.treasuryRevenue.plus(getUsed);
     protocolDay.spentFuel = protocolDay.spentFuel.plus(getUsed);
     protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(getUsed);
     protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(getUsed);
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
     billingIntegrator.spentFuelProtocol = billingIntegrator.spentFuelProtocol.plus(getUsed);
+    billingIntegrator.treasuryRevenue = billingIntegrator.treasuryRevenue.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
     billingIntegratorDay.spentFuelProtocol = billingIntegratorDay.spentFuelProtocol.plus(getUsed);
+    billingIntegratorDay.treasuryRevenue = billingIntegratorDay.treasuryRevenue.plus(getUsed);
 
     billingIntegrator.currentReservedFuel = billingIntegrator.currentReservedFuel.minus(getUsed);
     billingIntegrator.currentReservedFuelProtocol = billingIntegrator.currentReservedFuelProtocol.minus(getUsed);

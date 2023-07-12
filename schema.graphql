@@ -101,6 +101,8 @@ type Integrator @entity {
   scannedCount: BigInt!
   checkedInCount: BigInt!
   claimedCount: BigInt!
+  treasuryRevenue: BigDecimal!
+  holdersRevenue: BigDecimal!
   relayers: [Relayer!]! @derivedFrom(field: "integrator")
   events: [Event!]! @derivedFrom(field: "integrator")
   tickets: [Ticket!]! @derivedFrom(field: "integrator")
@@ -128,6 +130,8 @@ type IntegratorDay @entity {
   scannedCount: BigInt!
   checkedInCount: BigInt!
   claimedCount: BigInt!
+  treasuryRevenue: BigDecimal!
+  holdersRevenue: BigDecimal!
 }
 
 type Relayer @entity {

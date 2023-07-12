@@ -255,8 +255,8 @@ export function handleCheckedIn(e: CheckedIn): void {
 
   protocol.updateCheckedIn(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   protocolDay.updateCheckedIn(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
-  integrator.updateCheckedIn(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
-  integratorDay.updateCheckedIn(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol);
+  integrator.updateCheckedIn(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+  integratorDay.updateCheckedIn(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   event.updateCheckedIn(e.address, countBigInt);
 }
 
@@ -317,8 +317,8 @@ export function handleInvalidated(e: Invalidated): void {
 
   protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
-  integrator.updateInvalidated(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
-  integratorDay.updateInvalidated(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol);
+  integrator.updateInvalidated(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+  integratorDay.updateInvalidated(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   event.updateInvalidated(e.address, countBigInt);
 }
 

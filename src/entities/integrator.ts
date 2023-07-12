@@ -37,6 +37,8 @@ export function getIntegrator(integratorIndex: string): Integrator {
     integrator.scannedCount = BIG_INT_ZERO;
     integrator.checkedInCount = BIG_INT_ZERO;
     integrator.claimedCount = BIG_INT_ZERO;
+    integrator.treasuryRevenue = BIG_DECIMAL_ZERO;
+    integrator.holdersRevenue = BIG_DECIMAL_ZERO;
   }
 
   return integrator as Integrator;
@@ -95,21 +97,39 @@ export function updateScanned(integratorIndex: string, count: BigInt): void {
   integrator.save();
 }
 
-export function updateCheckedIn(integratorIndex: string, count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
+export function updateCheckedIn(
+  integratorIndex: string,
+  count: BigInt,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal,
+  holdersRevenue: BigDecimal,
+  treasuryRevenue: BigDecimal
+): void {
   let integrator = getIntegrator(integratorIndex);
   integrator.checkedInCount = integrator.checkedInCount.plus(count);
   integrator.spentFuel = integrator.spentFuel.plus(spentFuel);
   integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(spentFuelProtocol);
+  integrator.holdersRevenue = integrator.holdersRevenue.plus(holdersRevenue);
+  integrator.treasuryRevenue = integrator.treasuryRevenue.plus(treasuryRevenue);
   integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
   integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
   integrator.save();
 }
 
-export function updateInvalidated(integratorIndex: string, count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
+export function updateInvalidated(
+  integratorIndex: string,
+  count: BigInt,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal,
+  holdersRevenue: BigDecimal,
+  treasuryRevenue: BigDecimal
+): void {
   let integrator = getIntegrator(integratorIndex);
   integrator.invalidatedCount = integrator.invalidatedCount.plus(count);
   integrator.spentFuel = integrator.spentFuel.plus(spentFuel);
   integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(spentFuelProtocol);
+  integrator.holdersRevenue = integrator.holdersRevenue.plus(holdersRevenue);
+  integrator.treasuryRevenue = integrator.treasuryRevenue.plus(treasuryRevenue);
   integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
   integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
   integrator.save();
