@@ -246,7 +246,6 @@ export function handleCheckedIn(e: CheckedIn): void {
   } else {
     let percentageEthStaking = getSpentFuelRecipientPercentage(FUEL_BRIDGE_RECEIVER);
     let percentagePolyStaking = getSpentFuelRecipientPercentage(STAKING);
-
     percentageTreasury = getSpentFuelRecipientPercentage(GET_SAAS);
     percentageStaking = percentageEthStaking.plus(percentagePolyStaking);
   }

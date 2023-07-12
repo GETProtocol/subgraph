@@ -93,7 +93,7 @@ export function handleDisableIntegratorBilling(e: DisableIntegratorBilling): voi
 
 export function handleSetIntegratorOnCredit(e: UpdateIntegratorOnCredit): void {
   let integrator = getIntegrator(e.params.integratorIndex.toString());
-  integrator.isOnCredit = e.params.onCredit.toString() === "true";
+  integrator.isOnCredit = e.params.onCredit;
   integrator.save();
 }
 

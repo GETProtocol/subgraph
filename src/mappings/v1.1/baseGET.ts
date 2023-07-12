@@ -180,6 +180,7 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
     protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
     protocolDay.spentFuel = protocolDay.spentFuel.plus(getUsed);
     protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(getUsed);
+    protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(getUsed);
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
     billingIntegrator.spentFuelProtocol = billingIntegrator.spentFuelProtocol.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
@@ -264,6 +265,7 @@ export function handleTicketScanned(e: TicketScanned): void {
     protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
     protocolDay.spentFuel = protocolDay.spentFuel.plus(getUsed);
     protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(getUsed);
+    protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(getUsed);
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
     billingIntegrator.spentFuelProtocol = billingIntegrator.spentFuelProtocol.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
@@ -314,6 +316,7 @@ export function handleCheckedIn(e: CheckedIn): void {
     protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
     protocolDay.spentFuel = protocolDay.spentFuel.plus(getUsed);
     protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(getUsed);
+    protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(getUsed);
     billingIntegrator.spentFuel = billingIntegrator.spentFuel.plus(getUsed);
     billingIntegrator.spentFuelProtocol = billingIntegrator.spentFuelProtocol.plus(getUsed);
     billingIntegratorDay.spentFuel = billingIntegratorDay.spentFuel.plus(getUsed);
