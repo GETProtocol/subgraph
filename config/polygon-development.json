@@ -1,6 +1,11 @@
 {
   "chainName": "mumbai",
   "network": "mumbai",
+  "addresses": {
+    "GETSaaS":"0x0000000000000000000000000000000000000001",
+    "Staking": "0xbf7f1625E74D64a0f380a2C887F17F9BdC3d518D",
+    "FuelBridgeReceiver": "0xa4d622434f677cfc58BaFd23c16B6fc57bA845Ce"
+  },
   "v2": {
     "Economics": {
       "address": "0xCD50e54A3Ee1374d8c805b128a06C91475e1720F",

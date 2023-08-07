@@ -27,6 +27,8 @@ function getIntegratorDay(integratorIndex: string, day: i32): IntegratorDay {
     integratorDay.scannedCount = BIG_INT_ZERO;
     integratorDay.checkedInCount = BIG_INT_ZERO;
     integratorDay.claimedCount = BIG_INT_ZERO;
+    integratorDay.treasuryRevenue = BIG_DECIMAL_ZERO;
+    integratorDay.holdersRevenue = BIG_DECIMAL_ZERO;
   }
 
   return integratorDay as IntegratorDay;
@@ -84,12 +86,16 @@ export function updateCheckedIn(
   e: ethereum.Event,
   count: BigInt,
   spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal
+  spentFuelProtocol: BigDecimal,
+  holdersRevenue: BigDecimal,
+  treasuryRevenue: BigDecimal
 ): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
   integratorDay.checkedInCount = integratorDay.checkedInCount.plus(count);
   integratorDay.spentFuel = integratorDay.spentFuel.plus(spentFuel);
   integratorDay.spentFuelProtocol = integratorDay.spentFuelProtocol.plus(spentFuelProtocol);
+  integratorDay.holdersRevenue = integratorDay.holdersRevenue.plus(holdersRevenue);
+  integratorDay.treasuryRevenue = integratorDay.treasuryRevenue.plus(treasuryRevenue);
   integratorDay.save();
 }
 
@@ -98,12 +104,16 @@ export function updateInvalidated(
   e: ethereum.Event,
   count: BigInt,
   spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal
+  spentFuelProtocol: BigDecimal,
+  holdersRevenue: BigDecimal,
+  treasuryRevenue: BigDecimal
 ): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
   integratorDay.invalidatedCount = integratorDay.invalidatedCount.plus(count);
   integratorDay.spentFuel = integratorDay.spentFuel.plus(spentFuel);
   integratorDay.spentFuelProtocol = integratorDay.spentFuelProtocol.plus(spentFuelProtocol);
+  integratorDay.holdersRevenue = integratorDay.holdersRevenue.plus(holdersRevenue);
+  integratorDay.treasuryRevenue = integratorDay.treasuryRevenue.plus(treasuryRevenue);
   integratorDay.save();
 }
 

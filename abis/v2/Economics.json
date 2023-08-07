@@ -634,6 +634,25 @@
       },
       {
         "indexed": false,
+        "internalType": "bool",
+        "name": "onCredit",
+        "type": "bool"
+      }
+    ],
+    "name": "UpdateIntegratorOnCredit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "price",
         "type": "uint256"
@@ -752,6 +771,19 @@
       }
     ],
     "name": "UpdateSpentFuel",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "spentFuelOnCredit",
+        "type": "uint256"
+      }
+    ],
+    "name": "UpdateSpentFuelOnCredit",
     "type": "event"
   },
   {
@@ -905,6 +937,11 @@
     "inputs": [],
     "name": "collectSpentFuel",
     "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "",
@@ -1084,6 +1121,11 @@
         "internalType": "string",
         "name": "name",
         "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "onCredit",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -1527,6 +1569,24 @@
         "type": "uint32"
       },
       {
+        "internalType": "bool",
+        "name": "_onCredit",
+        "type": "bool"
+      }
+    ],
+    "name": "setIntegratorOnCredit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
         "internalType": "uint256",
         "name": "_price",
         "type": "uint256"
@@ -1641,6 +1701,11 @@
         "internalType": "struct IEconomics.SpentFuel",
         "name": "_spentFuel",
         "type": "tuple"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_spentFuelOnCredit",
+        "type": "uint256"
       }
     ],
     "name": "setSpentFuel",
@@ -1789,6 +1854,19 @@
         "internalType": "uint32",
         "name": "ticketCount",
         "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "spentFuelOnCredit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

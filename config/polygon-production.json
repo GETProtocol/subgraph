@@ -31,6 +31,11 @@
     ["ontapp tickets", "13"],
     ["neonox", "14"]
   ],
+  "addresses": {
+    "GETSaaS":"0xba0eae2aA4CB751D063E52Cf988E179c7d38E90C",
+    "Staking": "0x3e49E9C890Cd5B015A18ed76E7A4093f569f1A04",
+    "FuelBridgeReceiver": "0x5339D13e0C5f88A4194B2D80594F4cB870BAd8bf"
+  },
   "v1": {
     "BaseGET": {
       "address": "0x308e44cA2153C61103b0DC67Fd038De650912b73",

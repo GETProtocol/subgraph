@@ -1,6 +1,11 @@
 {
   "chainName": "polygon",
   "network": "matic",
+  "addresses": {
+    "GETSaaS":"0xba0eae2aA4CB751D063E52Cf988E179c7d38E90C",
+    "Staking": "0x3e49E9C890Cd5B015A18ed76E7A4093f569f1A04",
+    "FuelBridgeReceiver": "0x5339D13e0C5f88A4194B2D80594F4cB870BAd8bf"
+  },
   "v2": {
     "Economics": {
       "address": "0xe7F784799479fcFAF4A2d83E1880Df774e56A9bd",

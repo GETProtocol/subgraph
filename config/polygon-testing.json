@@ -15,6 +15,11 @@
     ["wicket", "4"],
     ["tectix", "5"]
   ],
+  "addresses": {
+    "GETSaaS":"0x0000000000000000000000000000000000000001",
+    "Staking": "0xbf7f1625E74D64a0f380a2C887F17F9BdC3d518D",
+    "FuelBridgeReceiver": "0xa4d622434f677cfc58BaFd23c16B6fc57bA845Ce"
+  },
   "v1": {
     "BaseGET": {
       "address": "0xdD1dd60661e26ab34db1f89c9fE5f5B578f8388b",

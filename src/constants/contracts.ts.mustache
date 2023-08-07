@@ -5,6 +5,13 @@ import { Address, BigInt } from "@graphprotocol/graph-ts";
 
 export let CHAIN_NAME = "{{ chainName }}".toUpperCase();
 export let CURRENCY_CONVERSION_ACTIVATED_BLOCK = BigInt.fromI32(20410204);
+export let GUTS_ON_CREDIT_DAY = 19338
+export let GUTS_INTEGRATOR_ID = "4"
+export let GUTS_ON_CREDIT_BLOCK = BigInt.fromI32(39300544);
+export let STAKING_INIT_BLOCK = BigInt.fromI32(38542794);
+export let FUEL_BRIDGE_RECEIVER = Address.fromString("{{ addresses.FuelBridgeReceiver }}");
+export let STAKING = Address.fromString("{{ addresses.Staking }}");
+export let GET_SAAS = Address.fromString("{{ addresses.GETSaaS }}")
 export let EVENT_METADATA_STORAGE_ADDRESS_V1 = {{ ^v1.EventMetadataStorage.address }}Address.zero(){{ /v1.EventMetadataStorage.address }}{{ #v1.EventMetadataStorage.address }}Address.fromString("{{ v1.EventMetadataStorage.address }}"){{ /v1.EventMetadataStorage.address }};
 export let EVENT_METADATA_STORAGE_ADDRESS_V1_1 = {{ ^v1_1.EventMetadataStorage.address }}Address.zero(){{ /v1_1.EventMetadataStorage.address }}{{ #v1_1.EventMetadataStorage.address }}Address.fromString("{{ v1_1.EventMetadataStorage.address }}"){{ /v1_1.EventMetadataStorage.address }};
 export let BASEGET_ADDRESS_V1_1 = {{ ^v1_1.BaseGET.address }}Address.zero(){{ /v1_1.BaseGET.address }}{{ #v1_1.BaseGET.address }}Address.fromString("{{ v1_1.BaseGET.address }}"){{ /v1_1.BaseGET.address }};

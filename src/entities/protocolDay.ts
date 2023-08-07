@@ -29,6 +29,8 @@ export function getProtocolDay(e: ethereum.Event): ProtocolDay {
     protocolDay.scannedCount = BIG_INT_ZERO;
     protocolDay.checkedInCount = BIG_INT_ZERO;
     protocolDay.claimedCount = BIG_INT_ZERO;
+    protocolDay.treasuryRevenue = BIG_DECIMAL_ZERO;
+    protocolDay.holdersRevenue = BIG_DECIMAL_ZERO;
   }
 
   return protocolDay as ProtocolDay;
@@ -60,9 +62,18 @@ export function updateScanned(e: ethereum.Event, count: BigInt): void {
   protocolDay.save();
 }
 
-export function updateCheckedIn(e: ethereum.Event, count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
+export function updateCheckedIn(
+  e: ethereum.Event,
+  count: BigInt,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal,
+  holdersRevenue: BigDecimal,
+  treasuryRevenue: BigDecimal
+): void {
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
+  protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(treasuryRevenue);
+  protocolDay.holdersRevenue = protocolDay.holdersRevenue.plus(holdersRevenue);
   protocolDay.checkedInCount = protocolDay.checkedInCount.plus(count);
   protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
   protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(spentFuelProtocol);
@@ -71,12 +82,21 @@ export function updateCheckedIn(e: ethereum.Event, count: BigInt, spentFuel: Big
   protocolDay.save();
 }
 
-export function updateInvalidated(e: ethereum.Event, count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
+export function updateInvalidated(
+  e: ethereum.Event,
+  count: BigInt,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal,
+  holdersRevenue: BigDecimal,
+  treasuryRevenue: BigDecimal
+): void {
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
-  protocolDay.invalidatedCount = protocolDay.invalidatedCount.plus(count);
-  protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
+  protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(treasuryRevenue);
+  protocolDay.holdersRevenue = protocolDay.holdersRevenue.plus(holdersRevenue);
   protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(spentFuelProtocol);
+  protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
+  protocolDay.invalidatedCount = protocolDay.invalidatedCount.plus(count);
   protocolDay.currentSpentFuel = protocol.currentSpentFuel;
   protocolDay.currentSpentFuelProtocol = protocol.currentSpentFuelProtocol;
   protocolDay.save();

@@ -12,6 +12,7 @@ import {
   UpdateDynamicRates,
   UpdateIntegratorName,
   UpdateProtocolRates,
+  UpdateIntegratorOnCredit,
 } from "../../../generated/EconomicsV2/EconomicsV2";
 import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
@@ -87,6 +88,12 @@ export function handleEnableIntegratorBilling(e: EnableIntegratorBilling): void 
 export function handleDisableIntegratorBilling(e: DisableIntegratorBilling): void {
   let integrator = getIntegrator(e.params.integratorIndex.toString());
   integrator.isBillingEnabled = false;
+  integrator.save();
+}
+
+export function handleSetIntegratorOnCredit(e: UpdateIntegratorOnCredit): void {
+  let integrator = getIntegrator(e.params.integratorIndex.toString());
+  integrator.isOnCredit = e.params.onCredit;
   integrator.save();
 }
 
