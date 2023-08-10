@@ -204,7 +204,7 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
 export function handleSecondarySale(e: SecondarySale): void {
   let nftIndex = e.params.nftIndex;
   let ticket = getTicket(BIG_INT_ZERO, nftIndex);
-  let event = getEvent(Address.fromString(ticket.event));
+  let event = getEvent(ticket.event == "" ? ADDRESS_ZERO : Address.fromString(ticket.event));
   let protocol = getProtocol();
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
@@ -238,7 +238,7 @@ export function handleSecondarySale(e: SecondarySale): void {
 export function handleTicketScanned(e: TicketScanned): void {
   let nftIndex = e.params.nftIndex;
   let ticket = getTicket(BIG_INT_ZERO, nftIndex);
-  let event = getEvent(Address.fromString(ticket.event));
+  let event = getEvent(ticket.event == "" ? ADDRESS_ZERO : Address.fromString(ticket.event));
   let protocol = getProtocol();
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
@@ -291,7 +291,7 @@ export function handleTicketScanned(e: TicketScanned): void {
 export function handleCheckedIn(e: CheckedIn): void {
   let nftIndex = e.params.nftIndex;
   let ticket = getTicket(BIG_INT_ZERO, nftIndex);
-  let event = getEvent(Address.fromString(ticket.event));
+  let event = getEvent(ticket.event == "" ? ADDRESS_ZERO : Address.fromString(ticket.event));
   let protocol = getProtocol();
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);
@@ -344,7 +344,7 @@ export function handleCheckedIn(e: CheckedIn): void {
 export function handleNftClaimed(e: NftClaimed): void {
   let nftIndex = e.params.nftIndex;
   let ticket = getTicket(BIG_INT_ZERO, nftIndex);
-  let event = getEvent(Address.fromString(ticket.event));
+  let event = getEvent(ticket.event == "" ? ADDRESS_ZERO : Address.fromString(ticket.event));
   let protocol = getProtocol();
   let protocolDay = getProtocolDay(e);
   let integrator = getIntegrator(event.integrator);

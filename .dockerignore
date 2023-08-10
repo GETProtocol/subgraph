@@ -1,0 +1,14 @@
+.git
+.github
+.husky
+.vscode
+.yarn/*
+!.yarn/patches
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+build
+docs
+generated
+node_modules
