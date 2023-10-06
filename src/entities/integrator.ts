@@ -1,6 +1,6 @@
 import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Integrator } from "../../generated/schema";
-import { BIG_DECIMAL_ZERO, BIG_INT_ZERO, RELAYER_MAPPING, TICKETEER_MAPPING } from "../constants";
+import { ADDRESS_ZERO, BIG_DECIMAL_ZERO, BIG_INT_ZERO, RELAYER_MAPPING, TICKETEER_MAPPING } from "../constants";
 import { getRelayer } from "./relayer";
 
 export function getIntegrator(integratorIndex: string): Integrator {
@@ -10,6 +10,7 @@ export function getIntegrator(integratorIndex: string): Integrator {
     integrator = new Integrator(integratorIndex);
     integrator.averageReservedPerTicket = BIG_DECIMAL_ZERO;
     integrator.availableFuel = BIG_DECIMAL_ZERO;
+    integrator.availableFuelUSD = BIG_DECIMAL_ZERO;
     integrator.reservedFuel = BIG_DECIMAL_ZERO;
     integrator.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     integrator.currentReservedFuel = BIG_DECIMAL_ZERO;
@@ -18,9 +19,13 @@ export function getIntegrator(integratorIndex: string): Integrator {
     integrator.spentFuelProtocol = BIG_DECIMAL_ZERO;
     integrator.price = BIG_DECIMAL_ZERO;
     integrator.activeTicketCount = 0;
+    integrator.totalTopUp = BIG_INT_ZERO;
+    integrator.totalTopUpUSD = BIG_DECIMAL_ZERO;
     integrator.isBillingEnabled = true;
     integrator.isConfigured = true;
     integrator.isOnCredit = false;
+    integrator.isDigitalTwin = false;
+    integrator.economicsAddress = ADDRESS_ZERO;
     integrator.minFeePrimary = BIG_DECIMAL_ZERO;
     integrator.maxFeePrimary = BIG_DECIMAL_ZERO;
     integrator.primaryRate = BIG_DECIMAL_ZERO;

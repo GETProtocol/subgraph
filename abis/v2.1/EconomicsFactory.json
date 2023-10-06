@@ -1,0 +1,1438 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "previousAdmin",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newAdmin",
+        "type": "address"
+      }
+    ],
+    "name": "AdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "beacon",
+        "type": "address"
+      }
+    ],
+    "name": "BeaconUpgraded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
+      }
+    ],
+    "name": "BillingStatusUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
+      }
+    ],
+    "name": "ConfigurationStatusUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "DisableIntegratorBilling",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "economicsAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "integratorIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "EconomicsContractDeployed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "EnableIntegratorBilling",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "IntegratorActivated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "integratorIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "relayerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isDigitalTwin",
+        "type": "bool"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint24",
+            "name": "minFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IEconomicsFactory.DynamicRates",
+        "name": "dynamicRates",
+        "type": "tuple"
+      }
+    ],
+    "name": "IntegratorConfigured",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "IntegratorDisabled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "integratorIndex",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      }
+    ],
+    "name": "IntegratorNameSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "economicsContract",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "total",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "topUpPrice",
+        "type": "uint256"
+      }
+    ],
+    "name": "IntegratorToppedUp",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "relayerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "integratorIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "RelayerAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "relayerAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "integratorIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "RelayerRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint24",
+            "name": "minFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IEconomicsFactory.DynamicRates",
+        "name": "dynamicRates",
+        "type": "tuple"
+      }
+    ],
+    "name": "UpdateDynamicRates",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "old",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "updated",
+        "type": "address"
+      }
+    ],
+    "name": "UpdateFuelToken",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "onCredit",
+        "type": "bool"
+      }
+    ],
+    "name": "UpdateIntegratorOnCredit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint24",
+            "name": "minFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IEconomicsFactory.DynamicRates",
+        "name": "protocolRates",
+        "type": "tuple"
+      }
+    ],
+    "name": "UpdateProtocolRates",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "salesTaxFuelDestination",
+        "type": "address"
+      }
+    ],
+    "name": "UpdateSalesTaxFuelDestination",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "implementation",
+        "type": "address"
+      }
+    ],
+    "name": "Upgraded",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_registry",
+        "type": "address"
+      }
+    ],
+    "name": "__AuthModifiers_init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_registry",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_implementation",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_fuelToken",
+        "type": "address"
+      }
+    ],
+    "name": "__EconomicsFactoryV2_init",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "activateIntegrator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_relayerAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "addRelayer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "beacon",
+    "outputs": [
+      {
+        "internalType": "contract UpgradeableBeacon",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_integratorIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "configuredIntegratorEconomics",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "economicsAddress_",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_relayerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "configuredIntegratorIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "integratorIndex_",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "disableIntegrator",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "disableIntegratorBilling",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "economicsContracts",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "economicsToIndex",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "name": "enableIntegratorBilling",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "fuelToken",
+    "outputs": [
+      {
+        "internalType": "contract IERC20",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "integratorCount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "integratorData",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "index",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bool",
+        "name": "isBillingEnabled",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "isConfigured",
+        "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "bool",
+        "name": "onCredit",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "integratorRates",
+    "outputs": [
+      {
+        "internalType": "uint24",
+        "name": "minFeePrimary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "maxFeePrimary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "primaryRate",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "minFeeSecondary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "maxFeeSecondary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "secondaryRate",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "salesTaxRate",
+        "type": "uint24"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_integratorIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "isIntegratorConfigured",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isConfigured_",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_relayerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "isIntegratorDigitalTwin",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isDigitalTwin_",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_integratorIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "isIntegratorEnabled",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isEnabled_",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "protocolRates",
+    "outputs": [
+      {
+        "internalType": "uint24",
+        "name": "minFeePrimary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "maxFeePrimary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "primaryRate",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "minFeeSecondary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "maxFeeSecondary",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "secondaryRate",
+        "type": "uint24"
+      },
+      {
+        "internalType": "uint24",
+        "name": "salesTaxRate",
+        "type": "uint24"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proxiableUUID",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "relayerData",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "integratorIndex",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_relayerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "relayerToIndex",
+    "outputs": [
+      {
+        "internalType": "uint32",
+        "name": "integratorIndex_",
+        "type": "uint32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_relayerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "removeRelayer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_integratorIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "returnBalanceOfFuelHolder",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "balance_",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_integratorIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "returnDynamicRatesOfIntegrator",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint24",
+            "name": "minFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
+          }
+        ],
+        "internalType": "struct IEconomicsFactory.DynamicRates",
+        "name": "dynamicRates_",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_integratorIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "returnValueOfFuel",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "value_",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bool",
+        "name": "_status",
+        "type": "bool"
+      }
+    ],
+    "name": "setBillingStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bool",
+        "name": "_status",
+        "type": "bool"
+      }
+    ],
+    "name": "setConfigurationStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint24",
+            "name": "minFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
+          }
+        ],
+        "internalType": "struct IEconomicsFactory.DynamicRates",
+        "name": "_dynamicRates",
+        "type": "tuple"
+      }
+    ],
+    "name": "setDynamicRates",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_fuelToken",
+        "type": "address"
+      }
+    ],
+    "name": "setFuelToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_integratorIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      }
+    ],
+    "name": "setIntegratorName",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint32",
+        "name": "_integratorIndex",
+        "type": "uint32"
+      },
+      {
+        "internalType": "bool",
+        "name": "_onCredit",
+        "type": "bool"
+      }
+    ],
+    "name": "setIntegratorOnCredit",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint24",
+            "name": "minFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
+          }
+        ],
+        "internalType": "struct IEconomicsFactory.DynamicRates",
+        "name": "_protocolRates",
+        "type": "tuple"
+      }
+    ],
+    "name": "setProtocolRates",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_name",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "_relayerAddress",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint24",
+            "name": "minFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeePrimary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "primaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "minFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "maxFeeSecondary",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "secondaryRate",
+            "type": "uint24"
+          },
+          {
+            "internalType": "uint24",
+            "name": "salesTaxRate",
+            "type": "uint24"
+          }
+        ],
+        "internalType": "struct IEconomicsFactory.DynamicRates",
+        "name": "_dynamicRates",
+        "type": "tuple"
+      },
+      {
+        "internalType": "bool",
+        "name": "isDigitalTwin",
+        "type": "bool"
+      }
+    ],
+    "name": "setupIntegrator",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "economicsAddress_",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_integratorIndex",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_sender",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_totalTokens",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_topUpPrice",
+        "type": "uint256"
+      }
+    ],
+    "name": "topUpIntegrator",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_totalFuelUSD",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      }
+    ],
+    "name": "upgradeTo",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newImplementation",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "data",
+        "type": "bytes"
+      }
+    ],
+    "name": "upgradeToAndCall",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  }
+]

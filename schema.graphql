@@ -74,6 +74,7 @@ type Integrator @entity {
   id: ID!
   averageReservedPerTicket: BigDecimal!
   availableFuel: BigDecimal!
+  availableFuelUSD: BigDecimal!
   reservedFuel: BigDecimal!
   reservedFuelProtocol: BigDecimal!
   currentReservedFuel: BigDecimal!
@@ -82,9 +83,13 @@ type Integrator @entity {
   spentFuelProtocol: BigDecimal!
   price: BigDecimal!
   activeTicketCount: Int!
+  totalTopUp: BigDecimal!
+  totalTopUpUSD: BigDecimal!
   isBillingEnabled: Boolean!
   isConfigured: Boolean!
   isOnCredit: Boolean!
+  isDigitalTwin: Boolean!
+  economicsAddress: Bytes!
   minFeePrimary: BigDecimal!
   maxFeePrimary: BigDecimal!
   primaryRate: BigDecimal!
@@ -117,6 +122,7 @@ type IntegratorDay @entity {
   day: Int!
   averageReservedPerTicket: BigDecimal!
   availableFuel: BigDecimal!
+  availableFuelUSD: BigDecimal!
   reservedFuel: BigDecimal!
   reservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!

@@ -39,3 +39,9 @@ export let TICKETEER_MAPPING = new Map<string, string>();
 {{ #ticketeers }}
 TICKETEER_MAPPING.set("{{ 0 }}", "{{ 1 }}");
 {{ /ticketeers }}
+
+// We record whether an integrator is a digitalTwin or not in V2.1. To keep the records consistent we're going to record all digital twins and their integrator indexes for backward compatibility
+export let DIGITAL_TWIN_MAPPING = new Map<string, boolean>();
+{{ #digitalTwins }}
+DIGITAL_TWIN_MAPPING.set("{{0}}", "{{1}}")
+{{ /digitalTwins }}

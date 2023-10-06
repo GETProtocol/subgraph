@@ -2,7 +2,7 @@
   "chainName": "mumbai",
   "network": "mumbai",
   "addresses": {
-    "GETSaaS":"0x0000000000000000000000000000000000000001",
+    "GETSaaS": "0x0000000000000000000000000000000000000001",
     "Staking": "0xbf7f1625E74D64a0f380a2C887F17F9BdC3d518D",
     "FuelBridgeReceiver": "0xa4d622434f677cfc58BaFd23c16B6fc57bA845Ce"
   },
@@ -26,6 +26,12 @@
     "TopUp": {
       "address": "0xCfD6DbE035413811C3F8aC9e65d4fF647E00C384",
       "startBlock": 26742682
+    }
+  },
+  "v2_1": {
+    "EconomicsFactory": {
+      "address": "0xA7d8cAd5775cfC1388ab4054A945652f314FAf94",
+      "startBlock": 26742663
     }
   }
 }

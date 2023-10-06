@@ -6,7 +6,7 @@ import {
   RelayerToppedUpBuffer,
   SiloBalanceCorrected,
 } from "../../../generated/EconomicsGETV1_1/EconomicsGETV1_1";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE, BYTES_EMPTY, RELAYER_MAPPING } from "../../constants";
+import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE, RELAYER_MAPPING } from "../../constants";
 import {
   getIntegratorByRelayerAddress,
   getIntegratorDayByIndexAndEvent,
@@ -77,11 +77,20 @@ export function handleRelayerToppedUpBuffer(e: RelayerToppedUpBuffer): void {
   integrator.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
   integratorDay.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
 
+  let price = e.params.priceGETTopUp.divDecimal(BIG_DECIMAL_1E3);
+  let topUpUSD = amount.times(price);
+
+  integrator.price = price;
+  integrator.availableFuelUSD = integrator.availableFuelUSD.plus(topUpUSD);
+  integratorDay.availableFuelUSD = integrator.availableFuelUSD;
+
+  integrator.totalTopUp = integrator.totalTopUp.plus(amount);
+  integrator.totalTopUpUSD = integrator.totalTopUpUSD.plus(topUpUSD);
+
   integrator.save();
   integratorDay.save();
 
-  let price = e.params.priceGETTopUp.divDecimal(BIG_DECIMAL_1E3);
-  createTopUpEvent(e, integrator.id, amount, BIG_DECIMAL_ZERO, price, BYTES_EMPTY);
+  createTopUpEvent(e, integrator.id, amount, BIG_DECIMAL_ZERO, price);
 }
 
 export function handleAveragePriceUpdated(e: AveragePriceUpdated): void {
