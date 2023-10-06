@@ -50,7 +50,7 @@ export function handleIntegratorConfigured(e: IntegratorConfigured): void {
   integrator.maxFeeSecondary = BigInt.fromI32(e.params.dynamicRates.maxFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
   integrator.secondaryRate = BigInt.fromI32(e.params.dynamicRates.secondaryRate).divDecimal(BigDecimal.fromString("10000"));
   integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
-  //   integrator.isDigitalTwin = e.params.isDigitalTwin;
+  integrator.isDigitalTwin = e.params.isDigitalTwin;
   relayer.save();
   integrator.save();
 }
@@ -123,11 +123,11 @@ export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   integratorDay.availableFuel = integrator.availableFuel;
   integratorDay.availableFuelUSD = integrator.availableFuelUSD;
 
-  integrator.totalTopUp = integrator.totalTopUp.plus(topUpAmount);
-  integrator.totalTopUpUSD = integrator.totalTopUpUSD.plus(topUpAmountUSD);
-
   integrator.price = integrator.totalTopUpUSD.div(integrator.totalTopUp);
   integratorDay.price = integrator.price;
+
+  integrator.totalTopUp = integrator.totalTopUp.plus(topUpAmount);
+  integrator.totalTopUpUSD = integrator.totalTopUpUSD.plus(topUpAmountUSD);
 
   integrator.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
   integratorDay.topUpCount = integratorDay.topUpCount.plus(BIG_INT_ONE);
