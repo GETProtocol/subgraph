@@ -117,17 +117,19 @@ export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
 
   let integrator = getIntegrator(integratorIndex);
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
+  let totalTopUp = integrator.totalTopUp.plus(topUpAmount);
+  let totalTopUpUSD = integrator.totalTopUpUSD.plus(topUpAmountUSD);
 
   integrator.availableFuel = integrator.availableFuel.plus(topUpAmount);
   integrator.availableFuelUSD = integrator.availableFuelUSD.plus(topUpAmountUSD);
   integratorDay.availableFuel = integrator.availableFuel;
   integratorDay.availableFuelUSD = integrator.availableFuelUSD;
 
-  integrator.price = integrator.totalTopUpUSD.div(integrator.totalTopUp);
+  integrator.price = totalTopUpUSD.div(totalTopUp);
   integratorDay.price = integrator.price;
 
-  integrator.totalTopUp = integrator.totalTopUp.plus(topUpAmount);
-  integrator.totalTopUpUSD = integrator.totalTopUpUSD.plus(topUpAmountUSD);
+  integrator.totalTopUp = totalTopUp;
+  integrator.totalTopUpUSD = totalTopUpUSD;
 
   integrator.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
   integratorDay.topUpCount = integratorDay.topUpCount.plus(BIG_INT_ONE);

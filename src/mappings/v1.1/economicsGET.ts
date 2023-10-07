@@ -73,17 +73,19 @@ export function handleRelayerToppedUpBuffer(e: RelayerToppedUpBuffer): void {
   let amount = e.params.topUpAmount.divDecimal(BIG_DECIMAL_1E18);
   let price = e.params.priceGETTopUp.divDecimal(BIG_DECIMAL_1E3);
   let topUpUSD = amount.times(price);
+  let totalTopUp = integrator.totalTopUp.plus(amount);
+  let totaltopUpUSD = integrator.totalTopUpUSD.plus(topUpUSD);
 
   integrator.availableFuel = integrator.availableFuel.plus(amount);
   integrator.availableFuelUSD = integrator.availableFuelUSD.plus(topUpUSD);
   integratorDay.availableFuel = integrator.availableFuel;
   integratorDay.availableFuelUSD = integrator.availableFuelUSD;
 
-  integrator.price = price;
-  integratorDay.price = price;
+  integrator.price = totaltopUpUSD.div(totalTopUp);
+  integratorDay.price = integrator.price;
 
-  integrator.totalTopUp = integrator.totalTopUp.plus(amount);
-  integrator.totalTopUpUSD = integrator.totalTopUpUSD.plus(topUpUSD);
+  integrator.totalTopUp = totalTopUp;
+  integrator.totalTopUpUSD = totaltopUpUSD;
 
   integrator.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
   integratorDay.topUpCount = integratorDay.topUpCount.plus(BIG_INT_ONE);

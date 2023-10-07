@@ -19,7 +19,7 @@ export function getIntegrator(integratorIndex: string): Integrator {
     integrator.spentFuelProtocol = BIG_DECIMAL_ZERO;
     integrator.price = BIG_DECIMAL_ZERO;
     integrator.activeTicketCount = 0;
-    integrator.totalTopUp = BIG_INT_ZERO;
+    integrator.totalTopUp = BIG_DECIMAL_ZERO;
     integrator.totalTopUpUSD = BIG_DECIMAL_ZERO;
     integrator.isBillingEnabled = true;
     integrator.isConfigured = true;
