@@ -1,0 +1,487 @@
+[
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_registry",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_baseRate",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_digitalTwinIntegratorId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_economicsFrom",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_fuelDestinationTo",
+        "type": "address"
+      }
+    ],
+    "name": "DigitalTwinPrimarySaleRouteChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "economicsAddressFrom",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "fuelDestinationTo",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelValueUSD",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "toDripCollector",
+        "type": "bool"
+      }
+    ],
+    "name": "FuelRouted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_from",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "name": "RouteRequestFilled",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "economicsAddressFrom",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "fuelDestinationTo",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelValueUSD",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "ticketAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "RouteRequestFilledDigitalTwinPrimarySale",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "economicsAddressFrom",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "fuelDestinationTo",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "productFuelAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "productFuelValueUSD",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "protocolFuelAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "protocolFuelValue",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "ticketAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "RouteRequestFilledWhitelabelPrimarySale",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "eventAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "economicsAddressFrom",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "fuelDestinationTo",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelValueUSD",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "ticketAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "RouteRequestFilledWhitelabelSecondarySale",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "auth",
+    "outputs": [
+      {
+        "internalType": "contract IAuth",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "baseRate",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "digitalTwinIntegratorId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "dtEventPrimarySaleRoute",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "fuelFrom",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "fuelTo",
+            "type": "address"
+          }
+        ],
+        "internalType": "struct IFuelRouter.Route",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isRouterWhitelabelRouter",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isWhitelabelRouter_",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "registry",
+    "outputs": [
+      {
+        "internalType": "contract IRegistry",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "externalId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint64",
+            "name": "orderTime",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint40",
+            "name": "basePrice",
+            "type": "uint40"
+          }
+        ],
+        "internalType": "struct IEventImplementation.TicketAction[]",
+        "name": "_ticketActions",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "routeFuelForPrimarySale",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_totalFuelValue",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_totalFuelTokens",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "externalId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint64",
+            "name": "orderTime",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint40",
+            "name": "basePrice",
+            "type": "uint40"
+          }
+        ],
+        "internalType": "struct IEventImplementation.TicketAction[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "routeFuelForSecondarySale",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "routerType",
+    "outputs": [
+      {
+        "internalType": "enum IFuelRouter.RouterType",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_economicsFrom",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_fuelDestinationTo",
+        "type": "address"
+      }
+    ],
+    "name": "setDigitalTwinPrimarySaleRoute",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_baseRate",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMintBaseRate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
