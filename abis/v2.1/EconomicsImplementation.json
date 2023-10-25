@@ -348,19 +348,6 @@
   },
   {
     "inputs": [],
-    "name": "deployNewFuelHolder",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "newHolder_",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "economicsFactory",
     "outputs": [
       {
@@ -554,6 +541,45 @@
   },
   {
     "inputs": [],
+    "name": "overdraftedFuelUSDStorage_",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "productOverdraft",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "protocolOverdraft",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "registry",
     "outputs": [
       {
@@ -576,6 +602,11 @@
         "internalType": "address",
         "name": "_fuelDestination",
         "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "isProductFuel",
+        "type": "bool"
       }
     ],
     "name": "routeFuelRequest",
