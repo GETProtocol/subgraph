@@ -123,9 +123,3 @@ export function updateClaimed(integratorIndex: string, e: ethereum.Event, count:
   integratorDay.claimedCount = integratorDay.claimedCount.plus(count);
   integratorDay.save();
 }
-
-export function updateProtocolFuelRouted(integratorIndex: string, e: ethereum.Event, spentFuelProtocol: BigDecimal): void {
-  let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
-  integratorDay.treasuryRevenue = integratorDay.treasuryRevenue.plus(spentFuelProtocol);
-  integratorDay.save();
-}

@@ -150,9 +150,3 @@ export function updateClaimed(integratorIndex: string, count: BigInt): void {
   integrator.claimedCount = integrator.claimedCount.plus(count);
   integrator.save();
 }
-
-export function updateProtocolFuelRouted(integratorIndex: string, spentFuelProtocol: BigDecimal): void {
-  let integrator = getIntegrator(integratorIndex);
-  integrator.treasuryRevenue = integrator.treasuryRevenue.plus(spentFuelProtocol);
-  integrator.save();
-}

@@ -447,32 +447,32 @@ dataSources:
           handler: handleIntegratorNameSet
 
 {{ /v2_1.EconomicsFactory }}
-{{ #v2_1.DripCollector }}
+{{ #v2_1.FuelCollector }}
   - kind: ethereum/contract
-    name: DripCollector
+    name: FuelCollector
     network: {{ network }}
     source:
-      address: "{{ v2_1.DripCollector.address }}"
-      abi: DripCollector
-      startBlock: {{ v2_1.DripCollector.startBlock }}
+      address: "{{ v2_1.FuelCollector.address }}"
+      abi: FuelCollector
+      startBlock: {{ v2_1.FuelCollector.startBlock }}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/v2.1/dripCollector.ts
+      file: ./src/mappings/v2.1/fuelCollector.ts
       entities:
         - Protocol
         - ProtocolDay
         - Integrator
         - IntegratorDay
       abis:
-        - name: DripCollector
-          file: ./abis/v2.1/DripCollector.json
+        - name: FuelCollector
+          file: ./abis/v2.1/FuelCollector.json
       eventHandlers:
-        - event: Claimed(indexed address,uint256)
-          handler: handleClaimed
+        - event: FuelDistributed(indexed uint256,indexed uint256,indexed uint256)
+          handler: handleFuelDistributed
 
-{{ /v2_1.DripCollector }}
+{{ /v2_1.FuelCollector }}
 templates:
 {{ #v2.EventFactory }}
   - name: EventImplementation
@@ -518,31 +518,6 @@ templates:
           
 {{ /v2.EventFactory }}
 {{ #v2_1.EconomicsFactory }}
-  - name: EconomicsImplementation
-    kind: ethereum/contract
-    network: {{ network }}
-    source:
-      abi: EconomicsImplementation
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/v2.1/economicsImplementation.ts
-      entities:
-        - Protocol
-        - ProtocolDay
-        - Integrator
-        - IntegratorDay
-        - Event
-        - Ticket
-        - UsageEvent
-      abis:
-        - name: EconomicsImplementation
-          file: ./abis/v2.1/EconomicsImplementation.json
-      eventHandlers:
-        - event: RouteRequestFilled(address,uint256,uint256,address)
-          handler: handleRouteRequestFilled
-
   - name: EventImplementationV2_1
     kind: ethereum/contract
     network: {{network}}
@@ -576,48 +551,4 @@ templates:
           handler: handleInvalidated
         - event: Claimed((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
           handler: handleClaimed
-
-  - name: FuelRouterWL
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: FuelRouterWL
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/v2.1/fuelRouterWL.ts
-      entities:
-        - Protocol
-        - ProtocolDay
-        - Integrator
-        - IntegratorDay
-      abis:
-        - name: FuelRouterWL
-          file: ./abis/v2.1/FuelRouterWL.json
-      eventHandlers:
-        - event: FuelRouted(indexed address,indexed address,indexed address,uint256,uint256,bool)
-          handler: handleFuelRouted
-
-  - name: FuelRouterDT
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: FuelRouterDT
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/v2.1/fuelRouterDT.ts
-      entities:
-        - Protocol
-        - ProtocolDay
-        - Integrator
-        - IntegratorDay
-      abis:
-        - name: FuelRouterDT
-          file: ./abis/v2.1/FuelRouterDT.json
-      eventHandlers:
-        - event: FuelRouted(indexed address,indexed address,indexed address,uint256,uint256,bool)
-          handler: handleFuelRouted
 {{ /v2_1.EconomicsFactory }}

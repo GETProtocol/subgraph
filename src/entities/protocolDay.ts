@@ -1,7 +1,7 @@
 import { BigDecimal, BigInt, ethereum } from "@graphprotocol/graph-ts";
 import { ProtocolDay } from "../../generated/schema";
 import { BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../constants";
-import { getProtocol, updateProtocolFuelRouted } from "./protocol";
+import { getProtocol } from "./protocol";
 
 export function getProtocolDay(e: ethereum.Event): ProtocolDay {
   let day = e.block.timestamp.toI32() / 86400;
@@ -120,22 +120,22 @@ export function updateTotalSalesVolume(e: ethereum.Event, price: BigDecimal): vo
   protocolDay.save();
 }
 
-export function updateProtocolFuelRouted(e: ethereum.Event, spentFuel: BigDecimal): void {
-  let protocolDay = getProtocolDay(e);
-  let protocol = getProtocol();
-  protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(spentFuel);
-  protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(spentFuel);
-  protocolDay.currentSpentFuelProtocol = protocol.currentSpentFuelProtocol;
-  protocolDay.save();
-}
-
-export function updateFuelClaimed(e: ethereum.Event, spentFuel: BigDecimal, treasuryRevenue: BigDecimal, holdersRevenue: BigDecimal): void {
+export function updateFuelDistributed(
+  e: ethereum.Event,
+  protocolRevenue: BigDecimal,
+  treasuryRevenue: BigDecimal,
+  holdersRevenue: BigDecimal
+): void {
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
 
   protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(treasuryRevenue);
   protocolDay.holdersRevenue = protocolDay.holdersRevenue.plus(holdersRevenue);
-  protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
+
+  protocolDay.spentFuel = protocolDay.spentFuel.plus(protocolRevenue.plus(holdersRevenue));
   protocolDay.currentSpentFuel = protocol.currentSpentFuel;
+
+  protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(protocolRevenue);
+  protocolDay.currentSpentFuelProtocol = protocol.spentFuelProtocol;
   protocolDay.save();
 }

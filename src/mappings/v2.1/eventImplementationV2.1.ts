@@ -44,15 +44,12 @@ export function handleEventDataSet(e: EventDataSet): void {
 }
 
 export function handlePrimarySale(e: PrimarySale): void {
-  // Protocol fee is only collected at primary sale and it's immediately spent
-  // It's routed to the protocol fee destination address in the sale
-  // Product fee on the otherhand is routed to the drip collector contract
-  // So it's technically reserved untill it's completely vested and withdrawn
+  // Protocol and product fee is routed to the FuelCollector contract on primary sale
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
-  let spentFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
-  let spentFuelProtocolPerTicket = spentFuelProtocol.div(BigDecimal.fromString(countBigInt.toString()));
+  let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
+  let reservedFuelProtocolPerTicket = reservedFuelProtocol.div(BigDecimal.fromString(countBigInt.toString()));
   let eventInstance = getEvent(e.address);
   let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
@@ -80,7 +77,7 @@ export function handlePrimarySale(e: PrimarySale): void {
       ticketAction.orderTime,
       ticket.basePrice,
       ticket.reservedFuel,
-      spentFuelProtocolPerTicket
+      reservedFuelProtocolPerTicket
     );
   }
 
@@ -90,13 +87,13 @@ export function handlePrimarySale(e: PrimarySale): void {
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
-  protocol.updatePrimarySale(countBigInt, reservedFuel, BIG_DECIMAL_ZERO);
-  protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, BIG_DECIMAL_ZERO);
+  protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol);
+  protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
 
-  integrator.updatePrimarySale(eventInstance.integrator, countBigInt, reservedFuel, BIG_DECIMAL_ZERO);
-  integratorDay.updatePrimarySale(eventInstance.integrator, e, countBigInt, reservedFuel, BIG_DECIMAL_ZERO);
+  integrator.updatePrimarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
+  integratorDay.updatePrimarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
 
-  event.updatePrimarySale(e.address, countBigInt, reservedFuel, BIG_DECIMAL_ZERO);
+  event.updatePrimarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
 }
 
 export function handleSecondarySale(e: SecondarySale): void {
