@@ -14,6 +14,7 @@ function getIntegratorDay(integratorIndex: string, day: i32): IntegratorDay {
     integratorDay.day = day;
     integratorDay.averageReservedPerTicket = BIG_DECIMAL_ZERO;
     integratorDay.availableFuel = integrator.availableFuel;
+    integratorDay.availableFuelUSD = BIG_DECIMAL_ZERO;
     integratorDay.reservedFuel = BIG_DECIMAL_ZERO;
     integratorDay.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     integratorDay.spentFuel = BIG_DECIMAL_ZERO;
@@ -53,6 +54,7 @@ export function updatePrimarySale(
   integratorDay.reservedFuelProtocol = integratorDay.reservedFuelProtocol.plus(reservedFuelProtocol);
   integratorDay.averageReservedPerTicket = integratorDay.reservedFuel.div(integratorDay.soldCount.toBigDecimal());
   integratorDay.availableFuel = integrator.availableFuel;
+  integratorDay.availableFuelUSD = integrator.availableFuelUSD;
   integratorDay.save();
 }
 
@@ -85,10 +87,10 @@ export function updateCheckedIn(
   integratorIndex: string,
   e: ethereum.Event,
   count: BigInt,
-  spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal,
-  holdersRevenue: BigDecimal,
-  treasuryRevenue: BigDecimal
+  spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
+  spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
+  holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
+  treasuryRevenue: BigDecimal = BIG_DECIMAL_ZERO
 ): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
   integratorDay.checkedInCount = integratorDay.checkedInCount.plus(count);
@@ -103,10 +105,10 @@ export function updateInvalidated(
   integratorIndex: string,
   e: ethereum.Event,
   count: BigInt,
-  spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal,
-  holdersRevenue: BigDecimal,
-  treasuryRevenue: BigDecimal
+  spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
+  spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
+  holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
+  treasuryRevenue: BigDecimal = BIG_DECIMAL_ZERO
 ): void {
   let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
   integratorDay.invalidatedCount = integratorDay.invalidatedCount.plus(count);

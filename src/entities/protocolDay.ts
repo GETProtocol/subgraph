@@ -56,19 +56,25 @@ export function updateSecondarySale(e: ethereum.Event, count: BigInt, reservedFu
   protocolDay.save();
 }
 
-export function updateScanned(e: ethereum.Event, count: BigInt): void {
+export function updateScanned(e: ethereum.Event, count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
   let protocolDay = getProtocolDay(e);
+  let protocol = getProtocol();
   protocolDay.scannedCount = protocolDay.scannedCount.plus(count);
+  protocolDay.spentFuel = protocolDay.spentFuel.plus(spentFuel);
+  protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(spentFuelProtocol);
+  protocolDay.currentSpentFuel = protocol.currentSpentFuel;
+  protocolDay.currentSpentFuelProtocol = protocol.currentSpentFuelProtocol;
+
   protocolDay.save();
 }
 
 export function updateCheckedIn(
   e: ethereum.Event,
   count: BigInt,
-  spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal,
-  holdersRevenue: BigDecimal,
-  treasuryRevenue: BigDecimal
+  spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
+  spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
+  holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
+  treasuryRevenue: BigDecimal = BIG_DECIMAL_ZERO
 ): void {
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
@@ -85,10 +91,10 @@ export function updateCheckedIn(
 export function updateInvalidated(
   e: ethereum.Event,
   count: BigInt,
-  spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal,
-  holdersRevenue: BigDecimal,
-  treasuryRevenue: BigDecimal
+  spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
+  spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
+  holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
+  treasuryRevenue: BigDecimal = BIG_DECIMAL_ZERO
 ): void {
   let protocolDay = getProtocolDay(e);
   let protocol = getProtocol();
@@ -111,5 +117,25 @@ export function updateClaimed(e: ethereum.Event, count: BigInt): void {
 export function updateTotalSalesVolume(e: ethereum.Event, price: BigDecimal): void {
   let protocolDay = getProtocolDay(e);
   protocolDay.totalSalesVolume = protocolDay.totalSalesVolume.plus(price);
+  protocolDay.save();
+}
+
+export function updateFuelDistributed(
+  e: ethereum.Event,
+  protocolRevenue: BigDecimal,
+  treasuryRevenue: BigDecimal,
+  holdersRevenue: BigDecimal
+): void {
+  let protocolDay = getProtocolDay(e);
+  let protocol = getProtocol();
+
+  protocolDay.treasuryRevenue = protocolDay.treasuryRevenue.plus(treasuryRevenue);
+  protocolDay.holdersRevenue = protocolDay.holdersRevenue.plus(holdersRevenue);
+
+  protocolDay.spentFuel = protocolDay.spentFuel.plus(protocolRevenue.plus(holdersRevenue));
+  protocolDay.currentSpentFuel = protocol.currentSpentFuel;
+
+  protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(protocolRevenue);
+  protocolDay.currentSpentFuelProtocol = protocol.spentFuelProtocol;
   protocolDay.save();
 }

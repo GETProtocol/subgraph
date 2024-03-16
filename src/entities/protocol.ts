@@ -58,18 +58,22 @@ export function updateSecondarySale(count: BigInt, reservedFuel: BigDecimal, res
   protocol.save();
 }
 
-export function updateScanned(count: BigInt): void {
+export function updateScanned(count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
   let protocol = getProtocol();
   protocol.scannedCount = protocol.scannedCount.plus(count);
+  protocol.currentReservedFuel = protocol.currentReservedFuel.minus(spentFuel);
+  protocol.currentReservedFuelProtocol = protocol.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  protocol.spentFuel = protocol.spentFuel.plus(spentFuel);
+  protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(spentFuelProtocol);
   protocol.save();
 }
 
 export function updateCheckedIn(
   count: BigInt,
-  spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal,
-  holdersRevenue: BigDecimal,
-  treasuryRevenue: BigDecimal
+  spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
+  spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
+  holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
+  treasuryRevenue: BigDecimal = BIG_DECIMAL_ZERO
 ): void {
   let protocol = getProtocol();
   protocol.treasuryRevenue = protocol.treasuryRevenue.plus(treasuryRevenue);
@@ -86,10 +90,10 @@ export function updateCheckedIn(
 
 export function updateInvalidated(
   count: BigInt,
-  spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal,
-  holdersRevenue: BigDecimal,
-  treasuryRevenue: BigDecimal
+  spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
+  spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
+  holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
+  treasuryRevenue: BigDecimal = BIG_DECIMAL_ZERO
 ): void {
   let protocol = getProtocol();
   protocol.treasuryRevenue = protocol.treasuryRevenue.plus(treasuryRevenue);
@@ -113,5 +117,24 @@ export function updateClaimed(count: BigInt): void {
 export function updateTotalSalesVolume(price: BigDecimal): void {
   let protocol = getProtocol();
   protocol.totalSalesVolume = protocol.totalSalesVolume.plus(price);
+  protocol.save();
+}
+
+export function updateFuelDistributed(protocolRevenue: BigDecimal, treasuryRevenue: BigDecimal, holdersRevenue: BigDecimal): void {
+  let protocol = getProtocol();
+  let spentFuel = treasuryRevenue.plus(holdersRevenue);
+
+  protocol.spentFuel = protocol.spentFuel.plus(spentFuel);
+  protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(protocolRevenue);
+
+  protocol.currentSpentFuel = protocol.currentSpentFuel.plus(spentFuel);
+  protocol.currentSpentFuelProtocol = protocol.currentSpentFuelProtocol.plus(protocolRevenue);
+
+  protocol.currentReservedFuel = protocol.currentReservedFuel.minus(spentFuel);
+  protocol.currentReservedFuelProtocol = protocol.currentReservedFuelProtocol.minus(protocolRevenue);
+
+  protocol.treasuryRevenue = protocol.treasuryRevenue.plus(treasuryRevenue);
+  protocol.holdersRevenue = protocol.holdersRevenue.plus(holdersRevenue);
+
   protocol.save();
 }

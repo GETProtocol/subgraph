@@ -179,6 +179,8 @@ export function handleScanned(e: Scanned): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let eventInstance = getEvent(e.address);
+  let spentFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
+  let spentFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
 
   for (let i = 0; i < count; ++i) {
     let ticketAction = e.params.ticketActions[i];
@@ -190,9 +192,9 @@ export function handleScanned(e: Scanned): void {
     createUsageEvent(e, i, eventInstance, ticketAction.tokenId, "SCANNED", ticketAction.orderTime);
   }
 
-  protocol.updateScanned(countBigInt);
-  protocolDay.updateScanned(e, countBigInt);
-  integrator.updateScanned(eventInstance.integrator, countBigInt);
+  protocol.updateScanned(countBigInt, spentFuel, spentFuelProtocol);
+  protocolDay.updateScanned(e, countBigInt, spentFuel, spentFuelProtocol);
+  integrator.updateScanned(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
   integratorDay.updateScanned(eventInstance.integrator, e, countBigInt);
   event.updateScanned(e.address, countBigInt);
 }
