@@ -14,6 +14,7 @@ function getIntegratorDay(integratorIndex: string, day: i32): IntegratorDay {
     integratorDay.day = day;
     integratorDay.averageReservedPerTicket = BIG_DECIMAL_ZERO;
     integratorDay.availableFuel = integrator.availableFuel;
+    integratorDay.availableFuelUSD = BIG_DECIMAL_ZERO;
     integratorDay.reservedFuel = BIG_DECIMAL_ZERO;
     integratorDay.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     integratorDay.spentFuel = BIG_DECIMAL_ZERO;

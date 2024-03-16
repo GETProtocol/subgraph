@@ -30,12 +30,12 @@
   },
   "v2_1": {
     "EconomicsFactory": {
-      "address": "0xA7d8cAd5775cfC1388ab4054A945652f314FAf94",
-      "startBlock": 26742663
+      "address": "0x6aDb6016d96854da4745B4aec6CD8c0e4F4481E4",
+      "startBlock": 45830892
     },
     "FuelCollector": {
-      "address": "0xA7d8cAd5775cfC1388ab4054A945652f314FAf94",
-      "startBlock": 26742663
+      "address": "0x1E357AD0BB55426bfF8888c2294780bE99C0AF62",
+      "startBlock": 45830636
     }
   }
 }

@@ -16,7 +16,7 @@
     ["tectix", "5"]
   ],
   "addresses": {
-    "GETSaaS":"0x0000000000000000000000000000000000000001",
+    "GETSaaS": "0x0000000000000000000000000000000000000001",
     "Staking": "0xbf7f1625E74D64a0f380a2C887F17F9BdC3d518D",
     "FuelBridgeReceiver": "0xa4d622434f677cfc58BaFd23c16B6fc57bA845Ce"
   },
@@ -77,6 +77,16 @@
     "TopUp": {
       "address": "0xf33Ad9cCEA2190d4116e52E5F0bbe031971033A4",
       "startBlock": 26743700
+    }
+  },
+  "v2_1": {
+    "EconomicsFactory": {
+      "address": "0xD36bF24d985033bB88B307440D2b8eCb8ff0cd42",
+      "startBlock": 46683056
+    },
+    "FuelCollector": {
+      "address": "0x55dbDa1BaA5CEf96699df5b8039256Ea82A4a7ce",
+      "startBlock": 46683015
     }
   }
 }

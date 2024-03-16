@@ -32,7 +32,7 @@
     ["neonox", "14"]
   ],
   "addresses": {
-    "GETSaaS":"0xba0eae2aA4CB751D063E52Cf988E179c7d38E90C",
+    "GETSaaS": "0xba0eae2aA4CB751D063E52Cf988E179c7d38E90C",
     "Staking": "0x3e49E9C890Cd5B015A18ed76E7A4093f569f1A04",
     "FuelBridgeReceiver": "0x5339D13e0C5f88A4194B2D80594F4cB870BAd8bf"
   },
@@ -93,6 +93,16 @@
     "TopUp": {
       "address": "0x748df336E5d1c6387E3FAD5dEC86FB9B1d4c3Eda",
       "startBlock": 29585112
+    }
+  },
+  "v2_1": {
+    "EconomicsFactory": {
+      "address": "0x845350fa9374A2e83db8a74d24F9164eC0f65301",
+      "startBlock": 54656361
+    },
+    "FuelCollector": {
+      "address": "0x90fE3fBBbD71F4204d0bD91264D80216BD1082F3",
+      "startBlock": 54656267
     }
   }
 }
