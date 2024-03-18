@@ -13,6 +13,7 @@ import {
   IntegratorToppedUp,
   IntegratorNameSet,
   UpdateProtocolRates,
+  EconomicsContractDeployed,
 } from "../../../generated/EconomicsFactory/EconomicsFactory";
 import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
@@ -148,4 +149,26 @@ export function handleIntegratorNameSet(e: IntegratorNameSet): void {
   let integrator = getIntegrator(e.params.integratorIndex.toString());
   integrator.name = e.params.name;
   integrator.save();
+}
+
+export function handleEconomicsContractDeployed(e: EconomicsContractDeployed): void {
+  let integrator = getIntegrator(e.params.integratorIndex.toString());
+
+  // If an integrator is found then this means they were migrated to the new economics from the old. In these cases we
+  // spend the current reserved fuel at the time of migration.
+  if (integrator != null) {
+    let integratorDay = getIntegratorDayByIndexAndEvent(integrator.id, e);
+
+    integrator.spentFuel = integrator.spentFuel.plus(integrator.currentReservedFuel);
+    integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(integrator.currentReservedFuelProtocol);
+
+    integratorDay.spentFuel = integratorDay.spentFuel.plus(integrator.currentReservedFuel);
+    integratorDay.spentFuelProtocol = integratorDay.spentFuelProtocol.plus(integrator.currentReservedFuelProtocol);
+
+    integrator.currentReservedFuel = BIG_DECIMAL_ZERO;
+    integrator.currentReservedFuelProtocol = BIG_DECIMAL_ZERO;
+
+    integrator.save();
+    integratorDay.save();
+  }
 }

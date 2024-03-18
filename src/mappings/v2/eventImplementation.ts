@@ -125,7 +125,7 @@ export function handlePrimarySale(e: PrimarySale): void {
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
-  protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol);
+  protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol, true);
   protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
   integrator.updatePrimarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
   integratorDay.updatePrimarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
@@ -168,7 +168,7 @@ export function handleSecondarySale(e: SecondarySale): void {
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
-  protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol);
+  protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol, true);
   protocolDay.updateSecondarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
   integrator.updateSecondarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
   integratorDay.updateSecondarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
@@ -192,7 +192,7 @@ export function handleScanned(e: Scanned): void {
     createUsageEvent(e, i, eventInstance, ticketAction.tokenId, "SCANNED", ticketAction.orderTime);
   }
 
-  protocol.updateScanned(countBigInt, spentFuel, spentFuelProtocol);
+  protocol.updateScanned(countBigInt, spentFuel, spentFuelProtocol, true);
   protocolDay.updateScanned(e, countBigInt, spentFuel, spentFuelProtocol);
   integrator.updateScanned(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
   integratorDay.updateScanned(eventInstance.integrator, e, countBigInt);
@@ -255,7 +255,7 @@ export function handleCheckedIn(e: CheckedIn): void {
   treasuryRevenue = remainder.times(percentageTreasury).plus(spentFuelProtocol);
   holdersRevenue = remainder.times(percentageStaking);
 
-  protocol.updateCheckedIn(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+  protocol.updateCheckedIn(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue, true);
   protocolDay.updateCheckedIn(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   integrator.updateCheckedIn(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   integratorDay.updateCheckedIn(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
@@ -317,7 +317,7 @@ export function handleInvalidated(e: Invalidated): void {
   treasuryRevenue = remainder.times(percentageTreasury).plus(spentFuelProtocol);
   holdersRevenue = remainder.times(percentageStaking);
 
-  protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+  protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue, true);
   protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   integrator.updateInvalidated(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   integratorDay.updateInvalidated(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);

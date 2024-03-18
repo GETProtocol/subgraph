@@ -13,8 +13,9 @@ import {
   UpdateIntegratorName,
   UpdateProtocolRates,
   UpdateIntegratorOnCredit,
+  Upgraded,
 } from "../../../generated/EconomicsV2/EconomicsV2";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
+import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE, ECONOMICS_V2_1_BLOCK } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
 import { createTopUpEvent } from "../../entities/topUpEvent";
 
@@ -183,4 +184,26 @@ export function handleSpentFuelCollected(e: SpentFuelCollected): void {
 
   protocol.save();
   protocolDay.save();
+}
+
+export function handleUpgraded(e: Upgraded): void {
+  if (e.block.number.gt(ECONOMICS_V2_1_BLOCK)) {
+    let protocol = getProtocol();
+    let protocolDay = getProtocolDay(e);
+
+    let currentReservedFuel = protocol.currentReservedFuel;
+    let currentReservedFuelProtocol = protocol.currentReservedFuelProtocol;
+
+    protocol.spentFuel = protocol.spentFuel.plus(currentReservedFuel);
+    protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(currentReservedFuelProtocol);
+
+    protocolDay.spentFuel = protocol.spentFuel.plus(currentReservedFuel);
+    protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(currentReservedFuelProtocol);
+
+    protocol.currentReservedFuel = BIG_DECIMAL_ZERO;
+    protocol.currentReservedFuelProtocol = BIG_DECIMAL_ZERO;
+
+    protocol.save();
+    protocolDay.save();
+  }
 }
