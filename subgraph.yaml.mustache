@@ -517,38 +517,3 @@ templates:
           handler: handleTransfer
           
 {{ /v2.EventFactory }}
-{{ #v2_1.EconomicsFactory }}
-  - name: EventImplementationV2_1
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: EventImplementationV2_1
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/v2.1/eventImplementationV2.1.ts
-      entities:
-        - Protocol
-        - Integrator
-        - Event
-        - UsageEvent
-      abis:
-        - name: EventImplementationV2_1
-          file: ./abis/v2.1/EventImplementationV2.1.json
-      eventHandlers:
-        - event: EventDataSet((uint32,uint64,uint64,int32,int32,string,string,string,string))
-          handler: handleEventDataSet
-        - event: PrimarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handlePrimarySale
-        - event: SecondarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleSecondarySale
-        - event: Scanned((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleScanned
-        - event: CheckedIn((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleCheckedIn
-        - event: Invalidated((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleInvalidated
-        - event: Claimed((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleClaimed
-{{ /v2_1.EconomicsFactory }}

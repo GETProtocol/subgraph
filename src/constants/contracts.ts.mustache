@@ -21,6 +21,9 @@ export let ECONOMICS_ADDRESS_V1_1 = {{ ^v1_1.EconomicsGET.address }}Address.zero
 // See: https://polygonscan.com/tx/0xe9ef44375aa2a2cb70fb6244e60ca6c8ca60fca3dd6e0fa3b42e779d1d0faba3
 export let FUEL_ACTIVATED_BLOCK = BigInt.fromI32({{ v1_1.fuelActivatedBlock }}{{ ^v1_1.fuelActivatedBlock }}0{{ /v1_1.fuelActivatedBlock }});
 
+// The block after which the final upgrade to Economics 2.0 happened.
+export let ECONOMICS_V2_1_BLOCK = {{ ^v2_1.EconomicsFactory.startBlock }}BIG_INT_ZERO{{ /v2_1.EconomicsFactory.startBlock }}{{ #v2_1.EconomicsFactory.startBlock }}BigInt.fromI32({{ v2_1.EconomicsFactory.startBlock }}){{ /v2_1.EconomicsFactory.startBlock }};
+
 // After V1.1 we enforced separate relayers per-ticketeer and started assigning a string of "name" alongside the
 // relayer data. This maps the provided relayerAddress to the *accounting* integrator that was used by its index.
 // This mapping allows us to fetch the integrator record that was used for accounting purposes for a tx.
