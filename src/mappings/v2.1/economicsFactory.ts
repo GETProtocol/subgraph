@@ -122,6 +122,7 @@ export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
 
   integrator.totalTopUp = totalTopUp;
   integrator.totalTopUpUSD = totalTopUpUSD;
+  integrator.price = totalTopUpUSD.div(totalTopUp);
 
   integrator.topUpCount = integrator.topUpCount.plus(BIG_INT_ONE);
   integratorDay.topUpCount = integratorDay.topUpCount.plus(BIG_INT_ONE);

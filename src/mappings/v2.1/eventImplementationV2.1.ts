@@ -8,7 +8,7 @@ import {
   Scanned,
   SecondarySale,
 } from "../../../generated/templates/EventImplementationV2_1/EventImplementationV2_1";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO } from "../../constants";
+import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, V2_1_FUEL_FIX_BLOCK } from "../../constants";
 import { calculateReservedFuelPrimary, calculateReservedFuelSecondary, createUsageEvent, getEvent, getTicket } from "../../entities";
 import { EventDataSet } from "../../../generated/templates/EventImplementation/EventImplementation";
 
@@ -22,6 +22,13 @@ import * as event from "../../entities/event";
 // Events such as checkedIn, invalidated and scanned actually do not spend fuel.
 // However, we perform a manual calculation of what could have been spent using the old accounting system to track and update data.
 // The fuel
+
+// We had a bug in the contracts that affected the values of the emitted events of ticket sales and possibly resales.
+// We were adding the protocol fuel used twice in the total fuel used. As a result we had a divergence of Fuel
+// balances on the subgraph from their actual balances on chain. This bug was fixed on the `V2_1_FUEL_FIX_BLOCK`
+function getCorrectReservedFuel(totalFuelUsed: BigDecimal, protocolFuelUsed: BigDecimal, blockNumber: BigInt): BigDecimal {
+  return blockNumber.gt(V2_1_FUEL_FIX_BLOCK) ? totalFuelUsed : totalFuelUsed.minus(protocolFuelUsed);
+}
 
 export function handleEventDataSet(e: EventDataSet): void {
   let eventInstance = getEvent(e.address);
@@ -49,6 +56,8 @@ export function handlePrimarySale(e: PrimarySale): void {
   let countBigInt = BigInt.fromI32(count);
   let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
+  // fix reserved fuel value if prior to fuel fix block
+  reservedFuel = getCorrectReservedFuel(reservedFuel, reservedFuelProtocol, e.block.number);
   let reservedFuelProtocolPerTicket = reservedFuelProtocol.div(BigDecimal.fromString(countBigInt.toString()));
   let eventInstance = getEvent(e.address);
   let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
@@ -100,6 +109,9 @@ export function handleSecondarySale(e: SecondarySale): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
+  let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18); // this is "expected" to always be 0
+  // fix reserved fuel value if prior to fuel fix block
+  reservedFuel = getCorrectReservedFuel(reservedFuel, reservedFuelProtocol, e.block.number);
   let eventInstance = getEvent(e.address);
   let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
