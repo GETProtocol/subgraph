@@ -99,8 +99,8 @@ export function updateSecondarySale(
   integrator.resoldCount = integrator.resoldCount.plus(count);
   integrator.reservedFuel = integrator.reservedFuel.plus(reservedFuel);
   integrator.reservedFuelProtocol = integrator.reservedFuelProtocol.plus(reservedFuelProtocol);
-  integrator.spentFuel = integrator.spentFuel.plus(reservedFuel);
-  integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(reservedFuelProtocol);
+  integrator.currentReservedFuel = integrator.currentReservedFuel.plus(reservedFuel);
+  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
   integrator.averageReservedPerTicket = integrator.reservedFuel.div(integrator.soldCount.toBigDecimal());
   integrator.availableFuel = integrator.availableFuel.minus(reservedFuel);
 
