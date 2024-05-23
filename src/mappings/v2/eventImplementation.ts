@@ -19,6 +19,7 @@ import {
   STAKING,
   FUEL_BRIDGE_RECEIVER,
   ECONOMICS_V2_1_BLOCK,
+  ECONOMICS_V2_1_FUEL_FIX_BLOCK,
 } from "../../constants/contracts";
 import {
   calculateReservedFuelPrimary,
@@ -34,6 +35,16 @@ import * as protocolDay from "../../entities/protocolDay";
 import * as integrator from "../../entities/integrator";
 import * as integratorDay from "../../entities/integratorDay";
 import * as event from "../../entities/event";
+
+// We had a bug in the contracts that affected the values of the emitted events of ticket sales and possibly resales.
+// We were adding the protocol fuel used twice in the total fuel used. As a result we had a divergence of Fuel
+// balances on the subgraph from their actual balances on chain. This bug was fixed on the `ECONOMICS_V2_1_FUEL_FIX_BLOCK`
+// This bug only affects events post `ECONOMICS_V2_1_BLOCK` and prior to `ECONOMICS_V2_1_FUEL_FIX_BLOCK`
+function getCorrectReservedFuel(totalFuelUsed: BigDecimal, protocolFuelUsed: BigDecimal, blockNumber: BigInt): BigDecimal {
+  if (blockNumber.gt(ECONOMICS_V2_1_BLOCK)) {
+    return blockNumber.gt(ECONOMICS_V2_1_FUEL_FIX_BLOCK) ? totalFuelUsed : totalFuelUsed.minus(protocolFuelUsed);
+  } else return totalFuelUsed;
+}
 
 // -- Event Lifecycle Methods
 
@@ -90,6 +101,10 @@ export function handlePrimarySale(e: PrimarySale): void {
   let countBigInt = BigInt.fromI32(count);
   let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
+
+  // fix reserved fuel value for V2.1 events if prior to fuel fix block
+  reservedFuel = getCorrectReservedFuel(reservedFuel, reservedFuelProtocol, e.block.number);
+
   let reservedFuelProtocolPerTicket = reservedFuelProtocol.div(BigDecimal.fromString(countBigInt.toString()));
   let eventInstance = getEvent(e.address);
   let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
@@ -143,6 +158,10 @@ export function handleSecondarySale(e: SecondarySale): void {
   let countBigInt = BigInt.fromI32(count);
   let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
+
+  // fix reserved fuel value for V2.1 events if prior to fuel fix block
+  reservedFuel = getCorrectReservedFuel(reservedFuel, reservedFuelProtocol, e.block.number);
+
   let eventInstance = getEvent(e.address);
   let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
