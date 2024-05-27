@@ -26,7 +26,9 @@ type Protocol @entity {
   currentReservedFuel: BigDecimal!
   currentReservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!
+  spentFuelUSD: BigDecimal!
   spentFuelProtocol: BigDecimal!
+  spentFuelProtocolUSD: BigDecimal!
   currentSpentFuel: BigDecimal!
   currentSpentFuelProtocol: BigDecimal!
   collectedSpentFuel: BigDecimal!
@@ -52,7 +54,9 @@ type ProtocolDay @entity {
   reservedFuel: BigDecimal!
   reservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!
+  spentFuelUSD: BigDecimal!
   spentFuelProtocol: BigDecimal!
+  spentFuelProtocolUSD: BigDecimal!
   currentSpentFuel: BigDecimal!
   currentSpentFuelProtocol: BigDecimal!
   collectedSpentFuel: BigDecimal!
@@ -80,7 +84,9 @@ type Integrator @entity {
   currentReservedFuel: BigDecimal!
   currentReservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!
+  spentFuelUSD: BigDecimal!
   spentFuelProtocol: BigDecimal!
+  spentFuelProtocolUSD: BigDecimal!
   price: BigDecimal!
   activeTicketCount: Int!
   totalTopUp: BigDecimal!
@@ -125,6 +131,7 @@ type IntegratorDay @entity {
   reservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!
   spentFuelProtocol: BigDecimal!
+  spentFuelProtocolUSD: BigDecimal!
   price: BigDecimal!
   eventCount: BigInt!
   topUpCount: BigInt!

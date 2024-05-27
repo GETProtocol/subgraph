@@ -384,6 +384,12 @@
         "internalType": "uint256",
         "name": "fuelUSD",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelUSDProtocol",
+        "type": "uint256"
       }
     ],
     "name": "PrimarySale",
@@ -493,6 +499,12 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "fuelUSD",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelUSDProtocol",
         "type": "uint256"
       }
     ],

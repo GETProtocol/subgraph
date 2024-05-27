@@ -538,8 +538,8 @@ templates:
         - name: EventImplementation
           file: ./abis/v2.1/EventImplementation.json
       eventHandlers:
-        - event: PrimarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256,uint256)
+        - event: PrimarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256,uint256,uint256)
           handler: handlePrimarySale
-        - event: SecondarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256,uint256)
+        - event: SecondarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256,uint256,uint256)
           handler: handleSecondarySale
 {{ /v2.EventFactory }}
