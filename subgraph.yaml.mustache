@@ -515,5 +515,31 @@ templates:
           handler: handleEventDataUpdated
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-          
+
+  - name: EventImplementationV2
+    kind: ethereum/contract
+    network: {{ network }}
+    source:
+      abi: EventImplementation
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/mappings/v2.1/eventImplementation.ts
+      entities:
+        - Protocol
+        - ProtocolDay
+        - Integrator
+        - IntegratorDay
+        - Event
+        - Ticket
+        - UsageEvent
+      abis:
+        - name: EventImplementation
+          file: ./abis/v2.1/EventImplementation.json
+      eventHandlers:
+        - event: PrimarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256,uint256)
+          handler: handlePrimarySale
+        - event: SecondarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256,uint256)
+          handler: handleSecondarySale
 {{ /v2.EventFactory }}
