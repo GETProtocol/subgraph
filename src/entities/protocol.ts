@@ -54,6 +54,16 @@ export function updatePrimarySale(
   protocol.save();
 }
 
+// specifically for the Economics2.1 events and upward
+export function updateFuelBalances(fuel: BigDecimal, protocolFuel: BigDecimal, fuelUSD: BigDecimal, protocolFuelUSD: BigDecimal): void {
+  let protocol = getProtocol();
+  protocol.spentFuel = protocol.spentFuel.plus(fuel);
+  protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(protocolFuel);
+  protocol.spentFuelUSD = protocol.spentFuelUSD.plus(fuelUSD);
+  protocol.spentFuelProtocolUSD = protocol.spentFuelProtocolUSD.plus(protocolFuelUSD);
+  protocol.save();
+}
+
 export function updateSecondarySale(
   count: BigInt,
   reservedFuel: BigDecimal,

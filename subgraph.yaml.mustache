@@ -419,11 +419,11 @@ dataSources:
       eventHandlers:
         - event: EnableIntegratorBilling(uint32)
           handler: handleEnableIntegratorBilling
-        - event: UpdateDynamicRates(indexed uint32,(uint24,uint24,uint24,uint24,uint24,uint24,uint24))
+        - event: UpdateDynamicRates(indexed uint32,(uint24,uint24,uint24,uint24,uint24,uint24))
           handler: handleUpdateDynamicRates
         - event: UpdateIntegratorOnCredit(uint32,bool)
           handler: handleSetIntegratorOnCredit
-        - event: IntegratorConfigured(indexed uint256,string,address,bool,(uint24,uint24,uint24,uint24,uint24,uint24,uint24))
+        - event: IntegratorConfigured(indexed uint256,string,address,bool,(uint24,uint24,uint24,uint24,uint24,uint24))
           handler: handleIntegratorConfigured
         - event: IntegratorActivated(indexed uint32)
           handler: handleIntegratorActivated
@@ -441,7 +441,7 @@ dataSources:
           handler: handleIntegratorToppedUp
         - event: EnableIntegratorBilling(uint32)
           handler: handleEnableIntegratorBilling
-        - event: UpdateProtocolRates((uint24,uint24,uint24,uint24,uint24,uint24,uint24))
+        - event: UpdateProtocolRates((uint24,uint24,uint24,uint24,uint24,uint24))
           handler: handleUpdateProtocolRates
         - event: IntegratorNameSet(uint256,string)
           handler: handleIntegratorNameSet
@@ -516,7 +516,7 @@ templates:
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
 
-  - name: EventImplementationV2
+  - name: EventImplementationV2_2
     kind: ethereum/contract
     network: {{ network }}
     source:
@@ -525,7 +525,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
-      file: ./src/mappings/v2.1/eventImplementation.ts
+      file: ./src/mappings/v2.2/eventImplementation.ts
       entities:
         - Protocol
         - ProtocolDay
@@ -536,7 +536,7 @@ templates:
         - UsageEvent
       abis:
         - name: EventImplementation
-          file: ./abis/v2.1/EventImplementation.json
+          file: ./abis/v2.2/EventImplementation.json
       eventHandlers:
         - event: PrimarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256,uint256,uint256)
           handler: handlePrimarySale

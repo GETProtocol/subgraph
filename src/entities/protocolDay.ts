@@ -45,6 +45,22 @@ export function updatePrimarySale(e: ethereum.Event, count: BigInt, reservedFuel
   protocolDay.save();
 }
 
+// specifically for the Economics2.1 events and upward
+export function updateFuelBalances(
+  e: ethereum.Event,
+  fuel: BigDecimal,
+  protocolFuel: BigDecimal,
+  fuelUSD: BigDecimal,
+  protocolFuelUSD: BigDecimal
+): void {
+  let protocolDay = getProtocolDay(e);
+  protocolDay.spentFuel = protocolDay.spentFuel.plus(fuel);
+  protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(protocolFuel);
+  protocolDay.spentFuelUSD = protocolDay.spentFuelUSD.plus(fuelUSD);
+  protocolDay.spentFuelProtocolUSD = protocolDay.spentFuelProtocolUSD.plus(protocolFuelUSD);
+  protocolDay.save();
+}
+
 export function updateSecondarySale(e: ethereum.Event, count: BigInt, reservedFuel: BigDecimal, reservedFuelProtocol: BigDecimal): void {
   let protocolDay = getProtocolDay(e);
   protocolDay.resoldCount = protocolDay.resoldCount.plus(count);

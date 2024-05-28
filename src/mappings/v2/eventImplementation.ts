@@ -138,15 +138,22 @@ export function handlePrimarySale(e: PrimarySale): void {
     );
   }
 
-  eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
-  eventInstance.save();
+  if (isV2) {
+    // handle fuel balances for protocol, integrator, and event instances for dark days
+    // i.e
+    // event.updateEventUSDBalance()
+    // update spentFuel, spentFuelUSD, spentFuelProtocol, spentFuelProtocolUSD on Integrator and Protocol entities
+  } else {
+    eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
+    eventInstance.save();
+  }
 
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);
 
   protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol, isV2);
   protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
-  integrator.updatePrimarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
+  integrator.updatePrimarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol, isV2);
   integratorDay.updatePrimarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
   event.updatePrimarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
 }
@@ -187,8 +194,15 @@ export function handleSecondarySale(e: SecondarySale): void {
     );
   }
 
-  eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
-  eventInstance.save();
+  if (isV2) {
+    // handle fuel balances for protocol, integrator, and event instances for dark days
+    // i.e
+    // event.updateEventUSDBalance()
+    // update spentFuel, spentFuelUSD, spentFuelProtocol, spentFuelProtocolUSD on Integrator and Protocol entities
+  } else {
+    eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
+    eventInstance.save();
+  }
 
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
   protocolDay.updateTotalSalesVolume(e, cumulativeTicketValue);

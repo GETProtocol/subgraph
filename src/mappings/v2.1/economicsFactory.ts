@@ -27,7 +27,6 @@ export function handleUpdateDynamicRates(e: UpdateDynamicRates): void {
   integrator.minFeeSecondary = BigInt.fromI32(e.params.dynamicRates.minFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
   integrator.maxFeeSecondary = BigInt.fromI32(e.params.dynamicRates.maxFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
   integrator.secondaryRate = BigInt.fromI32(e.params.dynamicRates.secondaryRate).divDecimal(BigDecimal.fromString("10000"));
-  integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   integrator.save();
 }
 
@@ -49,7 +48,6 @@ export function handleIntegratorConfigured(e: IntegratorConfigured): void {
   integrator.minFeeSecondary = BigInt.fromI32(e.params.dynamicRates.minFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
   integrator.maxFeeSecondary = BigInt.fromI32(e.params.dynamicRates.maxFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
   integrator.secondaryRate = BigInt.fromI32(e.params.dynamicRates.secondaryRate).divDecimal(BigDecimal.fromString("10000"));
-  integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   relayer.save();
   integrator.save();
 }

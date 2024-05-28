@@ -130,6 +130,7 @@ type IntegratorDay @entity {
   reservedFuel: BigDecimal!
   reservedFuelProtocol: BigDecimal!
   spentFuel: BigDecimal!
+  spentFuelUSD: BigDecimal!
   spentFuelProtocol: BigDecimal!
   spentFuelProtocolUSD: BigDecimal!
   price: BigDecimal!

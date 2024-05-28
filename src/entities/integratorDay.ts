@@ -58,6 +58,23 @@ export function updatePrimarySale(
   integratorDay.save();
 }
 
+// specifically for the Economics2.1 events and upward
+export function updateFuelBalances(
+  integratorIndex: string,
+  e: ethereum.Event,
+  fuel: BigDecimal,
+  protocolFuel: BigDecimal,
+  fuelUSD: BigDecimal,
+  protocolFuelUSD: BigDecimal
+): void {
+  let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
+  integratorDay.spentFuel = integratorDay.spentFuel.plus(fuel);
+  integratorDay.spentFuelProtocol = integratorDay.spentFuelProtocol.plus(protocolFuel);
+  integratorDay.spentFuelUSD = integratorDay.spentFuelUSD.plus(fuelUSD);
+  integratorDay.spentFuelProtocolUSD = integratorDay.spentFuelProtocolUSD.plus(protocolFuelUSD);
+  integratorDay.save();
+}
+
 export function updateSecondarySale(
   integratorIndex: string,
   e: ethereum.Event,
