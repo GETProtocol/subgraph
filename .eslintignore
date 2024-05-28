@@ -2,7 +2,6 @@ build
 generated
 node_modules
 sample-app
-src/mappings/v1
 .commitlintrc.js
 .prettierrc.js
 .eslintrc.js

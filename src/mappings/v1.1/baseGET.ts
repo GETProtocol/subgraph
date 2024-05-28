@@ -2,7 +2,6 @@ import { Address, BigDecimal, BigInt } from "@graphprotocol/graph-ts";
 import { Event } from "../../../generated/schema";
 import {
   ADDRESS_ZERO,
-  BIG_DECIMAL_1E18,
   BIG_DECIMAL_1E3,
   BIG_DECIMAL_ZERO,
   BIG_INT_ONE,
@@ -10,6 +9,7 @@ import {
   CURRENCY_CONVERSION_ACTIVATED_BLOCK,
   FUEL_ACTIVATED_BLOCK,
   BASEGET_ADDRESS_V1_1,
+  BIG_DECIMAL_1E15,
 } from "../../constants";
 import {
   PrimarySaleMint,
@@ -107,7 +107,7 @@ export function handlePrimarySaleMint(e: PrimarySaleMint): void {
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
     let billingIntegrator = getIntegratorByRelayerAddress(e.transaction.from);
     let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
-    let getUsed = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
+    let getUsed = e.params.getUsed.divDecimal(BIG_DECIMAL_1E15);
 
     protocol.reservedFuel = protocol.reservedFuel.plus(getUsed);
     protocol.reservedFuelProtocol = protocol.reservedFuelProtocol.plus(getUsed);
@@ -173,7 +173,7 @@ export function handleTicketInvalidated(e: TicketInvalidated): void {
     let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
     // The only mechanism used in V1.1 was to fully re-allocate the ticket's 'backpack' to the DAO fee collector
     // address. Because of this we can assume the getUsed to be the full reserved fuel for that ticket.
-    let getUsed = ticket.reservedFuel;
+    let getUsed = ticket.reservedFuel.times(BIG_DECIMAL_1E3);
 
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
     protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
@@ -260,7 +260,7 @@ export function handleTicketScanned(e: TicketScanned): void {
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
     let billingIntegrator = getIntegratorByRelayerAddress(e.transaction.from);
     let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
-    let getUsed = ticket.reservedFuel;
+    let getUsed = ticket.reservedFuel.times(BIG_DECIMAL_1E3);
 
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
     protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);
@@ -313,7 +313,7 @@ export function handleCheckedIn(e: CheckedIn): void {
   if (e.block.number.ge(FUEL_ACTIVATED_BLOCK)) {
     let billingIntegrator = getIntegratorByRelayerAddress(e.transaction.from);
     let billingIntegratorDay = getIntegratorDayByIndexAndEvent(billingIntegrator.id, e);
-    let getUsed = ticket.reservedFuel;
+    let getUsed = ticket.reservedFuel.times(BIG_DECIMAL_1E3);
 
     protocol.spentFuel = protocol.spentFuel.plus(getUsed);
     protocol.spentFuelProtocol = protocol.spentFuelProtocol.plus(getUsed);

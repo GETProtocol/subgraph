@@ -8,6 +8,7 @@ export let BIG_DECIMAL_1E2 = BigDecimal.fromString("1e2");
 export let BIG_DECIMAL_1E3 = BigDecimal.fromString("1e3");
 export let BIG_DECIMAL_1E6 = BigDecimal.fromString("1e6");
 export let BIG_DECIMAL_1E12 = BigDecimal.fromString("1e12");
+export let BIG_DECIMAL_1E15 = BigDecimal.fromString("1e15");
 export let BIG_DECIMAL_1E18 = BigDecimal.fromString("1e18");
 
 export let BIG_INT_ZERO = BigInt.fromI32(0);
