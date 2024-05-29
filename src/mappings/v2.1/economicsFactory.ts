@@ -15,7 +15,7 @@ import {
   UpdateProtocolRates,
   EconomicsContractDeployed,
 } from "../../../generated/EconomicsFactory/EconomicsFactory";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
+import { BIG_DECIMAL_1E15, BIG_DECIMAL_1E21, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
 import { createTopUpEvent } from "../../entities/topUpEvent";
 
@@ -93,8 +93,12 @@ export function handleRelayerAdded(e: RelayerAdded): void {
 
 export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   let integratorIndex = e.params.integratorIndex.toString();
-  let topUpAmount = e.params.total.divDecimal(BIG_DECIMAL_1E18);
-  let price = e.params.topUpPrice.divDecimal(BIG_DECIMAL_1E18);
+
+  // divide by 1e15 and not 1e18 for GET -> OPN conversion
+  let topUpAmount = e.params.total.divDecimal(BIG_DECIMAL_1E15);
+
+  // divide by 1e21 and not 1e18 for the GET -> OPN price conversion
+  let price = e.params.topUpPrice.divDecimal(BIG_DECIMAL_1E21);
   let topUpAmountUSD = topUpAmount.times(price);
 
   let protocol = getProtocol();
