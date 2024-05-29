@@ -17,7 +17,7 @@
     "deploy:polygon-development": "graph deploy --studio open-core-amoy-dev",
     "deploy:polygon-testing": "graph deploy --studio open-core-amoy-test",
     "deploy:polygon-playground": "graph deploy --studio get-protocol-polygon-play",
-    "deploy:polygon-production-v1": "graph deploy --studio get-protocol-polygon-v1",
+    "deploy:polygon-production-v1": "graph deploy --studio open-core-polygon-v1",
     "deploy:polygon-production": "graph deploy --studio get-protocol-polygon",
     "release:polygon-development": "yarn prepare:polygon-development && yarn deploy:polygon-development",
     "release:polygon-testing": "yarn prepare:polygon-testing && yarn deploy:polygon-testing",

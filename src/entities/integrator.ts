@@ -74,18 +74,18 @@ export function updatePrimarySale(
   integrator.activeTicketCount = integrator.activeTicketCount + i32(parseInt(count.toString()));
   integrator.reservedFuel = integrator.reservedFuel.plus(reservedFuel);
   integrator.reservedFuelProtocol = integrator.reservedFuelProtocol.plus(reservedFuelProtocol);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.plus(reservedFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
   integrator.averageReservedPerTicket = integrator.reservedFuel.div(integrator.soldCount.toBigDecimal());
   integrator.availableFuel = integrator.availableFuel.minus(reservedFuel);
 
-  if (!isV2) {
+  if (isV2) {
     integrator.availableFuelUSD = integrator.availableFuelUSD.minus(reservedFuel.times(integrator.price));
+    integrator.currentReservedFuel = integrator.currentReservedFuel.plus(reservedFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
   }
   integrator.save();
 }
 
-// specifically for the Economics2.1 events and upward
+// specifically for the V2.1 events and upward
 export function updateFuelBalances(
   integratorIndex: string,
   fuel: BigDecimal,
@@ -112,28 +112,37 @@ export function updateSecondarySale(
   integrator.resoldCount = integrator.resoldCount.plus(count);
   integrator.reservedFuel = integrator.reservedFuel.plus(reservedFuel);
   integrator.reservedFuelProtocol = integrator.reservedFuelProtocol.plus(reservedFuelProtocol);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.plus(reservedFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
   integrator.averageReservedPerTicket = integrator.reservedFuel.div(integrator.soldCount.toBigDecimal());
   integrator.availableFuel = integrator.availableFuel.minus(reservedFuel);
 
-  if (!isV2) {
+  if (isV2) {
     integrator.availableFuelUSD = integrator.availableFuelUSD.minus(reservedFuel.times(integrator.price));
+    integrator.currentReservedFuel = integrator.currentReservedFuel.plus(reservedFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
   }
   integrator.save();
 }
 
-export function updateScanned(integratorIndex: string, count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
+export function updateScanned(
+  integratorIndex: string,
+  count: BigInt,
+  isV2: bool = false,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal
+): void {
   let integrator = getIntegrator(integratorIndex);
   integrator.scannedCount = integrator.scannedCount.plus(count);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  if (isV2) {
+    integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  }
   integrator.save();
 }
 
 export function updateCheckedIn(
   integratorIndex: string,
   count: BigInt,
+  isV2: bool = false,
   spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
   spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
   holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
@@ -146,14 +155,18 @@ export function updateCheckedIn(
   integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(spentFuelProtocol);
   integrator.holdersRevenue = integrator.holdersRevenue.plus(holdersRevenue);
   integrator.treasuryRevenue = integrator.treasuryRevenue.plus(treasuryRevenue);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+
+  if (isV2) {
+    integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  }
   integrator.save();
 }
 
 export function updateInvalidated(
   integratorIndex: string,
   count: BigInt,
+  isV2: bool = false,
   spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
   spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
   holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
@@ -166,8 +179,10 @@ export function updateInvalidated(
   integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(spentFuelProtocol);
   integrator.holdersRevenue = integrator.holdersRevenue.plus(holdersRevenue);
   integrator.treasuryRevenue = integrator.treasuryRevenue.plus(treasuryRevenue);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  if (isV2) {
+    integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  }
   integrator.save();
 }
 

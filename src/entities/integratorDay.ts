@@ -58,7 +58,7 @@ export function updatePrimarySale(
   integratorDay.save();
 }
 
-// specifically for the Economics2.1 events and upward
+// specifically for the V2.1 events and upward
 export function updateFuelBalances(
   integratorIndex: string,
   e: ethereum.Event,

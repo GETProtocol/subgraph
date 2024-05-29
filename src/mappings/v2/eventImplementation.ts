@@ -10,7 +10,7 @@ import {
   SecondarySale,
   Transfer,
 } from "../../../generated/templates/EventImplementation/EventImplementation";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ONE, BIG_DECIMAL_ZERO } from "../../constants";
+import { BIG_DECIMAL_1E15, BIG_DECIMAL_1E3, BIG_DECIMAL_ONE, BIG_DECIMAL_ZERO } from "../../constants";
 import {
   GUTS_ON_CREDIT_BLOCK,
   GET_SAAS,
@@ -99,8 +99,10 @@ export function handlePrimarySale(e: PrimarySale): void {
   // rate, then duplicate the logic that is in the contracts for assigning the fees. Pass for now.
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
-  let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
-  let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
+
+  // we divide by 1e15 instead of 1e18 for the GET -> OPN migration
+  let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E15);
+  let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E15);
 
   // fix reserved fuel value for V2.1 events if prior to fuel fix block
   reservedFuel = getCorrectReservedFuel(reservedFuel, reservedFuelProtocol, e.block.number);
@@ -138,14 +140,18 @@ export function handlePrimarySale(e: PrimarySale): void {
     );
   }
 
+  // This event handler will be called for all events for the v2 and v2.1 contracts.
+  // Seeing the issue we unknowingly introduced in not emitting the fuel used in USD for the v2.1 contracts, we have to specially handle fuel used in USD for v2.1 events.
+  // Note that the fuel emitted in USD was introduced in the v2.2 contracts for which we have a separate event handler in the v2.2 directory.
+
   if (isV2) {
+    eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
+    eventInstance.save();
+  } else {
     // handle fuel balances for protocol, integrator, and event instances for dark days
     // i.e
     // event.updateEventUSDBalance()
-    // update spentFuel, spentFuelUSD, spentFuelProtocol, spentFuelProtocolUSD on Integrator and Protocol entities
-  } else {
-    eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
-    eventInstance.save();
+    // update spentFuel, spentFuelUSD, spentFuelProtocol, spentFuelProtocolUSD on Integrator and Protocol entities as well as IntegratorDay and ProtocolDay entities
   }
 
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
@@ -153,8 +159,10 @@ export function handlePrimarySale(e: PrimarySale): void {
 
   protocol.updatePrimarySale(countBigInt, reservedFuel, reservedFuelProtocol, isV2);
   protocolDay.updatePrimarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
+
   integrator.updatePrimarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol, isV2);
   integratorDay.updatePrimarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
+
   event.updatePrimarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
 }
 
@@ -163,8 +171,10 @@ export function handleSecondarySale(e: SecondarySale): void {
 
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
-  let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E18);
-  let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18);
+
+  // we divide by 1e15 instead of 1e18 for the GET -> OPN migration
+  let reservedFuel = e.params.getUsed.divDecimal(BIG_DECIMAL_1E15);
+  let reservedFuelProtocol = e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E15);
 
   // fix reserved fuel value for V2.1 events if prior to fuel fix block
   reservedFuel = getCorrectReservedFuel(reservedFuel, reservedFuelProtocol, e.block.number);
@@ -195,13 +205,13 @@ export function handleSecondarySale(e: SecondarySale): void {
   }
 
   if (isV2) {
+    eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
+    eventInstance.save();
+  } else {
     // handle fuel balances for protocol, integrator, and event instances for dark days
     // i.e
     // event.updateEventUSDBalance()
     // update spentFuel, spentFuelUSD, spentFuelProtocol, spentFuelProtocolUSD on Integrator and Protocol entities
-  } else {
-    eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
-    eventInstance.save();
   }
 
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
@@ -209,8 +219,10 @@ export function handleSecondarySale(e: SecondarySale): void {
 
   protocol.updateSecondarySale(countBigInt, reservedFuel, reservedFuelProtocol, isV2);
   protocolDay.updateSecondarySale(e, countBigInt, reservedFuel, reservedFuelProtocol);
-  integrator.updateSecondarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol);
+
+  integrator.updateSecondarySale(eventInstance.integrator, countBigInt, reservedFuel, reservedFuelProtocol, isV2);
   integratorDay.updateSecondarySale(eventInstance.integrator, e, countBigInt, reservedFuel, reservedFuelProtocol);
+
   event.updateSecondarySale(e.address, countBigInt, reservedFuel, reservedFuelProtocol);
 }
 
@@ -220,8 +232,10 @@ export function handleScanned(e: Scanned): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
   let eventInstance = getEvent(e.address);
-  let spentFuel = isV2 ? e.params.getUsed.divDecimal(BIG_DECIMAL_1E18) : BIG_DECIMAL_ZERO;
-  let spentFuelProtocol = isV2 ? e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18) : BIG_DECIMAL_ZERO;
+
+  // we divide by 1e15 instead of 1e18 for the GET -> OPN migration
+  let spentFuel = isV2 ? e.params.getUsed.divDecimal(BIG_DECIMAL_1E15) : BIG_DECIMAL_ZERO;
+  let spentFuelProtocol = isV2 ? e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E15) : BIG_DECIMAL_ZERO;
 
   for (let i = 0; i < count; ++i) {
     let ticketAction = e.params.ticketActions[i];
@@ -235,8 +249,10 @@ export function handleScanned(e: Scanned): void {
 
   protocol.updateScanned(countBigInt, spentFuel, spentFuelProtocol, isV2);
   protocolDay.updateScanned(e, countBigInt, spentFuel, spentFuelProtocol);
-  integrator.updateScanned(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol);
+
+  integrator.updateScanned(eventInstance.integrator, countBigInt, isV2, spentFuel, spentFuelProtocol);
   integratorDay.updateScanned(eventInstance.integrator, e, countBigInt);
+
   event.updateScanned(e.address, countBigInt);
 }
 
@@ -250,8 +266,10 @@ export function handleCheckedIn(e: CheckedIn): void {
 
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
-  let spentFuel = isV2 ? e.params.getUsed.divDecimal(BIG_DECIMAL_1E18) : BIG_DECIMAL_ZERO;
-  let spentFuelProtocol = isV2 ? e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18) : BIG_DECIMAL_ZERO;
+
+  // we divide by 1e15 instead of 1e18 for the GET -> OPN migration
+  let spentFuel = isV2 ? e.params.getUsed.divDecimal(BIG_DECIMAL_1E15) : BIG_DECIMAL_ZERO;
+  let spentFuelProtocol = isV2 ? e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E15) : BIG_DECIMAL_ZERO;
   let eventInstance = getEvent(e.address);
   let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
@@ -275,14 +293,13 @@ export function handleCheckedIn(e: CheckedIn): void {
     );
   }
 
-  const remainder = spentFuel.minus(spentFuelProtocol);
-
   const day = protocolDay.getProtocolDay(e).day;
 
   //GUTS Tickets has turned into an onCredit integrator on day "GUTS_ON_CREDIT_DAY", without an on chain transaction.
   //This means that all the revenue generated by GUTS Tickets will go to stakers, except for "spentFuelProtocol" from day "GUTS_ON_CREDIT_DAY".
   //onCredit status of GUTS Tickets was set on chain on block number "GUTS_ON_CREDIT_BLOCK".
   if (isV2) {
+    const remainder = spentFuel.minus(spentFuelProtocol);
     if (
       (day >= GUTS_ON_CREDIT_DAY && eventInstance.integrator == GUTS_INTEGRATOR_ID && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) ||
       integratorInstance.isOnCredit
@@ -295,15 +312,16 @@ export function handleCheckedIn(e: CheckedIn): void {
       percentageTreasury = getSpentFuelRecipientPercentage(GET_SAAS);
       percentageStaking = percentageEthStaking.plus(percentagePolyStaking);
     }
+    treasuryRevenue = remainder.times(percentageTreasury).plus(spentFuelProtocol);
+    holdersRevenue = remainder.times(percentageStaking);
   }
-
-  treasuryRevenue = remainder.times(percentageTreasury).plus(spentFuelProtocol);
-  holdersRevenue = remainder.times(percentageStaking);
 
   protocol.updateCheckedIn(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue, isV2);
   protocolDay.updateCheckedIn(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
-  integrator.updateCheckedIn(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+
+  integrator.updateCheckedIn(eventInstance.integrator, countBigInt, isV2, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   integratorDay.updateCheckedIn(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+
   event.updateCheckedIn(e.address, countBigInt);
 }
 
@@ -316,8 +334,10 @@ export function handleInvalidated(e: Invalidated): void {
   let percentageTreasury = BIG_DECIMAL_ONE;
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
-  let spentFuel = isV2 ? e.params.getUsed.divDecimal(BIG_DECIMAL_1E18) : BIG_DECIMAL_ZERO;
-  let spentFuelProtocol = isV2 ? e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E18) : BIG_DECIMAL_ZERO;
+
+  // we divide by 1e15 instead of 1e18 for the GET -> OPN migration
+  let spentFuel = isV2 ? e.params.getUsed.divDecimal(BIG_DECIMAL_1E15) : BIG_DECIMAL_ZERO;
+  let spentFuelProtocol = isV2 ? e.params.getUsedProtocol.divDecimal(BIG_DECIMAL_1E15) : BIG_DECIMAL_ZERO;
   let eventInstance = getEvent(e.address);
   let integratorInstance = integrator.getIntegrator(eventInstance.integrator);
 
@@ -341,14 +361,13 @@ export function handleInvalidated(e: Invalidated): void {
     );
   }
 
-  const remainder = spentFuel.minus(spentFuelProtocol);
-
   const day = protocolDay.getProtocolDay(e).day;
 
   //GUTS Tickets has turned into an onCredit integrator on day "GUTS_ON_CREDIT_DAY", without an on chain transaction.
   //This means that all the revenue generated by GUTS Tickets will go to stakers, except for "spentFuelProtocol" from day "GUTS_ON_CREDIT_DAY".
   //onCredit status of GUTS Tickets was set on chain on block number "GUTS_ON_CREDIT_BLOCK".
   if (isV2) {
+    const remainder = spentFuel.minus(spentFuelProtocol);
     if (
       (day >= GUTS_ON_CREDIT_DAY && eventInstance.integrator == GUTS_INTEGRATOR_ID && e.block.number.lt(GUTS_ON_CREDIT_BLOCK)) ||
       integratorInstance.isOnCredit
@@ -361,15 +380,16 @@ export function handleInvalidated(e: Invalidated): void {
       percentageStaking = percentageEthStaking.plus(percentagePolyStaking);
       percentageTreasury = getSpentFuelRecipientPercentage(GET_SAAS);
     }
+    treasuryRevenue = remainder.times(percentageTreasury).plus(spentFuelProtocol);
+    holdersRevenue = remainder.times(percentageStaking);
   }
-
-  treasuryRevenue = remainder.times(percentageTreasury).plus(spentFuelProtocol);
-  holdersRevenue = remainder.times(percentageStaking);
 
   protocol.updateInvalidated(countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue, isV2);
   protocolDay.updateInvalidated(e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
-  integrator.updateInvalidated(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+
+  integrator.updateInvalidated(eventInstance.integrator, countBigInt, isV2, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
   integratorDay.updateInvalidated(eventInstance.integrator, e, countBigInt, spentFuel, spentFuelProtocol, holdersRevenue, treasuryRevenue);
+
   event.updateInvalidated(e.address, countBigInt);
 }
 

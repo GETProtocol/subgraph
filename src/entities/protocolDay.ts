@@ -45,7 +45,7 @@ export function updatePrimarySale(e: ethereum.Event, count: BigInt, reservedFuel
   protocolDay.save();
 }
 
-// specifically for the Economics2.1 events and upward
+// specifically for the V2.1 events and upward
 export function updateFuelBalances(
   e: ethereum.Event,
   fuel: BigDecimal,
