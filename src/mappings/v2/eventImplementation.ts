@@ -19,7 +19,6 @@ import {
   STAKING,
   FUEL_BRIDGE_RECEIVER,
   ECONOMICS_V2_1_BLOCK,
-  ECONOMICS_V2_1_FUEL_FIX_BLOCK,
   INTEGRATOR_AVERAGE_PRICES,
 } from "../../constants/contracts";
 import {
@@ -42,9 +41,7 @@ import * as event from "../../entities/event";
 // balances on the subgraph from their actual balances on chain. This bug was fixed on the `ECONOMICS_V2_1_FUEL_FIX_BLOCK`
 // This bug only affects events post `ECONOMICS_V2_1_BLOCK` and prior to `ECONOMICS_V2_1_FUEL_FIX_BLOCK`
 function getCorrectReservedFuel(totalFuelUsed: BigDecimal, protocolFuelUsed: BigDecimal, blockNumber: BigInt): BigDecimal {
-  if (blockNumber.gt(ECONOMICS_V2_1_BLOCK)) {
-    return blockNumber.gt(ECONOMICS_V2_1_FUEL_FIX_BLOCK) ? totalFuelUsed : totalFuelUsed.minus(protocolFuelUsed);
-  } else return totalFuelUsed;
+  return blockNumber.gt(ECONOMICS_V2_1_BLOCK) ? totalFuelUsed.minus(protocolFuelUsed) : totalFuelUsed;
 }
 
 // -- Event Lifecycle Methods
