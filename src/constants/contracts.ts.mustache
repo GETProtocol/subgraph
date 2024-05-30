@@ -50,3 +50,34 @@ TICKETEER_MAPPING.set("{{ 0 }}", "{{ 1 }}");
 DIGITAL_TWIN_MAPPING.set("{{0}}", "{{1}}")
 {{ /digitalTwins }}
 export let ECONOMICS_BASIC_TAX_RATE = BigDecimal.fromString("200000");
+
+{{! // Average integrator prices between ECONOMICS_V2_1_BLOCK and block ECONOMICS_V2_2_BLOCK
+export let INTEGRATOR_AVERAGE_PRICES: PriceMap = {
+  '0': '0',
+  '1': '0',
+  '2': '0',
+  '3': '0',
+  '4': '2.432084964570751',
+  '5': '0',
+  '6': '2.984631802755087',
+  '7': '0',
+  '8': '0',
+  '9': '0',
+  '10': '0',
+  '11': '0',
+  '12': '0',
+  '13': '4.334913687362661',
+  '14': '0',
+  '15': '0',
+  '16': '0',
+  '17': '0',
+  '18': '0',
+  '19': '0',
+  '20': '0',
+  '21': '0',
+  '22': '0',
+  '23': '0',
+  '24': '0',
+  '25': '0',
+  '26': '3.7035209183969138'
+}; }}

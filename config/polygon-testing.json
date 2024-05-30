@@ -1,5 +1,5 @@
 {
-  "chainName": "polygon-amoy",
+  "chainName": "amoy",
   "network": "polygon-amoy",
   "relayers": [
     ["0x069dd8c5f42c0a58d1c2f767b5d95579f22cae13", "1", "GET Shared Partners"],

@@ -1,5 +1,5 @@
 {
-  "chainName": "polygon-amoy",
+  "chainName": "amoy",
   "network": "polygon-amoy",
   "addresses": {
     "GETSaaS": "0x0000000000000000000000000000000000000001",

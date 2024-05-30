@@ -14,7 +14,9 @@ export function getProtocol(): Protocol {
     protocol.currentReservedFuel = BIG_DECIMAL_ZERO;
     protocol.currentReservedFuelProtocol = BIG_DECIMAL_ZERO;
     protocol.spentFuel = BIG_DECIMAL_ZERO;
+    protocol.spentFuelUSD = BIG_DECIMAL_ZERO;
     protocol.spentFuelProtocol = BIG_DECIMAL_ZERO;
+    protocol.spentFuelProtocolUSD = BIG_DECIMAL_ZERO;
     protocol.currentSpentFuel = BIG_DECIMAL_ZERO;
     protocol.currentSpentFuelProtocol = BIG_DECIMAL_ZERO;
     protocol.collectedSpentFuel = BIG_DECIMAL_ZERO;

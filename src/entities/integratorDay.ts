@@ -18,7 +18,9 @@ function getIntegratorDay(integratorIndex: string, day: i32): IntegratorDay {
     integratorDay.reservedFuel = BIG_DECIMAL_ZERO;
     integratorDay.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     integratorDay.spentFuel = BIG_DECIMAL_ZERO;
+    integratorDay.spentFuelUSD = BIG_DECIMAL_ZERO;
     integratorDay.spentFuelProtocol = BIG_DECIMAL_ZERO;
+    integratorDay.spentFuelProtocolUSD = BIG_DECIMAL_ZERO;
     integratorDay.price = integrator.price;
     integratorDay.eventCount = BIG_INT_ZERO;
     integratorDay.topUpCount = BIG_INT_ZERO;

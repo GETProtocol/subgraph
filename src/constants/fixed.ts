@@ -14,6 +14,6 @@ export let BIG_DECIMAL_1E21 = BigDecimal.fromString("1e21");
 
 export let BIG_INT_ZERO = BigInt.fromI32(0);
 export let BIG_INT_ONE = BigInt.fromI32(1);
-export let BIG_INT_1E3 = BigInt.fromString("1e3");
+export let BIG_INT_1E3 = BigInt.fromI32(1000);
 
 export let BYTES_EMPTY = Bytes.empty();

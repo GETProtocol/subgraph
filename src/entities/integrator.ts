@@ -126,9 +126,9 @@ export function updateSecondarySale(
 export function updateScanned(
   integratorIndex: string,
   count: BigInt,
-  isV2: bool = false,
   spentFuel: BigDecimal,
-  spentFuelProtocol: BigDecimal
+  spentFuelProtocol: BigDecimal,
+  isV2: bool = false
 ): void {
   let integrator = getIntegrator(integratorIndex);
   integrator.scannedCount = integrator.scannedCount.plus(count);

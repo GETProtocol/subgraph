@@ -15,7 +15,9 @@ export function getProtocolDay(e: ethereum.Event): ProtocolDay {
     protocolDay.reservedFuel = BIG_DECIMAL_ZERO;
     protocolDay.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     protocolDay.spentFuel = BIG_DECIMAL_ZERO;
+    protocolDay.spentFuelUSD = BIG_DECIMAL_ZERO;
     protocolDay.spentFuelProtocol = BIG_DECIMAL_ZERO;
+    protocolDay.spentFuelProtocolUSD = BIG_DECIMAL_ZERO;
     protocolDay.currentSpentFuel = BIG_DECIMAL_ZERO;
     protocolDay.currentSpentFuelProtocol = BIG_DECIMAL_ZERO;
     protocolDay.collectedSpentFuel = BIG_DECIMAL_ZERO;

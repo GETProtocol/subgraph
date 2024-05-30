@@ -250,7 +250,7 @@ export function handleScanned(e: Scanned): void {
   protocol.updateScanned(countBigInt, spentFuel, spentFuelProtocol, isV2);
   protocolDay.updateScanned(e, countBigInt, spentFuel, spentFuelProtocol);
 
-  integrator.updateScanned(eventInstance.integrator, countBigInt, isV2, spentFuel, spentFuelProtocol);
+  integrator.updateScanned(eventInstance.integrator, countBigInt, spentFuel, spentFuelProtocol, isV2);
   integratorDay.updateScanned(eventInstance.integrator, e, countBigInt);
 
   event.updateScanned(e.address, countBigInt);
@@ -259,8 +259,8 @@ export function handleScanned(e: Scanned): void {
 export function handleCheckedIn(e: CheckedIn): void {
   let isV2 = e.block.number.le(ECONOMICS_V2_1_BLOCK);
 
-  let holdersRevenue: BigDecimal;
-  let treasuryRevenue: BigDecimal;
+  let holdersRevenue = BIG_DECIMAL_ZERO;
+  let treasuryRevenue = BIG_DECIMAL_ZERO;
   let percentageStaking = BIG_DECIMAL_ZERO;
   let percentageTreasury = BIG_DECIMAL_ONE;
 
@@ -328,8 +328,8 @@ export function handleCheckedIn(e: CheckedIn): void {
 export function handleInvalidated(e: Invalidated): void {
   let isV2 = e.block.number.le(ECONOMICS_V2_1_BLOCK);
 
-  let holdersRevenue: BigDecimal;
-  let treasuryRevenue: BigDecimal;
+  let holdersRevenue = BIG_DECIMAL_ZERO;
+  let treasuryRevenue = BIG_DECIMAL_ZERO;
   let percentageStaking = BIG_DECIMAL_ZERO;
   let percentageTreasury = BIG_DECIMAL_ONE;
   let count = e.params.ticketActions.length;
