@@ -20,6 +20,7 @@ import {
   FUEL_BRIDGE_RECEIVER,
   ECONOMICS_V2_1_BLOCK,
   ECONOMICS_V2_1_FUEL_FIX_BLOCK,
+  INTEGRATOR_AVERAGE_PRICES,
 } from "../../constants/contracts";
 import {
   calculateReservedFuelPrimary,
@@ -145,13 +146,23 @@ export function handlePrimarySale(e: PrimarySale): void {
   // Note that the fuel emitted in USD was introduced in the v2.2 contracts for which we have a separate event handler in the v2.2 directory.
 
   if (isV2) {
-    eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
-    eventInstance.save();
+    event.updateEventUSDBalance(e.address, reservedFuel.times(integratorInstance.price));
   } else {
-    // handle fuel balances for protocol, integrator, and event instances for dark days
-    // i.e
-    // event.updateEventUSDBalance()
-    // update spentFuel, spentFuelUSD, spentFuelProtocol, spentFuelProtocolUSD on Integrator and Protocol entities as well as IntegratorDay and ProtocolDay entities
+    let price = BigDecimal.fromString(INTEGRATOR_AVERAGE_PRICES.get(eventInstance.integrator));
+    if (price.equals(BIG_DECIMAL_ZERO)) {
+      price = integratorInstance.price;
+    }
+    // handle update for fuel balances for protocol, integrator, and event instances for dark days
+    // dark days being the days between v2.1 and v2.2
+    const fuelUSD = reservedFuel.times(price);
+    const protocolFuelUSD = reservedFuelProtocol.times(price);
+    event.updateEventUSDBalance(e.address, fuelUSD);
+
+    protocol.updateFuelBalances(reservedFuel, reservedFuelProtocol, fuelUSD, protocolFuelUSD);
+    protocolDay.updateFuelBalances(e, reservedFuel, reservedFuelProtocol, fuelUSD, protocolFuelUSD);
+
+    integrator.updateFuelBalances(eventInstance.integrator, reservedFuel, reservedFuelProtocol, fuelUSD, protocolFuelUSD);
+    integratorDay.updateFuelBalances(eventInstance.integrator, e, reservedFuel, reservedFuelProtocol, fuelUSD, protocolFuelUSD);
   }
 
   protocol.updateTotalSalesVolume(cumulativeTicketValue);
@@ -205,13 +216,23 @@ export function handleSecondarySale(e: SecondarySale): void {
   }
 
   if (isV2) {
-    eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(reservedFuel.times(integratorInstance.price));
-    eventInstance.save();
+    event.updateEventUSDBalance(e.address, reservedFuel.times(integratorInstance.price));
   } else {
-    // handle fuel balances for protocol, integrator, and event instances for dark days
-    // i.e
-    // event.updateEventUSDBalance()
-    // update spentFuel, spentFuelUSD, spentFuelProtocol, spentFuelProtocolUSD on Integrator and Protocol entities
+    let price = BigDecimal.fromString(INTEGRATOR_AVERAGE_PRICES.get(eventInstance.integrator));
+    if (price.equals(BIG_DECIMAL_ZERO)) {
+      price = integratorInstance.price;
+    }
+    // handle update for fuel balances for protocol, integrator, and event instances for dark days
+    // dark days being the days between v2.1 and v2.2
+    const fuelUSD = reservedFuel.times(price);
+    const protocolFuelUSD = reservedFuelProtocol.times(price);
+    event.updateEventUSDBalance(e.address, fuelUSD);
+
+    protocol.updateFuelBalances(reservedFuel, reservedFuelProtocol, fuelUSD, protocolFuelUSD);
+    protocolDay.updateFuelBalances(e, reservedFuel, reservedFuelProtocol, fuelUSD, protocolFuelUSD);
+
+    integrator.updateFuelBalances(eventInstance.integrator, reservedFuel, reservedFuelProtocol, fuelUSD, protocolFuelUSD);
+    integratorDay.updateFuelBalances(eventInstance.integrator, e, reservedFuel, reservedFuelProtocol, fuelUSD, protocolFuelUSD);
   }
 
   protocol.updateTotalSalesVolume(cumulativeTicketValue);

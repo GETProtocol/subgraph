@@ -60,7 +60,7 @@ export function updatePrimarySale(
   integratorDay.save();
 }
 
-// specifically for the V2.1 events and upward
+// specifically for the V2.1 events and upward (including v2.2 events)
 export function updateFuelBalances(
   integratorIndex: string,
   e: ethereum.Event,

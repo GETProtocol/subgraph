@@ -51,7 +51,7 @@ export function updatePrimarySale(count: BigInt, reservedFuel: BigDecimal, reser
   protocol.save();
 }
 
-// specifically for the V2.1 events and upward
+// specifically for the V2.1 events and upward (including v2.2 events)
 export function updateFuelBalances(fuel: BigDecimal, protocolFuel: BigDecimal, fuelUSD: BigDecimal, protocolFuelUSD: BigDecimal): void {
   let protocol = getProtocol();
   protocol.spentFuel = protocol.spentFuel.plus(fuel);

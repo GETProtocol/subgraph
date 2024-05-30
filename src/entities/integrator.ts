@@ -85,7 +85,7 @@ export function updatePrimarySale(
   integrator.save();
 }
 
-// specifically for the V2.1 events and upward
+// specifically for the V2.1 events and upward (including v2.2 events)
 export function updateFuelBalances(
   integratorIndex: string,
   fuel: BigDecimal,
@@ -98,6 +98,7 @@ export function updateFuelBalances(
   integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(protocolFuel);
   integrator.spentFuelUSD = integrator.spentFuelUSD.plus(fuelUSD);
   integrator.spentFuelProtocolUSD = integrator.spentFuelProtocolUSD.plus(protocolFuelUSD);
+  integrator.availableFuelUSD = integrator.availableFuelUSD.minus(fuelUSD);
   integrator.save();
 }
 
