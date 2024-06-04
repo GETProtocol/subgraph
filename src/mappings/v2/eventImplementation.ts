@@ -145,10 +145,9 @@ export function handlePrimarySale(e: PrimarySale): void {
   if (isV2) {
     event.updateEventUSDBalance(e.address, reservedFuel.times(integratorInstance.price));
   } else {
-    let price = BigDecimal.fromString(INTEGRATOR_AVERAGE_PRICES.get(eventInstance.integrator));
-    if (price.equals(BIG_DECIMAL_ZERO)) {
-      price = integratorInstance.price;
-    }
+    let price = INTEGRATOR_AVERAGE_PRICES.has(eventInstance.integrator)
+      ? BigDecimal.fromString(INTEGRATOR_AVERAGE_PRICES.get(eventInstance.integrator))
+      : integratorInstance.price;
     // handle update for fuel balances for protocol, integrator, and event instances for dark days
     // dark days being the days between v2.1 and v2.2
     const fuelUSD = reservedFuel.times(price);
