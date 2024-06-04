@@ -15,9 +15,10 @@ import {
   UpdateProtocolRates,
   EconomicsContractDeployed,
 } from "../../../generated/EconomicsFactory/EconomicsFactory";
-import { BIG_DECIMAL_1E15, BIG_DECIMAL_1E21, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
+import { BIG_DECIMAL_1E15, BIG_DECIMAL_1E18, BIG_DECIMAL_1E21, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
 import { createTopUpEvent } from "../../entities/topUpEvent";
+import { isV2_2 } from "../v2.2/utils";
 
 export function handleUpdateDynamicRates(e: UpdateDynamicRates): void {
   let integrator = getIntegrator(e.params.integratorIndex.toString());
@@ -94,11 +95,11 @@ export function handleRelayerAdded(e: RelayerAdded): void {
 export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   let integratorIndex = e.params.integratorIndex.toString();
 
-  // divide by 1e15 and not 1e18 for GET -> OPN conversion
-  let topUpAmount = e.params.total.divDecimal(BIG_DECIMAL_1E15);
+  // if v2_2, divide by 1e18 and if not divide by 1e15 for the GET -> OPN migration
+  let topUpAmount = e.params.total.divDecimal(isV2_2(e.block.number) ? BIG_DECIMAL_1E18 : BIG_DECIMAL_1E15);
 
-  // divide by 1e21 and not 1e18 for the GET -> OPN price conversion
-  let price = e.params.topUpPrice.divDecimal(BIG_DECIMAL_1E21);
+  // if v2_2, divide price by 1e18 and if not divide by 1e21 for the GET -> OPN price migration
+  let price = e.params.topUpPrice.divDecimal(isV2_2(e.block.number) ? BIG_DECIMAL_1E18 : BIG_DECIMAL_1E21);
   let topUpAmountUSD = topUpAmount.times(price);
 
   let protocol = getProtocol();

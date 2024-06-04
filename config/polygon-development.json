@@ -21,5 +21,8 @@
       "address": "0x4E47980d9bf143f31D93DDB45a6C52eFa8792133",
       "startBlock": 6003421
     }
+  },
+  "v2_2": {
+    "startBlock": 0
   }
 }
