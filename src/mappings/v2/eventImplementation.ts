@@ -44,6 +44,15 @@ function getCorrectReservedFuel(totalFuelUsed: BigDecimal, protocolFuelUsed: Big
   return blockNumber.gt(ECONOMICS_V2_1_BLOCK) ? totalFuelUsed.minus(protocolFuelUsed) : totalFuelUsed;
 }
 
+// To get an average price for integrator top ups during the span of the v2.1 contracts,
+// we compile a record of the average price of fuel spent by the integrator based on the price of top ups
+// If an integrator didn't perform any top ups for the v2.1 contracts, we use the normal integrator price
+// from all historical top ups on the integrator entity.
+function getIntegratorPriceV2_1(integrator: string, defaultPrice: BigDecimal): BigDecimal {
+  let price = INTEGRATOR_AVERAGE_PRICES.has(integrator) ? BigDecimal.fromString(INTEGRATOR_AVERAGE_PRICES.get(integrator)) : defaultPrice;
+  return price.notEqual(BIG_DECIMAL_ZERO) ? price : defaultPrice;
+}
+
 // -- Event Lifecycle Methods
 
 export function handleEventDataSet(e: EventDataSet): void {
@@ -145,9 +154,7 @@ export function handlePrimarySale(e: PrimarySale): void {
   if (isV2) {
     event.updateEventUSDBalance(e.address, reservedFuel.times(integratorInstance.price));
   } else {
-    let price = INTEGRATOR_AVERAGE_PRICES.has(eventInstance.integrator)
-      ? BigDecimal.fromString(INTEGRATOR_AVERAGE_PRICES.get(eventInstance.integrator))
-      : integratorInstance.price;
+    let price = getIntegratorPriceV2_1(eventInstance.integrator, integratorInstance.price);
     // handle update for fuel balances for protocol, integrator, and event instances for dark days
     // dark days being the days between v2.1 and v2.2
     const fuelUSD = reservedFuel.times(price);
@@ -214,10 +221,7 @@ export function handleSecondarySale(e: SecondarySale): void {
   if (isV2) {
     event.updateEventUSDBalance(e.address, reservedFuel.times(integratorInstance.price));
   } else {
-    let price = BigDecimal.fromString(INTEGRATOR_AVERAGE_PRICES.get(eventInstance.integrator));
-    if (price.equals(BIG_DECIMAL_ZERO)) {
-      price = integratorInstance.price;
-    }
+    let price = getIntegratorPriceV2_1(eventInstance.integrator, integratorInstance.price);
     // handle update for fuel balances for protocol, integrator, and event instances for dark days
     // dark days being the days between v2.1 and v2.2
     const fuelUSD = reservedFuel.times(price);
