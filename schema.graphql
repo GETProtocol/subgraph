@@ -19,7 +19,7 @@ enum SpentFuelSource {
 }
 
 type Protocol @entity {
-  id: Bytes!
+  id: ID!
   averageReservedPerTicket: BigDecimal!
   reservedFuel: BigDecimal!
   reservedFuelProtocol: BigDecimal!
@@ -48,7 +48,7 @@ type Protocol @entity {
 }
 
 type ProtocolDay @entity {
-  id: Bytes!
+  id: ID!
   day: Int!
   averageReservedPerTicket: BigDecimal!
   reservedFuel: BigDecimal!
@@ -75,7 +75,7 @@ type ProtocolDay @entity {
 }
 
 type Integrator @entity {
-  id: Bytes!
+  id: ID!
   averageReservedPerTicket: BigDecimal!
   availableFuel: BigDecimal!
   availableFuelUSD: BigDecimal!
@@ -121,7 +121,7 @@ type Integrator @entity {
 }
 
 type IntegratorDay @entity {
-  id: Bytes! # Composite PK: integratorIndex-timestampAsDay
+  id: ID! # Composite PK: integratorIndex-timestampAsDay
   integrator: Integrator!
   day: Int!
   averageReservedPerTicket: BigDecimal!
@@ -147,13 +147,13 @@ type IntegratorDay @entity {
 }
 
 type Relayer @entity {
-  id: Bytes!
+  id: ID!
   integrator: Integrator!
   isEnabled: Boolean!
 }
 
 type Event @entity {
-  id: Bytes!
+  id: ID!
   eventIndex: BigInt!
   createTx: Bytes!
   blockNumber: BigInt!
@@ -183,7 +183,7 @@ type Event @entity {
 }
 
 type Ticket @entity {
-  id: Bytes!
+  id: ID!
   tokenId: BigInt!
   createTx: Bytes!
   blockNumber: BigInt!
@@ -203,7 +203,7 @@ type Ticket @entity {
 }
 
 type PriceOracle @entity {
-  id: Bytes!
+  id: ID!
   price: BigDecimal!
   lastUpdateTimestamp: BigInt!
   lastUpdateTx: Bytes!
@@ -211,7 +211,7 @@ type PriceOracle @entity {
 }
 
 type SpentFuelRecipient @entity {
-  id: Bytes!
+  id: ID!
   source: SpentFuelSource!
   collectedSpentFuel: BigDecimal!
   label: String!
@@ -221,7 +221,7 @@ type SpentFuelRecipient @entity {
 }
 
 type TopUpEvent @entity {
-  id: Bytes! # Composite PK: txHash
+  id: ID! # Composite PK: txHash
   txHash: Bytes!
   invoiceNumber: BigInt!
   blockNumber: BigInt!
@@ -239,7 +239,7 @@ type TopUpEvent @entity {
 }
 
 type UsageEvent @entity {
-  id: Bytes! # Composite PK: txHash-logIndex
+  id: ID! # Composite PK: txHash-logIndex
   txHash: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -263,8 +263,8 @@ type UsageEvent @entity {
   longitude: BigDecimal!
 }
 
-type SpentFuelCollectedEvent @entity(immutable: true) {
-  id: Bytes! # Composite PK: txHash-logIndex
+type SpentFuelCollectedEvent @entity {
+  id: ID! # Composite PK: txHash-logIndex
   txHash: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
