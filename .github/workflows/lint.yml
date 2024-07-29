@@ -8,7 +8,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Prepare subgraph.yaml
-        run: yarn prepare:polygon-testing
+        run: yarn prepare:polygon-production
       - name: Generate types
         run: yarn codegen
       - name: Run linting checks

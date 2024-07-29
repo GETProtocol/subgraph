@@ -75,6 +75,16 @@ export function updatePrimarySale(
   integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
   integrator.averageReservedPerTicket = integrator.reservedFuel.div(integrator.soldCount.toBigDecimal());
   integrator.availableFuel = integrator.availableFuel.minus(reservedFuel);
+
+  // This value may slightly diverge from the actual values provided on chain. This is because in the new
+  // V2.1 contracts, there's no concept of an average price of fuel as fuel isn't mixed together during top ups.
+  // Fuel is represented as individual installments which we call `ticks`. Each tick is characterized by the fuel
+  // amount and price at top up. We deplete fuel from an integrator from it's ticks in a FIFO basis.
+  // I.e we charge fuel based on a price of P1 of a tick T1 untill it's fully depleted and we move onto the price
+  // P2 of tick T2 and so on and forth.
+  // It's important to note however, that while these values may diverge initially (subgraph and on chain values),
+  // because of the earlier explained factors, these divergence is smothened out over time because the average price
+  // model would equate to same values of fuel used/charged via the tick FIFO model over a given period of time.
   integrator.availableFuelUSD = integrator.availableFuelUSD.minus(reservedFuel.times(integrator.price));
   integrator.save();
 }
@@ -93,6 +103,7 @@ export function updateSecondarySale(
   integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
   integrator.averageReservedPerTicket = integrator.reservedFuel.div(integrator.soldCount.toBigDecimal());
   integrator.availableFuel = integrator.availableFuel.minus(reservedFuel);
+  // Same idea explained for the `availableFuelUSD` on the updatePrimarySale function holds true here
   integrator.availableFuelUSD = integrator.availableFuelUSD.minus(reservedFuel.times(integrator.price));
   integrator.save();
 }

@@ -96,6 +96,7 @@
     }
   },
   "v2_1": {
+    "fuelFixBlock": "66698382",
     "EconomicsFactory": {
       "address": "0x845350fa9374A2e83db8a74d24F9164eC0f65301",
       "startBlock": 54656361

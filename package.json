@@ -14,8 +14,8 @@
     "prepare:polygon-playground": "mustache config/polygon-playground.json subgraph.yaml.mustache > subgraph.yaml && mustache config/polygon-playground.json src/constants/contracts.ts.mustache > src/constants/contracts.ts && yarn codegen",
     "prepare:polygon-production-v1": "jq 'del(.graft,.v2)' config/polygon-production.json | mustache - subgraph.yaml.mustache > subgraph.yaml && mustache config/polygon-production.json src/constants/contracts.ts.mustache > src/constants/contracts.ts && yarn codegen",
     "prepare:polygon-production": "jq 'del(.v1)' config/polygon-production.json | mustache - subgraph.yaml.mustache > subgraph.yaml && mustache config/polygon-production.json src/constants/contracts.ts.mustache > src/constants/contracts.ts && yarn codegen",
-    "deploy:polygon-development": "graph deploy --studio get-protocol-polygon-dev",
-    "deploy:polygon-testing": "graph deploy --studio get-protocol-polygon-test",
+    "deploy:polygon-development": "graph deploy --studio open-core-amoy-dev",
+    "deploy:polygon-testing": "graph deploy --studio open-core-amoy-test",
     "deploy:polygon-playground": "graph deploy --studio get-protocol-polygon-play",
     "deploy:polygon-production-v1": "graph deploy --studio get-protocol-polygon-v1",
     "deploy:polygon-production": "graph deploy --studio get-protocol-polygon",
@@ -26,7 +26,7 @@
     "release:polygon-production": "yarn prepare:polygon-production && yarn deploy:polygon-production"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.53.0",
+    "@graphprotocol/graph-cli": "0.72.1",
     "@graphprotocol/graph-ts": "0.31.0"
   },
   "devDependencies": {
