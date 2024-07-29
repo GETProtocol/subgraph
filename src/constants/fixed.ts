@@ -17,3 +17,5 @@ export let BIG_INT_ONE = BigInt.fromI32(1);
 export let BIG_INT_1E3 = BigInt.fromI32(1000);
 
 export let BYTES_EMPTY = Bytes.empty();
+
+export let V2_1_FUEL_FIX_BLOCK = BigInt.fromI32(56450784); // This is a dummy number and would be replaced with the actual blockheight after our contract upgrade
