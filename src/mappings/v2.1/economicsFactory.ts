@@ -13,10 +13,12 @@ import {
   IntegratorToppedUp,
   IntegratorNameSet,
   UpdateProtocolRates,
+  EconomicsContractDeployed,
 } from "../../../generated/EconomicsFactory/EconomicsFactory";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
+import { BIG_DECIMAL_1E15, BIG_DECIMAL_1E18, BIG_DECIMAL_1E21, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE } from "../../constants";
 import { getIntegrator, getIntegratorDayByIndexAndEvent, getProtocol, getProtocolDay, getRelayer } from "../../entities";
 import { createTopUpEvent } from "../../entities/topUpEvent";
+import { isV2_2 } from "../v2.2/utils";
 
 export function handleUpdateDynamicRates(e: UpdateDynamicRates): void {
   let integrator = getIntegrator(e.params.integratorIndex.toString());
@@ -26,7 +28,6 @@ export function handleUpdateDynamicRates(e: UpdateDynamicRates): void {
   integrator.minFeeSecondary = BigInt.fromI32(e.params.dynamicRates.minFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
   integrator.maxFeeSecondary = BigInt.fromI32(e.params.dynamicRates.maxFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
   integrator.secondaryRate = BigInt.fromI32(e.params.dynamicRates.secondaryRate).divDecimal(BigDecimal.fromString("10000"));
-  integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   integrator.save();
 }
 
@@ -48,7 +49,6 @@ export function handleIntegratorConfigured(e: IntegratorConfigured): void {
   integrator.minFeeSecondary = BigInt.fromI32(e.params.dynamicRates.minFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
   integrator.maxFeeSecondary = BigInt.fromI32(e.params.dynamicRates.maxFeeSecondary).divDecimal(BIG_DECIMAL_1E3);
   integrator.secondaryRate = BigInt.fromI32(e.params.dynamicRates.secondaryRate).divDecimal(BigDecimal.fromString("10000"));
-  integrator.salesTaxRate = BigInt.fromI32(e.params.dynamicRates.salesTaxRate).divDecimal(BigDecimal.fromString("10000"));
   relayer.save();
   integrator.save();
 }
@@ -94,8 +94,12 @@ export function handleRelayerAdded(e: RelayerAdded): void {
 
 export function handleIntegratorToppedUp(e: IntegratorToppedUp): void {
   let integratorIndex = e.params.integratorIndex.toString();
-  let topUpAmount = e.params.total.divDecimal(BIG_DECIMAL_1E18);
-  let price = e.params.topUpPrice.divDecimal(BIG_DECIMAL_1E18);
+
+  // if v2_2, divide by 1e18 and if not divide by 1e15 for the GET -> OPN migration
+  let topUpAmount = e.params.total.divDecimal(isV2_2(e.block.number) ? BIG_DECIMAL_1E18 : BIG_DECIMAL_1E15);
+
+  // if v2_2, divide price by 1e18 and if not divide by 1e21 for the GET -> OPN price migration
+  let price = e.params.topUpPrice.divDecimal(isV2_2(e.block.number) ? BIG_DECIMAL_1E18 : BIG_DECIMAL_1E21);
   let topUpAmountUSD = topUpAmount.times(price);
 
   let protocol = getProtocol();
@@ -149,4 +153,26 @@ export function handleIntegratorNameSet(e: IntegratorNameSet): void {
   let integrator = getIntegrator(e.params.integratorIndex.toString());
   integrator.name = e.params.name;
   integrator.save();
+}
+
+export function handleEconomicsContractDeployed(e: EconomicsContractDeployed): void {
+  let integrator = getIntegrator(e.params.integratorIndex.toString());
+
+  // If an integrator is found then this means they were migrated to the new economics from the old. In these cases we
+  // spend the current reserved fuel at the time of migration.
+  if (integrator != null) {
+    let integratorDay = getIntegratorDayByIndexAndEvent(integrator.id, e);
+
+    integrator.spentFuel = integrator.spentFuel.plus(integrator.currentReservedFuel);
+    integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(integrator.currentReservedFuelProtocol);
+
+    integratorDay.spentFuel = integratorDay.spentFuel.plus(integrator.currentReservedFuel);
+    integratorDay.spentFuelProtocol = integratorDay.spentFuelProtocol.plus(integrator.currentReservedFuelProtocol);
+
+    integrator.currentReservedFuel = BIG_DECIMAL_ZERO;
+    integrator.currentReservedFuelProtocol = BIG_DECIMAL_ZERO;
+
+    integrator.save();
+    integratorDay.save();
+  }
 }

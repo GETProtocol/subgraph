@@ -203,11 +203,6 @@
             "internalType": "uint24",
             "name": "secondaryRate",
             "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "salesTaxRate",
-            "type": "uint24"
           }
         ],
         "indexed": false,
@@ -379,11 +374,6 @@
             "internalType": "uint24",
             "name": "secondaryRate",
             "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "salesTaxRate",
-            "type": "uint24"
           }
         ],
         "indexed": false,
@@ -466,11 +456,6 @@
           {
             "internalType": "uint24",
             "name": "secondaryRate",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "salesTaxRate",
             "type": "uint24"
           }
         ],
@@ -601,7 +586,7 @@
     "outputs": [
       {
         "internalType": "address",
-        "name": "economicsAddress_",
+        "name": "_economicsAddress",
         "type": "address"
       }
     ],
@@ -620,7 +605,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "integratorIndex_",
+        "name": "_integratorIndex",
         "type": "uint256"
       }
     ],
@@ -689,6 +674,29 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_asset",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_to",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "emergencyWithdraw",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -808,11 +816,25 @@
         "internalType": "uint24",
         "name": "secondaryRate",
         "type": "uint24"
-      },
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
-        "internalType": "uint24",
-        "name": "salesTaxRate",
-        "type": "uint24"
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "isDigitalTwin",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -830,7 +852,7 @@
     "outputs": [
       {
         "internalType": "bool",
-        "name": "isConfigured_",
+        "name": "_isConfigured",
         "type": "bool"
       }
     ],
@@ -849,7 +871,7 @@
     "outputs": [
       {
         "internalType": "bool",
-        "name": "isDigitalTwin_",
+        "name": "_isDigitalTwin",
         "type": "bool"
       }
     ],
@@ -868,7 +890,20 @@
     "outputs": [
       {
         "internalType": "bool",
-        "name": "isEnabled_",
+        "name": "_isEnabled",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "migrated",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
         "type": "bool"
       }
     ],
@@ -921,11 +956,6 @@
         "internalType": "uint24",
         "name": "secondaryRate",
         "type": "uint24"
-      },
-      {
-        "internalType": "uint24",
-        "name": "salesTaxRate",
-        "type": "uint24"
       }
     ],
     "stateMutability": "view",
@@ -975,7 +1005,7 @@
     "outputs": [
       {
         "internalType": "uint32",
-        "name": "integratorIndex_",
+        "name": "_integratorIndex",
         "type": "uint32"
       }
     ],
@@ -1000,25 +1030,6 @@
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_integratorIndex",
-        "type": "uint256"
-      }
-    ],
-    "name": "returnBalanceOfFuelHolder",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "balance_",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1062,15 +1073,10 @@
             "internalType": "uint24",
             "name": "secondaryRate",
             "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "salesTaxRate",
-            "type": "uint24"
           }
         ],
         "internalType": "struct IEconomicsFactory.DynamicRates",
-        "name": "dynamicRates_",
+        "name": "_dynamicRates",
         "type": "tuple"
       }
     ],
@@ -1089,7 +1095,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "value_",
+        "name": "_value",
         "type": "uint256"
       }
     ],
@@ -1169,11 +1175,6 @@
           {
             "internalType": "uint24",
             "name": "secondaryRate",
-            "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "salesTaxRate",
             "type": "uint24"
           }
         ],
@@ -1269,11 +1270,6 @@
             "internalType": "uint24",
             "name": "secondaryRate",
             "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "salesTaxRate",
-            "type": "uint24"
           }
         ],
         "internalType": "struct IEconomicsFactory.DynamicRates",
@@ -1329,11 +1325,6 @@
             "internalType": "uint24",
             "name": "secondaryRate",
             "type": "uint24"
-          },
-          {
-            "internalType": "uint24",
-            "name": "salesTaxRate",
-            "type": "uint24"
           }
         ],
         "internalType": "struct IEconomicsFactory.DynamicRates",
@@ -1342,7 +1333,7 @@
       },
       {
         "internalType": "bool",
-        "name": "isDigitalTwin",
+        "name": "_isDigitalTwin",
         "type": "bool"
       }
     ],
@@ -1350,7 +1341,7 @@
     "outputs": [
       {
         "internalType": "address",
-        "name": "economicsAddress_",
+        "name": "_economicsAddress",
         "type": "address"
       }
     ],

@@ -96,3 +96,10 @@ export function updateClaimed(eventAddress: Address, count: BigInt): void {
   event.claimedCount = event.claimedCount.plus(count);
   event.save();
 }
+
+export function updateEventUSDBalance(eventAddress: Address, amount: BigDecimal): Event {
+  let eventInstance = getEvent(eventAddress);
+  eventInstance.accountDeductionUsd = eventInstance.accountDeductionUsd.plus(amount);
+  eventInstance.save();
+  return eventInstance;
+}

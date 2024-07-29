@@ -419,11 +419,11 @@ dataSources:
       eventHandlers:
         - event: EnableIntegratorBilling(uint32)
           handler: handleEnableIntegratorBilling
-        - event: UpdateDynamicRates(indexed uint32,(uint24,uint24,uint24,uint24,uint24,uint24,uint24))
+        - event: UpdateDynamicRates(indexed uint32,(uint24,uint24,uint24,uint24,uint24,uint24))
           handler: handleUpdateDynamicRates
         - event: UpdateIntegratorOnCredit(uint32,bool)
           handler: handleSetIntegratorOnCredit
-        - event: IntegratorConfigured(indexed uint256,string,address,bool,(uint24,uint24,uint24,uint24,uint24,uint24,uint24))
+        - event: IntegratorConfigured(indexed uint256,string,address,bool,(uint24,uint24,uint24,uint24,uint24,uint24))
           handler: handleIntegratorConfigured
         - event: IntegratorActivated(indexed uint32)
           handler: handleIntegratorActivated
@@ -439,9 +439,7 @@ dataSources:
           handler: handleRelayerAdded
         - event: IntegratorToppedUp(indexed uint32,address,indexed uint256,uint256)
           handler: handleIntegratorToppedUp
-        - event: EnableIntegratorBilling(uint32)
-          handler: handleEnableIntegratorBilling
-        - event: UpdateProtocolRates((uint24,uint24,uint24,uint24,uint24,uint24,uint24))
+        - event: UpdateProtocolRates((uint24,uint24,uint24,uint24,uint24,uint24))
           handler: handleUpdateProtocolRates
         - event: IntegratorNameSet(uint256,string)
           handler: handleIntegratorNameSet
@@ -473,8 +471,8 @@ dataSources:
           handler: handleFuelDistributed
 
 {{ /v2_1.FuelCollector }}
-templates:
 {{ #v2.EventFactory }}
+templates:
   - name: EventImplementation
     kind: ethereum/contract
     network: {{ network }}
@@ -515,40 +513,11 @@ templates:
           handler: handleEventDataUpdated
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-          
+          {{! V2_2 Events }}
+        - event: PrimarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256,uint256,uint256) 
+          handler: handlePrimarySaleV2_2
+        - event: SecondarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256,uint256,uint256)
+          handler: handleSecondarySaleV2_2
+        - event: Claimed((uint256,bytes32,address,uint64,uint40)[])
+          handler: handleClaimedV2_2
 {{ /v2.EventFactory }}
-{{ #v2_1.EconomicsFactory }}
-  - name: EventImplementationV2_1
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      abi: EventImplementationV2_1
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      file: ./src/mappings/v2.1/eventImplementationV2.1.ts
-      entities:
-        - Protocol
-        - Integrator
-        - Event
-        - UsageEvent
-      abis:
-        - name: EventImplementationV2_1
-          file: ./abis/v2.1/EventImplementationV2.1.json
-      eventHandlers:
-        - event: EventDataSet((uint32,uint64,uint64,int32,int32,string,string,string,string))
-          handler: handleEventDataSet
-        - event: PrimarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handlePrimarySale
-        - event: SecondarySale((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleSecondarySale
-        - event: Scanned((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleScanned
-        - event: CheckedIn((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleCheckedIn
-        - event: Invalidated((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleInvalidated
-        - event: Claimed((uint256,bytes32,address,uint64,uint40)[],uint256,uint256)
-          handler: handleClaimed
-{{ /v2_1.EconomicsFactory }}

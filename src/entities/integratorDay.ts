@@ -18,7 +18,9 @@ function getIntegratorDay(integratorIndex: string, day: i32): IntegratorDay {
     integratorDay.reservedFuel = BIG_DECIMAL_ZERO;
     integratorDay.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     integratorDay.spentFuel = BIG_DECIMAL_ZERO;
+    integratorDay.spentFuelUSD = BIG_DECIMAL_ZERO;
     integratorDay.spentFuelProtocol = BIG_DECIMAL_ZERO;
+    integratorDay.spentFuelProtocolUSD = BIG_DECIMAL_ZERO;
     integratorDay.price = integrator.price;
     integratorDay.eventCount = BIG_INT_ZERO;
     integratorDay.topUpCount = BIG_INT_ZERO;
@@ -58,6 +60,23 @@ export function updatePrimarySale(
   integratorDay.save();
 }
 
+// specifically for the V2.1 events and upward (including v2.2 events)
+export function updateFuelBalances(
+  integratorIndex: string,
+  e: ethereum.Event,
+  fuel: BigDecimal,
+  protocolFuel: BigDecimal,
+  fuelUSD: BigDecimal,
+  protocolFuelUSD: BigDecimal
+): void {
+  let integratorDay = getIntegratorDayByIndexAndEvent(integratorIndex, e);
+  integratorDay.spentFuel = integratorDay.spentFuel.plus(fuel);
+  integratorDay.spentFuelProtocol = integratorDay.spentFuelProtocol.plus(protocolFuel);
+  integratorDay.spentFuelUSD = integratorDay.spentFuelUSD.plus(fuelUSD);
+  integratorDay.spentFuelProtocolUSD = integratorDay.spentFuelProtocolUSD.plus(protocolFuelUSD);
+  integratorDay.save();
+}
+
 export function updateSecondarySale(
   integratorIndex: string,
   e: ethereum.Event,
@@ -71,6 +90,7 @@ export function updateSecondarySale(
   integratorDay.reservedFuel = integratorDay.reservedFuel.plus(reservedFuel);
   integratorDay.reservedFuelProtocol = integratorDay.reservedFuelProtocol.plus(reservedFuelProtocol);
   integratorDay.availableFuel = integrator.availableFuel;
+  integratorDay.availableFuelUSD = integrator.availableFuelUSD;
   if (integratorDay.soldCount.gt(BIG_INT_ZERO)) {
     integratorDay.averageReservedPerTicket = integratorDay.reservedFuel.div(integratorDay.soldCount.toBigDecimal());
   }

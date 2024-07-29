@@ -21,6 +21,11 @@ export let ECONOMICS_ADDRESS_V1_1 = {{ ^v1_1.EconomicsGET.address }}Address.zero
 // See: https://polygonscan.com/tx/0xe9ef44375aa2a2cb70fb6244e60ca6c8ca60fca3dd6e0fa3b42e779d1d0faba3
 export let FUEL_ACTIVATED_BLOCK = BigInt.fromI32({{ v1_1.fuelActivatedBlock }}{{ ^v1_1.fuelActivatedBlock }}0{{ /v1_1.fuelActivatedBlock }});
 
+// The block after which the final upgrade to Economics 2.0 happened.
+export let ECONOMICS_V2_1_BLOCK = {{ ^v2_1.EconomicsFactory.startBlock }}BigInt.fromI32(0){{ /v2_1.EconomicsFactory.startBlock }}{{ #v2_1.EconomicsFactory.startBlock }}BigInt.fromI32({{ v2_1.EconomicsFactory.startBlock }}){{ /v2_1.EconomicsFactory.startBlock }};
+
+export let ECONOMICS_V2_2_BLOCK = {{ ^v2_2.startBlock }}BigInt.fromI32(0){{ /v2_2.startBlock }}{{ #v2_2.startBlock }}BigInt.fromI32({{ v2_2.startBlock }}){{ /v2_2.startBlock }};
+
 // After V1.1 we enforced separate relayers per-ticketeer and started assigning a string of "name" alongside the
 // relayer data. This maps the provided relayerAddress to the *accounting* integrator that was used by its index.
 // This mapping allows us to fetch the integrator record that was used for accounting purposes for a tx.
@@ -44,3 +49,9 @@ TICKETEER_MAPPING.set("{{ 0 }}", "{{ 1 }}");
 DIGITAL_TWIN_MAPPING.set("{{0}}", "{{1}}")
 {{ /digitalTwins }}
 export let ECONOMICS_BASIC_TAX_RATE = BigDecimal.fromString("200000");
+
+// Average integrator prices between ECONOMICS_V2_1_BLOCK and block ECONOMICS_V2_2_BLOCK
+export let INTEGRATOR_AVERAGE_PRICES = new Map<string, string>();
+{{ #v2_1.averagePrices }}
+INTEGRATOR_AVERAGE_PRICES.set("{{ 0 }}", "{{ 1 }}");
+{{ /v2_1.averagePrices }}

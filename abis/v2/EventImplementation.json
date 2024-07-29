@@ -164,6 +164,46 @@
       {
         "components": [
           {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "externalId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint64",
+            "name": "orderTime",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint40",
+            "name": "basePrice",
+            "type": "uint40"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IEventImplementation.TicketAction[]",
+        "name": "ticketActions",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "Claimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
             "internalType": "uint32",
             "name": "index",
             "type": "uint32"
@@ -421,6 +461,70 @@
       {
         "indexed": false,
         "internalType": "uint256",
+        "name": "fuelTokens",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelTokensProtocol",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelUSD",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelUSDProtocol",
+        "type": "uint256"
+      }
+    ],
+    "name": "PrimarySale",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "externalId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint64",
+            "name": "orderTime",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint40",
+            "name": "basePrice",
+            "type": "uint40"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IEventImplementation.TicketAction[]",
+        "name": "ticketActions",
+        "type": "tuple[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "getUsed",
         "type": "uint256"
       },
@@ -480,6 +584,70 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "getUsedProtocol",
+        "type": "uint256"
+      }
+    ],
+    "name": "SecondarySale",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "externalId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint64",
+            "name": "orderTime",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint40",
+            "name": "basePrice",
+            "type": "uint40"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct IEventImplementation.TicketAction[]",
+        "name": "ticketActions",
+        "type": "tuple[]"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelTokens",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelTokensProtocol",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelUSD",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "fuelUSDProtocol",
         "type": "uint256"
       }
     ],

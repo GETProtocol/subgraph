@@ -1,6 +1,6 @@
 {
-  "chainName": "mumbai",
-  "network": "mumbai",
+  "chainName": "amoy",
+  "network": "polygon-amoy",
   "relayers": [
     ["0x069dd8c5f42c0a58d1c2f767b5d95579f22cae13", "1", "GET Shared Partners"],
     ["0x0d5bf3570ddf4c5b72afc014f4b728b67e44ea7f", "1", "GET Shared Partners"],
@@ -20,73 +20,24 @@
     "Staking": "0xbf7f1625E74D64a0f380a2C887F17F9BdC3d518D",
     "FuelBridgeReceiver": "0xa4d622434f677cfc58BaFd23c16B6fc57bA845Ce"
   },
-  "v1": {
-    "BaseGET": {
-      "address": "0xdD1dd60661e26ab34db1f89c9fE5f5B578f8388b",
-      "startBlock": 14955208
-    },
-    "EconomicsGET": {
-      "address": "0xd634F790349966cdbd9E73f12BF54312D67975f5",
-      "startBlock": 14955189
-    },
-    "EventMetadataStorage": {
-      "address": "0x535d2aa374f8d9ce4D6fF68938b1A75642328cF6",
-      "startBlock": 14955196
-    }
-  },
-  "v1_1": {
-    "fuelActivatedBlock": 20198770,
-    "BaseGET": {
-      "address": "0x1c7a119c851DE77DD9A19b4a629861Ec03929f06",
-      "startBlock": 20190398
-    },
-    "EconomicsGET": {
-      "address": "0x5c26C062C74Cec95Bb155DE172EdAd3dC02713cc",
-      "startBlock": 20190406
-    },
-    "EventMetadataStorage": {
-      "address": "0x1c9a79D553ABE5D52c64BD5F1007C47DBCcC21c5",
-      "startBlock": 20190412
-    },
-    "getNFT_ERC721V3": {
-      "address": "0xC6da03A43EC0415695E4Ec46B58fD529d886FAd1",
-      "startBlock": 20190398
-    },
-    "GETProtocolConfigurationV2": {
-      "address": "0xF89Ea661259001e910Dd11E8d0FDc9A22a74e913",
-      "startBlock": 20190392
-    }
-  },
   "v2": {
-    "Economics": {
-      "address": "0x790A9FfAA3255f457F64d98Db69a3931cc56F104",
-      "startBlock": 26743654
-    },
     "EventFactory": {
-      "address": "0xc05B78A2914dC6B45ca2A707A488eCF4c0f55Ae6",
-      "startBlock": 26743675
-    },
-    "FuelDistributor": {
-      "address": "0x13E25c123c8cc4e4219fa8791741420df27E4a94",
-      "startBlock": 26743663
-    },
-    "PriceOracle": {
-      "address": "0xD015e881f36f88763e15AEbccF920f520e7ac2b7",
-      "startBlock": 26743691
-    },
-    "TopUp": {
-      "address": "0xf33Ad9cCEA2190d4116e52E5F0bbe031971033A4",
-      "startBlock": 26743700
+      "address": "0x86dDF30a7945b561AD5C569EcD4d54837C9A9026",
+      "startBlock": 5896473
     }
   },
   "v2_1": {
+    "fuelFixBlock": "66698382",
     "EconomicsFactory": {
-      "address": "0xD36bF24d985033bB88B307440D2b8eCb8ff0cd42",
-      "startBlock": 46683056
+      "address": "0x94a33f2F2D0615E5b3Fa5Dc1e4785e47Ec57630f",
+      "startBlock": 5896498
     },
     "FuelCollector": {
-      "address": "0x55dbDa1BaA5CEf96699df5b8039256Ea82A4a7ce",
-      "startBlock": 46683015
+      "address": "0x68F1cba028Fd96e2CaCc1503178228fE2d4dab81",
+      "startBlock": 5896462
     }
+  },
+  "v2_2": {
+    "startBlock": 7362879
   }
 }

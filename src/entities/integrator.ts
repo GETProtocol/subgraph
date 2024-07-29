@@ -16,7 +16,9 @@ export function getIntegrator(integratorIndex: string): Integrator {
     integrator.currentReservedFuel = BIG_DECIMAL_ZERO;
     integrator.currentReservedFuelProtocol = BIG_DECIMAL_ZERO;
     integrator.spentFuel = BIG_DECIMAL_ZERO;
+    integrator.spentFuelUSD = BIG_DECIMAL_ZERO;
     integrator.spentFuelProtocol = BIG_DECIMAL_ZERO;
+    integrator.spentFuelProtocolUSD = BIG_DECIMAL_ZERO;
     integrator.price = BIG_DECIMAL_ZERO;
     integrator.activeTicketCount = 0;
     integrator.totalTopUp = BIG_DECIMAL_ZERO;
@@ -64,28 +66,39 @@ export function updatePrimarySale(
   integratorIndex: string,
   count: BigInt,
   reservedFuel: BigDecimal,
-  reservedFuelProtocol: BigDecimal
+  reservedFuelProtocol: BigDecimal,
+  isV2: bool = false
 ): void {
   let integrator = getIntegrator(integratorIndex);
   integrator.soldCount = integrator.soldCount.plus(count);
   integrator.activeTicketCount = integrator.activeTicketCount + i32(parseInt(count.toString()));
   integrator.reservedFuel = integrator.reservedFuel.plus(reservedFuel);
   integrator.reservedFuelProtocol = integrator.reservedFuelProtocol.plus(reservedFuelProtocol);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.plus(reservedFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
   integrator.averageReservedPerTicket = integrator.reservedFuel.div(integrator.soldCount.toBigDecimal());
   integrator.availableFuel = integrator.availableFuel.minus(reservedFuel);
 
-  // This value may slightly diverge from the actual values provided on chain. This is because in the new
-  // V2.1 contracts, there's no concept of an average price of fuel as fuel isn't mixed together during top ups.
-  // Fuel is represented as individual installments which we call `ticks`. Each tick is characterized by the fuel
-  // amount and price at top up. We deplete fuel from an integrator from it's ticks in a FIFO basis.
-  // I.e we charge fuel based on a price of P1 of a tick T1 untill it's fully depleted and we move onto the price
-  // P2 of tick T2 and so on and forth.
-  // It's important to note however, that while these values may diverge initially (subgraph and on chain values),
-  // because of the earlier explained factors, these divergence is smothened out over time because the average price
-  // model would equate to same values of fuel used/charged via the tick FIFO model over a given period of time.
-  integrator.availableFuelUSD = integrator.availableFuelUSD.minus(reservedFuel.times(integrator.price));
+  if (isV2) {
+    integrator.availableFuelUSD = integrator.availableFuelUSD.minus(reservedFuel.times(integrator.price));
+    integrator.currentReservedFuel = integrator.currentReservedFuel.plus(reservedFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
+  }
+  integrator.save();
+}
+
+// specifically for the V2.1 events and upward (including v2.2 events)
+export function updateFuelBalances(
+  integratorIndex: string,
+  fuel: BigDecimal,
+  protocolFuel: BigDecimal,
+  fuelUSD: BigDecimal,
+  protocolFuelUSD: BigDecimal
+): void {
+  let integrator = getIntegrator(integratorIndex);
+  integrator.spentFuel = integrator.spentFuel.plus(fuel);
+  integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(protocolFuel);
+  integrator.spentFuelUSD = integrator.spentFuelUSD.plus(fuelUSD);
+  integrator.spentFuelProtocolUSD = integrator.spentFuelProtocolUSD.plus(protocolFuelUSD);
+  integrator.availableFuelUSD = integrator.availableFuelUSD.minus(fuelUSD);
   integrator.save();
 }
 
@@ -93,33 +106,44 @@ export function updateSecondarySale(
   integratorIndex: string,
   count: BigInt,
   reservedFuel: BigDecimal,
-  reservedFuelProtocol: BigDecimal
+  reservedFuelProtocol: BigDecimal,
+  isV2: bool = false
 ): void {
   let integrator = getIntegrator(integratorIndex);
   integrator.resoldCount = integrator.resoldCount.plus(count);
   integrator.reservedFuel = integrator.reservedFuel.plus(reservedFuel);
   integrator.reservedFuelProtocol = integrator.reservedFuelProtocol.plus(reservedFuelProtocol);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.plus(reservedFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
   integrator.averageReservedPerTicket = integrator.reservedFuel.div(integrator.soldCount.toBigDecimal());
   integrator.availableFuel = integrator.availableFuel.minus(reservedFuel);
 
-  // Same idea explained for the `availableFuelUSD` on the updatePrimarySale function holds true here
-  integrator.availableFuelUSD = integrator.availableFuelUSD.minus(reservedFuel.times(integrator.price));
+  if (isV2) {
+    integrator.availableFuelUSD = integrator.availableFuelUSD.minus(reservedFuel.times(integrator.price));
+    integrator.currentReservedFuel = integrator.currentReservedFuel.plus(reservedFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.plus(reservedFuelProtocol);
+  }
   integrator.save();
 }
 
-export function updateScanned(integratorIndex: string, count: BigInt, spentFuel: BigDecimal, spentFuelProtocol: BigDecimal): void {
+export function updateScanned(
+  integratorIndex: string,
+  count: BigInt,
+  spentFuel: BigDecimal,
+  spentFuelProtocol: BigDecimal,
+  isV2: bool = false
+): void {
   let integrator = getIntegrator(integratorIndex);
   integrator.scannedCount = integrator.scannedCount.plus(count);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  if (isV2) {
+    integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  }
   integrator.save();
 }
 
 export function updateCheckedIn(
   integratorIndex: string,
   count: BigInt,
+  isV2: bool = false,
   spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
   spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
   holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
@@ -132,14 +156,18 @@ export function updateCheckedIn(
   integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(spentFuelProtocol);
   integrator.holdersRevenue = integrator.holdersRevenue.plus(holdersRevenue);
   integrator.treasuryRevenue = integrator.treasuryRevenue.plus(treasuryRevenue);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+
+  if (isV2) {
+    integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  }
   integrator.save();
 }
 
 export function updateInvalidated(
   integratorIndex: string,
   count: BigInt,
+  isV2: bool = false,
   spentFuel: BigDecimal = BIG_DECIMAL_ZERO,
   spentFuelProtocol: BigDecimal = BIG_DECIMAL_ZERO,
   holdersRevenue: BigDecimal = BIG_DECIMAL_ZERO,
@@ -152,13 +180,24 @@ export function updateInvalidated(
   integrator.spentFuelProtocol = integrator.spentFuelProtocol.plus(spentFuelProtocol);
   integrator.holdersRevenue = integrator.holdersRevenue.plus(holdersRevenue);
   integrator.treasuryRevenue = integrator.treasuryRevenue.plus(treasuryRevenue);
-  integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
-  integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  if (isV2) {
+    integrator.currentReservedFuel = integrator.currentReservedFuel.minus(spentFuel);
+    integrator.currentReservedFuelProtocol = integrator.currentReservedFuelProtocol.minus(spentFuelProtocol);
+  }
   integrator.save();
 }
 
 export function updateClaimed(integratorIndex: string, count: BigInt): void {
   let integrator = getIntegrator(integratorIndex);
   integrator.claimedCount = integrator.claimedCount.plus(count);
+  integrator.save();
+}
+
+// specifically for V2.1 events
+export function spendIntegratorUSDBalance(integratorIndex: string, fuelUSD: BigDecimal): void {
+  let integrator = getIntegrator(integratorIndex);
+  integrator.availableFuelUSD = integrator.availableFuelUSD.minus(fuelUSD);
+  integrator.spentFuelUSD = integrator.spentFuelUSD.plus(fuelUSD);
+  integrator.spentFuelProtocol;
   integrator.save();
 }

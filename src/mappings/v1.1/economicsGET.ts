@@ -6,7 +6,7 @@ import {
   RelayerToppedUpBuffer,
   SiloBalanceCorrected,
 } from "../../../generated/EconomicsGETV1_1/EconomicsGETV1_1";
-import { BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ZERO, BIG_INT_ONE, RELAYER_MAPPING } from "../../constants";
+import { BIG_DECIMAL_1E15, BIG_DECIMAL_1E18, BIG_DECIMAL_1E6, BIG_DECIMAL_ZERO, BIG_INT_ONE, RELAYER_MAPPING } from "../../constants";
 import {
   getIntegratorByRelayerAddress,
   getIntegratorDayByIndexAndEvent,
@@ -39,7 +39,7 @@ export function handleDepotSwiped(e: DepotSwiped): void {
 
   // There was a bug in very early v1.1 contracts in which the amount emitted in the event could be zero. In these
   // cases we opt to use the current spent fuel balance and assume it to be the transfer amount.
-  let amount = e.params.balance.divDecimal(BIG_DECIMAL_1E18);
+  let amount = e.params.balance.divDecimal(BIG_DECIMAL_1E15); // div by 1e18 && mul by 1e3 for GET->OPN migration
   if (amount.equals(BIG_DECIMAL_ZERO)) amount = protocol.currentSpentFuel;
 
   protocol.collectedSpentFuel = protocol.collectedSpentFuel.plus(amount);
@@ -70,8 +70,8 @@ export function handleRelayerToppedUpBuffer(e: RelayerToppedUpBuffer): void {
   let integrator = getIntegratorByRelayerAddress(relayerAddress);
   let integratorDay = getIntegratorDayByIndexAndEvent(integrator.id, e);
 
-  let amount = e.params.topUpAmount.divDecimal(BIG_DECIMAL_1E18);
-  let price = e.params.priceGETTopUp.divDecimal(BIG_DECIMAL_1E3);
+  let amount = e.params.topUpAmount.divDecimal(BIG_DECIMAL_1E15);
+  let price = e.params.priceGETTopUp.divDecimal(BIG_DECIMAL_1E6);
   let topUpUSD = amount.times(price);
   let totalTopUp = integrator.totalTopUp.plus(amount);
   let totaltopUpUSD = integrator.totalTopUpUSD.plus(topUpUSD);
@@ -101,8 +101,8 @@ export function handleAveragePriceUpdated(e: AveragePriceUpdated): void {
   let integrator = getIntegratorByRelayerAddress(relayerAddress);
   let integratorDay = getIntegratorDayByIndexAndEvent(integrator.id, e);
 
-  integrator.price = e.params.newRelayerPrice.divDecimal(BIG_DECIMAL_1E3);
-  integratorDay.price = e.params.newRelayerPrice.divDecimal(BIG_DECIMAL_1E3);
+  integrator.price = e.params.newRelayerPrice.divDecimal(BIG_DECIMAL_1E6);
+  integratorDay.price = e.params.newRelayerPrice.divDecimal(BIG_DECIMAL_1E6);
 
   integrator.save();
   integratorDay.save();
@@ -113,8 +113,8 @@ export function handleAverageSiloPriceUpdated(e: AverageSiloPriceUpdated): void 
   let integrator = getIntegratorByRelayerAddress(relayerAddress);
   let integratorDay = getIntegratorDayByIndexAndEvent(integrator.id, e);
 
-  integrator.price = e.params.newPrice.divDecimal(BIG_DECIMAL_1E3);
-  integratorDay.price = e.params.newPrice.divDecimal(BIG_DECIMAL_1E3);
+  integrator.price = e.params.newPrice.divDecimal(BIG_DECIMAL_1E6);
+  integratorDay.price = e.params.newPrice.divDecimal(BIG_DECIMAL_1E6);
 
   integrator.save();
   integratorDay.save();
@@ -127,7 +127,7 @@ export function handleSiloBalanceCorrected(e: SiloBalanceCorrected): void {
 
   let difference = e.params.newBalance.minus(e.params.oldBalance);
   integrator.availableFuel = integrator.availableFuel.plus(difference.divDecimal(BIG_DECIMAL_1E18));
-  integratorDay.availableFuel = integratorDay.availableFuel.plus(difference.divDecimal(BIG_DECIMAL_1E18));
+  integratorDay.availableFuel = integratorDay.availableFuel.plus(difference.divDecimal(BIG_DECIMAL_1E15));
 
   integrator.save();
   integratorDay.save();

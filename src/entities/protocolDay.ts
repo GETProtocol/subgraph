@@ -15,7 +15,9 @@ export function getProtocolDay(e: ethereum.Event): ProtocolDay {
     protocolDay.reservedFuel = BIG_DECIMAL_ZERO;
     protocolDay.reservedFuelProtocol = BIG_DECIMAL_ZERO;
     protocolDay.spentFuel = BIG_DECIMAL_ZERO;
+    protocolDay.spentFuelUSD = BIG_DECIMAL_ZERO;
     protocolDay.spentFuelProtocol = BIG_DECIMAL_ZERO;
+    protocolDay.spentFuelProtocolUSD = BIG_DECIMAL_ZERO;
     protocolDay.currentSpentFuel = BIG_DECIMAL_ZERO;
     protocolDay.currentSpentFuelProtocol = BIG_DECIMAL_ZERO;
     protocolDay.collectedSpentFuel = BIG_DECIMAL_ZERO;
@@ -42,6 +44,22 @@ export function updatePrimarySale(e: ethereum.Event, count: BigInt, reservedFuel
   protocolDay.reservedFuel = protocolDay.reservedFuel.plus(reservedFuel);
   protocolDay.reservedFuelProtocol = protocolDay.reservedFuelProtocol.plus(reservedFuelProtocol);
   protocolDay.averageReservedPerTicket = protocolDay.reservedFuel.div(protocolDay.soldCount.toBigDecimal());
+  protocolDay.save();
+}
+
+// specifically for the V2.1 events and upward (including v2.2 events)
+export function updateFuelBalances(
+  e: ethereum.Event,
+  fuel: BigDecimal,
+  protocolFuel: BigDecimal,
+  fuelUSD: BigDecimal,
+  protocolFuelUSD: BigDecimal
+): void {
+  let protocolDay = getProtocolDay(e);
+  protocolDay.spentFuel = protocolDay.spentFuel.plus(fuel);
+  protocolDay.spentFuelProtocol = protocolDay.spentFuelProtocol.plus(protocolFuel);
+  protocolDay.spentFuelUSD = protocolDay.spentFuelUSD.plus(fuelUSD);
+  protocolDay.spentFuelProtocolUSD = protocolDay.spentFuelProtocolUSD.plus(protocolFuelUSD);
   protocolDay.save();
 }
 

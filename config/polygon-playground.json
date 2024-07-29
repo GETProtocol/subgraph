@@ -37,5 +37,8 @@
       "address": "0x0890A28AB468c45a8a1470694e8fa20CdC48cA51",
       "startBlock": 54374597
     }
+  },
+  "v2_2": {
+    "startBlock": 57806062
   }
 }
