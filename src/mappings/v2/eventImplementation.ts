@@ -13,7 +13,7 @@ import {
   SecondarySale1,
   Transfer,
 } from "../../../generated/templates/EventImplementation/EventImplementation";
-import { BIG_DECIMAL_1E15, BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ONE, BIG_DECIMAL_ZERO } from "../../constants";
+import { BIG_DECIMAL_1E15, BIG_DECIMAL_1E18, BIG_DECIMAL_1E3, BIG_DECIMAL_ONE, BIG_DECIMAL_ZERO, BIG_INT_ZERO } from "../../constants";
 import {
   GUTS_ON_CREDIT_BLOCK,
   GET_SAAS,
@@ -450,6 +450,11 @@ export function handleTransfer(e: Transfer): void {
 export function handlePrimarySaleV2_2(e: PrimarySale1): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
+
+  if (countBigInt.equals(BIG_INT_ZERO)) {
+    return;
+  }
+
   let reservedFuel = e.params.fuelTokens.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelProtocol = e.params.fuelTokensProtocol.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelUSD = e.params.fuelUSD.divDecimal(BIG_DECIMAL_1E18);
@@ -516,6 +521,11 @@ export function handlePrimarySaleV2_2(e: PrimarySale1): void {
 export function handleSecondarySaleV2_2(e: SecondarySale1): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
+
+  if (countBigInt.equals(BIG_INT_ZERO)) {
+    return;
+  }
+
   let reservedFuel = e.params.fuelTokens.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelProtocol = e.params.fuelTokensProtocol.divDecimal(BIG_DECIMAL_1E18);
   let reservedFuelUSD = e.params.fuelUSD.divDecimal(BIG_DECIMAL_1E18);
@@ -575,6 +585,11 @@ export function handleSecondarySaleV2_2(e: SecondarySale1): void {
 export function handleClaimedV2_2(e: Claimed1): void {
   let count = e.params.ticketActions.length;
   let countBigInt = BigInt.fromI32(count);
+
+  if (countBigInt.equals(BIG_INT_ZERO)) {
+    return;
+  }
+
   let eventInstance = getEvent(e.address);
 
   for (let i = 0; i < count; ++i) {
